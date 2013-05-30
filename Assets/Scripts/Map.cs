@@ -5,11 +5,13 @@ public class Map : MonoBehaviour {
 
 	private int _mapSize = 100;
 
+	private const int _GRASS = 1;
 
 	// Use this for initialization
 	void Start () 
 	{
-		// Create a new 2x2 texture ARGB32 (32 bit with alpha) and no mipmaps
+
+		// Create a new X x Y texture ARGB32 (32 bit with alpha) and no mipmaps
 		Texture2D Texture = new Texture2D(this._mapSize, this._mapSize, TextureFormat.ARGB32, false);
 		Texture2D NormalMap = new Texture2D (this._mapSize, this._mapSize, TextureFormat.RGB24, false);
 
@@ -54,4 +56,28 @@ public class Map : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+	private int[,] _generateMap ()
+	{
+		int[,] mapTiles = new int[this._mapSize, this._mapSize];
+
+		//Initialize everything as grass
+		for (int i = 0; i < this._mapSize; i++) {
+			for (int j = 0; j < this._mapSize; j++) {
+				mapTiles [i, j] = _GRASS;
+			}
+		}
+
+		//Now do some randomization
+		int numRivers = Random.Range (0, 4);
+
+		for (int i = 0; i < numRivers; i++) {
+
+		}
+
+		return mapTiles;
+	}
+
+
 }
