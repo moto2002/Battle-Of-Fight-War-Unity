@@ -3,16 +3,61 @@ using System.Collections;
 
 public class Map : MonoBehaviour {
 
-	private int _mapSize = 100;
+	private int _mapSize = 512;
 
-	private const int _GRASS = 1;
+	public const int GRASS = 1;
+	public const int WATER = 2;
+	public const int MOUNTAIN = 3;
+
+	public Texture2D GrassTexture;
 
 	// Use this for initialization
 	void Start () 
 	{
+		Texture2D MainTexture = (Texture2D)this.renderer.material.mainTexture;
+		int[,] mapTiles = new int[this._mapSize, this._mapSize];
 
+		Color[] NewMainTexPixels = new Color[this._mapSize * this._mapSize];
+		for (int i = 0; i < this._mapSize; i++) {
+			for (int j = 0; j < this._mapSize; j++) {
+				Color PixelColor = MainTexture.GetPixel(i, j);
+
+				int	smallTextureX = i % 32;
+				int	smallTextureY = j % 32;
+
+				int pixelPosition = this._mapSize * j + i;
+				//Debug.Log (PixelColor.r + "," + PixelColor.g + "," + PixelColor.b);
+				if (PixelColor == Color.green) {
+					mapTiles [i, j] = GRASS;
+					NewMainTexPixels[pixelPosition] = this.GrassTexture.GetPixel (smallTextureX, smallTextureY); 
+				} else if (PixelColor == Color.blue) {
+					NewMainTexPixels[pixelPosition] = MainTexture.GetPixel (i, j); 
+					mapTiles [i, j] = WATER;
+				} else {
+					mapTiles [i, j] = MOUNTAIN;
+					NewMainTexPixels[pixelPosition] = MainTexture.GetPixel (i, j); 
+				}
+			}
+		}
+
+		MainTexture.SetPixels (NewMainTexPixels);
+		MainTexture.Apply();
+		this.renderer.material.mainTexture = MainTexture;
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+	
+	}
+
+
+	/**
+	 * In case I need this for future generations
+	 */
+	private void _generateGrayScaleTexture()
+	{
 		// Create a new X x Y texture ARGB32 (32 bit with alpha) and no mipmaps
-		Texture2D Texture = new Texture2D(this._mapSize, this._mapSize, TextureFormat.ARGB32, false);
 		Texture2D NormalMap = new Texture2D (this._mapSize, this._mapSize, TextureFormat.RGB24, false);
 
 		/**
@@ -26,57 +71,12 @@ public class Map : MonoBehaviour {
 
 		for (int i = 0; i < this._mapSize; i++) {
 			for (int j = 0; j < this._mapSize; j++) {
-				float random = Random.Range (0.0f, 10.0f);
-				if (random <= 1.0f) {
-					Texture.SetPixel(i, j, Color.blue);
-					NormalMap.SetPixel(i, j, Color.black);
-				} else if (random > 1.0f && random <= 8.0f) {
-					Texture.SetPixel(i, j, Color.green);
-					NormalMap.SetPixel (i, j, Color.grey);
-				} else {
-					Texture.SetPixel(i, j, Color.gray);
-					NormalMap.SetPixel(i, j, Color.white);
-				}
+
 			}
 		}
-
-
 
 		// Apply all SetPixel calls
-		Texture.Apply ();
 		NormalMap.Apply();
-
-
-		// connect texture to material of GameObject this script is attached to
-		this.renderer.material.mainTexture = Texture;
-		this.renderer.material.SetTexture("_BumpMap", NormalMap);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-
-	private int[,] _generateMap ()
-	{
-		int[,] mapTiles = new int[this._mapSize, this._mapSize];
-
-		//Initialize everything as grass
-		for (int i = 0; i < this._mapSize; i++) {
-			for (int j = 0; j < this._mapSize; j++) {
-				mapTiles [i, j] = _GRASS;
-			}
-		}
-
-		//Now do some randomization
-		int numRivers = Random.Range (0, 4);
-
-		for (int i = 0; i < numRivers; i++) {
-
-		}
-
-		return mapTiles;
 	}
 
 
