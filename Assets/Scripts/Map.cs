@@ -10,6 +10,7 @@ public class Map : MonoBehaviour {
 	public const int MOUNTAIN = 3;
 
 	public Texture2D GrassTexture;
+	public Texture2D WaterTexture;
 
 	// Use this for initialization
 	void Start () 
@@ -31,8 +32,8 @@ public class Map : MonoBehaviour {
 					mapTiles [i, j] = GRASS;
 					NewMainTexPixels[pixelPosition] = this.GrassTexture.GetPixel (smallTextureX, smallTextureY); 
 				} else if (PixelColor == Color.blue) {
-					NewMainTexPixels[pixelPosition] = MainTexture.GetPixel (i, j); 
 					mapTiles [i, j] = WATER;
+					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY); 
 				} else {
 					mapTiles [i, j] = MOUNTAIN;
 					NewMainTexPixels[pixelPosition] = MainTexture.GetPixel (i, j); 
