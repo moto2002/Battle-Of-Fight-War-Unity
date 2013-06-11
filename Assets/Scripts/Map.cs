@@ -8,20 +8,27 @@ public class Map : MonoBehaviour {
 	public const int GRASS = 1;
 	public const int WATER = 2;
 	public const int MOUNTAIN = 3;
+	public const int FOREST = 4;
 
 	public Texture2D GrassTexture;
 	public Texture2D WaterTexture;
+	public Texture2D MountainTexture;
+	public Texture2D ForestTexture;
+
+	private Texture2D _OriginalTexture;
 
 	// Use this for initialization
 	void Start () 
 	{
-		Texture2D MainTexture = (Texture2D)this.renderer.material.mainTexture;
+		this._OriginalTexture = (Texture2D)this.renderer.material.mainTexture;
+		Texture2D NewTexture = new Texture2D(this._mapSize, this._mapSize, TextureFormat.RGB24, true);
+
 		int[,] mapTiles = new int[this._mapSize, this._mapSize];
 
 		Color[] NewMainTexPixels = new Color[this._mapSize * this._mapSize];
 		for (int i = 0; i < this._mapSize; i++) {
 			for (int j = 0; j < this._mapSize; j++) {
-				Color PixelColor = MainTexture.GetPixel(i, j);
+				Color PixelColor = this._OriginalTexture.GetPixel(i, j);
 
 				int	smallTextureX = i % 32;
 				int	smallTextureY = j % 32;
@@ -34,22 +41,31 @@ public class Map : MonoBehaviour {
 				} else if (PixelColor == Color.blue) {
 					mapTiles [i, j] = WATER;
 					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY); 
-				} else {
+				} else if (PixelColor.r == (128.0f/255.0f) && PixelColor.g == (64.0f/255.0f)) { //Mountain brown
 					mapTiles [i, j] = MOUNTAIN;
-					NewMainTexPixels[pixelPosition] = MainTexture.GetPixel (i, j); 
+					NewMainTexPixels[pixelPosition] = this.MountainTexture.GetPixel (smallTextureX, smallTextureY); 
+				} else if (PixelColor.g == (128.0f/255.0f)) { //Forest green
+					mapTiles [i, j] = FOREST;
+					NewMainTexPixels[pixelPosition] = this.ForestTexture.GetPixel (smallTextureX, smallTextureY); 
 				}
 			}
 		}
 
-		MainTexture.SetPixels (NewMainTexPixels);
-		MainTexture.Apply();
-		this.renderer.material.mainTexture = MainTexture;
+		NewTexture.SetPixels (NewMainTexPixels);
+		NewTexture.Apply();
+		this.renderer.material.mainTexture = NewTexture;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 	
+	}
+
+
+	void OnDestroy()
+	{
+		this.renderer.material.mainTexture = this._OriginalTexture;
 	}
 
 
