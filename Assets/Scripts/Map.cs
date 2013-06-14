@@ -17,6 +17,8 @@ public class Map : MonoBehaviour {
 
 	private Texture2D _OriginalTexture;
 
+	public Unit SelectedUnit = null;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -66,6 +68,14 @@ public class Map : MonoBehaviour {
 	void OnDestroy()
 	{
 		this.renderer.material.mainTexture = this._OriginalTexture;
+	}
+
+
+	void OnMouseDown()
+	{
+		if (this.SelectedUnit == null) {
+
+		}
 	}
 
 

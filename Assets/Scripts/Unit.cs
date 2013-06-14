@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using Pathfinding;
+
 
 public class Unit : MonoBehaviour {
 
@@ -23,6 +25,26 @@ public class Unit : MonoBehaviour {
 
 	public bool selected = false;
 
+	/**
+	 * Pathfinding variables
+	 */
+
+	private CharacterController _Controller;
+
+	//The calculated path
+	public Path PathToFollow;
+
+	//The AI's speed per second
+	public float speed = 100;
+
+	//The max distance from the AI to a waypoint for it to continue to the next waypoint
+	public float nextWaypointDistance = 3;
+
+	//The waypoint we are currently moving towards
+	private int currentWaypoint = 0;
+	
+	public Vector3 GoalPosition = new Vector3(0.0f, -1.0f, 0.0f); //We should never get a neg't y value
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -36,13 +58,21 @@ public class Unit : MonoBehaviour {
 		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
 		this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
 
+		if (this.GoalPosition.y >= 0) {
+			Seeker AISeeker = this.GetComponent<Seeker> ();
+			AISeeker.StartPath (this.transform.position, this.GoalPosition, OnPathComplete);
+		}
+
+		this._Controller = this.GetComponent<CharacterController> ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		this._UnitSprite.Transform();
-		//this._UnitSprite.SetDrawLayer((int)this.gameObject.transform.position.z);
+
+		float drawLayerMultiplied = this.gameObject.transform.position.z * -1000;
+		this._UnitSprite.SetDrawLayer((int)drawLayerMultiplied);
 
 		if (this._SelectSprite != null) {
 			this._SelectSprite.Transform();
@@ -124,6 +154,43 @@ public class Unit : MonoBehaviour {
 
 		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
 		*/
+	}
+
+
+	public void OnPathComplete(Path CompletedPath)
+	{
+		Debug.Log ("Path complete! Error? " + CompletedPath.error);
+		if (!CompletedPath.error) {
+			this.PathToFollow = CompletedPath;
+			//Reset the waypoint counter
+			this.currentWaypoint = 0;
+		}
+	}
+
+
+	public void FixedUpdate () {
+		if (this.PathToFollow == null) {
+			//We have no path to move after yet
+			return;
+		}
+
+		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
+			this.PathToFollow = null;
+			Debug.Log ("End Of Path Reached");
+			return;
+		}
+
+		//Direction to the next waypoint
+		Vector3 Direction = (this.PathToFollow.vectorPath[currentWaypoint]-transform.position).normalized;
+		Direction *= this.speed * Time.fixedDeltaTime;
+		this._Controller.SimpleMove (Direction);
+
+		//Check if we are close enough to the next waypoint
+		//If we are, proceed to follow the next waypoint
+		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < this.nextWaypointDistance) {
+			this.currentWaypoint++;
+			return;
+		}
 	}
 
 
