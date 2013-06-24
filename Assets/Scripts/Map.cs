@@ -17,7 +17,8 @@ public class Map : MonoBehaviour {
 
 	private Texture2D _OriginalTexture;
 
-	public Unit SelectedUnit = null;
+	public GameObject PlayerObject;
+
 
 	// Use this for initialization
 	void Start () 
@@ -61,21 +62,31 @@ public class Map : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		if (Input.GetMouseButtonDown(1)) {
+			Player PlayerScript = this.PlayerObject.GetComponent<Player> ();
+			if (PlayerScript.SelectedUnit == null) {
+				return;
+			}
+
+			//Gives you a ray going from camera to the designated point on the screen (x,y?)
+			Ray RayFromCameraToMouseClickPoint = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit HitInfo;
+
+			//Last variable is the length of the ray
+			//Physics.Raycast returns true if it collides with sommat; hitInfo will contain collision info in this case
+			if (Physics.Raycast (RayFromCameraToMouseClickPoint, out HitInfo, 100.0f)) {
+				Debug.Log ("Right-clicked on Point " + HitInfo.point);
+				//Debug.DrawLine (RayFromCameraToMouseClickPoint.origin, HitInfo.point);
+				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
+				UnitScript.setGoalPosition (HitInfo.point);
+			}
+		}
 	}
 
 
 	void OnDestroy()
 	{
 		this.renderer.material.mainTexture = this._OriginalTexture;
-	}
-
-
-	void OnMouseDown()
-	{
-		if (this.SelectedUnit == null) {
-
-		}
 	}
 
 

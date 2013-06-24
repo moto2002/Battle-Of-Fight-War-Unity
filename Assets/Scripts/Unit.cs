@@ -23,6 +23,11 @@ public class Unit : MonoBehaviour {
 	protected float spriteBottomLeftX = 0.0f;
 	protected float spriteBottomLeftY = 64.0f;
 
+	
+	private GameObject _PlayerObject;
+	private GameObject _MainSpriteManager;
+	//Public variables
+
 	public bool selected = false;
 
 	/**
@@ -37,19 +42,24 @@ public class Unit : MonoBehaviour {
 	//The AI's speed per second
 	public float speed = 100;
 
-	//The max distance from the AI to a waypoint for it to continue to the next waypoint
-	public float nextWaypointDistance = 3;
+	//Whether or not the unit should currently be assigned a path
+	public bool shouldSeekPath = false;
 
 	//The waypoint we are currently moving towards
 	private int currentWaypoint = 0;
+
+	//The max distance from the AI to a waypoint for it to continue to the next waypoint
+	public float nextWaypointDistance = 0.1f;
 	
 	public Vector3 GoalPosition = new Vector3(0.0f, -1.0f, 0.0f); //We should never get a neg't y value
 
 	// Use this for initialization
 	void Start () 
 	{
-		GameObject MainSpriteManager = GameObject.Find("MainSpriteManager");
-		SpriteManager SpriteManagerScript = MainSpriteManager.GetComponent<SpriteManager> ();
+		this._PlayerObject = GameObject.Find("Player");
+		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
+
+		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
 		Vector2 SpriteStart = new Vector2 ((spriteBottomLeftX / spriteSheetWidth), 1.0f - (spriteBottomLeftY / spriteSheetHeight));
 		Vector2 SpriteDimensions = new Vector2 ((spriteWidth / spriteSheetWidth), (spriteHeight / spriteSheetHeight));
@@ -58,21 +68,33 @@ public class Unit : MonoBehaviour {
 		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
 		this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
 
-		if (this.GoalPosition.y >= 0) {
-			Seeker AISeeker = this.GetComponent<Seeker> ();
-			AISeeker.StartPath (this.transform.position, this.GoalPosition, OnPathComplete);
-		}
-
 		this._Controller = this.GetComponent<CharacterController> ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		this._UnitSprite.Transform();
 
-		float drawLayerMultiplied = this.gameObject.transform.position.z * -1000;
-		this._UnitSprite.SetDrawLayer((int)drawLayerMultiplied);
+		if (this.shouldSeekPath && this.PathToFollow == null) {
+
+			if (
+				Mathf.Abs (this.GoalPosition.x - this.transform.position.x) <= 0.5f && 
+				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.5f
+			    ) {
+				//Goal is too close; don't look for a path, so do nothing
+			} else {
+				Debug.Log ("looking for new path");
+				Seeker AISeeker = this.GetComponent<Seeker> ();
+				AISeeker.StartPath (this.transform.position, this.GoalPosition, pathSeekComplete);
+			}
+
+			//Need to stop seeking path immediately. Apparently the pathfinding algorithm doesn't do everything in one frame
+			//(which is pretty awesome), so we shouldn't keep restarting it
+			this.shouldSeekPath = false; 
+		}
+
+		this._UnitSprite.Transform();
+		//this._UnitSprite.SetDrawLayer((int)this.gameObject.transform.position.z);
 
 		if (this._SelectSprite != null) {
 			this._SelectSprite.Transform();
@@ -90,11 +112,20 @@ public class Unit : MonoBehaviour {
 	void OnMouseDown()
 	{
 		this.selected = !this.selected;
-		GameObject MainSpriteManager = GameObject.Find("MainSpriteManager");
-		SpriteManager SpriteManagerScript = MainSpriteManager.GetComponent<SpriteManager> ();
+
+		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
 
 		if (this.selected) {
 			if (this._SelectSprite == null) {
+				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+
+				if (PlayerScript.SelectedUnit != null) {
+					Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
+					UnitScript.removeSelectionBox ();
+				}
+
+				PlayerScript.SelectedUnit = this.gameObject;
+
 				//Dimensions for unit select box
 				Vector2 SpriteStart = new Vector2 ((selectBoxBottomLeftX / spriteSheetWidth), 1.0f - (selectBoxBottomLeftY / spriteSheetHeight));
 				Vector2 SpriteDimensions = new Vector2 ((spriteStandardSize / spriteSheetWidth), (spriteStandardSize / spriteSheetHeight));
@@ -103,11 +134,16 @@ public class Unit : MonoBehaviour {
 				SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 		} else {
-			if (this._SelectSprite != null) {
+			if (this._SelectSprite != null) { //Deselecting a unit
+				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+
+				PlayerScript.SelectedUnit = null;
+
 				SpriteManagerScript.RemoveSprite (this._SelectSprite);
 				this._SelectSprite = null;
 			}
 		}
+
 	}
 
 
@@ -157,25 +193,31 @@ public class Unit : MonoBehaviour {
 	}
 
 
-	public void OnPathComplete(Path CompletedPath)
+	public void pathSeekComplete(Path CompletedPath)
 	{
 		Debug.Log ("Path complete! Error? " + CompletedPath.error);
 		if (!CompletedPath.error) {
 			this.PathToFollow = CompletedPath;
 			//Reset the waypoint counter
 			this.currentWaypoint = 0;
+			this.shouldSeekPath = false;
 		}
 	}
 
 
-	public void FixedUpdate () {
+	public void FixedUpdate () 
+	{
 		if (this.PathToFollow == null) {
 			//We have no path to move after yet
 			return;
 		}
 
 		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
+			Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint-1]));
+			//Vector3 Goal = this.PathToFollow.vectorPath [this.currentWaypoint-1];
+			//Debug.Log ("Reached point " + Goal.x + "," + Goal.y + "," + Goal.z);
 			this.PathToFollow = null;
+			//this.shouldSeekPath = false;
 			Debug.Log ("End Of Path Reached");
 			return;
 		}
@@ -187,9 +229,41 @@ public class Unit : MonoBehaviour {
 
 		//Check if we are close enough to the next waypoint
 		//If we are, proceed to follow the next waypoint
-		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < this.nextWaypointDistance) {
+		/**
+		 * I suspect there may be a problem here with the "distance until waypoint considered reached" variable
+		 * If it's too low then the object will never get to said waypoint due to the direction calculation fucking up
+		 * in-between waypoints
+		 * If it's too high then the object will end up only half-assing it to their goal
+		 */ 
+		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.65f) {
+			Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]));
 			this.currentWaypoint++;
 			return;
+		}
+	}
+
+
+	public void setGoalPosition(Vector3 NewGoalPosition)
+	{
+		this.GoalPosition.x = NewGoalPosition.x;
+		this.GoalPosition.z = NewGoalPosition.z;
+		this.GoalPosition.y = 0;
+
+		this.shouldSeekPath = true;
+		this.PathToFollow = null;
+		this.currentWaypoint = 0;
+	}
+
+
+	public void removeSelectionBox()
+	{
+		if (this.selected) {
+			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+
+			SpriteManagerScript.RemoveSprite (this._SelectSprite);
+			this._SelectSprite = null;
+
+			this.selected = false;
 		}
 	}
 
