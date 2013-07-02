@@ -236,7 +236,7 @@ public class Unit : MonoBehaviour {
 		 * If it's too high then the object will end up only half-assing it to their goal
 		 */ 
 		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.65f) {
-			Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]));
+			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]));
 			this.currentWaypoint++;
 			return;
 		}

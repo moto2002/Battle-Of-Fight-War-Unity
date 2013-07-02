@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using Pathfinding;
+
 
 public class Map : MonoBehaviour {
 
@@ -51,6 +53,11 @@ public class Map : MonoBehaviour {
 					mapTiles [i, j] = FOREST;
 					NewMainTexPixels[pixelPosition] = this.ForestTexture.GetPixel (smallTextureX, smallTextureY); 
 				}
+
+				//Get the AI path node closest to this pixel
+				//Start by shooting a ray from above the middle of the map (0,0,0) to the position
+
+				//Node PathNode = AstarPath.active.GetNearest (transform.position, NNConstraint.Default);
 			}
 		}
 
