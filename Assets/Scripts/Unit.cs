@@ -6,11 +6,11 @@ using Pathfinding;
 public class Unit : MonoBehaviour {
 
 
-	private Sprite _UnitSprite;
-	private Sprite _SelectSprite;
+	protected Sprite _UnitSprite;
+	protected Sprite _SelectSprite;
 
-	protected static float spriteSheetWidth = 192.0f;
-	protected static float spriteSheetHeight = 192.0f;
+	protected static float spriteSheetWidth = 256.0f;
+	protected static float spriteSheetHeight = 256.0f;
 
 	protected static float selectBoxBottomLeftX = 0.0f;
 	protected static float selectBoxBottomLeftY = 192.0f;
@@ -22,10 +22,9 @@ public class Unit : MonoBehaviour {
 
 	protected float spriteBottomLeftX = 0.0f;
 	protected float spriteBottomLeftY = 64.0f;
-
 	
-	private GameObject _PlayerObject;
-	private GameObject _MainSpriteManager;
+	protected GameObject _PlayerObject;
+	protected GameObject _MainSpriteManager;
 	//Public variables
 
 	public bool selected = false;
@@ -34,7 +33,7 @@ public class Unit : MonoBehaviour {
 	 * Pathfinding variables
 	 */
 
-	private CharacterController _Controller;
+	protected CharacterController _Controller;
 
 	//The calculated path
 	public Path PathToFollow;
@@ -46,7 +45,7 @@ public class Unit : MonoBehaviour {
 	public bool shouldSeekPath = false;
 
 	//The waypoint we are currently moving towards
-	private int currentWaypoint = 0;
+	protected int currentWaypoint = 0;
 
 	//The max distance from the AI to a waypoint for it to continue to the next waypoint
 	public float nextWaypointDistance = 0.1f;
@@ -54,10 +53,12 @@ public class Unit : MonoBehaviour {
 	public Vector3 GoalPosition = new Vector3(0.0f, -1.0f, 0.0f); //We should never get a neg't y value
 
 	// Use this for initialization
-	void Start () 
+	public virtual void Start () 
 	{
 		this._PlayerObject = GameObject.Find("Player");
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
+
+		this._Controller = this.GetComponent<CharacterController> ();
 
 		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
@@ -67,8 +68,6 @@ public class Unit : MonoBehaviour {
 		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
 		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
 		this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
-
-		this._Controller = this.GetComponent<CharacterController> ();
 	}
 	
 	// Update is called once per frame
@@ -147,11 +146,9 @@ public class Unit : MonoBehaviour {
 	}
 
 
+	/**
 	void OnMouseEnter()
 	{
-		Color MouseOverColor = new Color (128.0f/255.0f, 255.0f / 255.0f, 128.0f / 255.0f);
-		this._UnitSprite.SetColor (Color.green);
-
 		//Below is commented-out bullshit code that didn't work but might be 
 		//My original goal was to customize the individual pixels within the sprite
 		/**
@@ -189,8 +186,8 @@ public class Unit : MonoBehaviour {
 		Vector2 SpriteDimensions = new Vector2 ((bodyWidth / spriteSheetWidth), (bodyHeight / spriteSheetHeight));
 
 		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
-		*/
-	}
+
+	} */
 
 
 	public void pathSeekComplete(Path CompletedPath)

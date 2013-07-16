@@ -21,6 +21,9 @@ public class Map : MonoBehaviour {
 
 	public GameObject PlayerObject;
 
+	private uint _PENALTY_GRASS = 0;
+	private uint _PENALTY_FOREST = 200;
+	private uint _PENALTY_MOUNTAIN = 2000;
 
 	// Use this for initialization
 	void Start () 
@@ -39,25 +42,43 @@ public class Map : MonoBehaviour {
 				int	smallTextureY = j % 32;
 
 				int pixelPosition = this._mapSize * j + i;
+
+				//Get the AI path node closest to this pixel
+				//THIS IS SO AWESOME IT'S FUCKING SWEET
+				float vectorX = (i / 25.6f) - 10.0f; 
+				float vectorZ = (j / 25.6f) - 10.0f; 
+				Vector3 ClosestVector = new Vector3(vectorX ,0.0f, vectorZ);
+
+				Node PathNode = AstarPath.active.GetNearest (ClosestVector).node;
+
 				//Debug.Log (PixelColor.r + "," + PixelColor.g + "," + PixelColor.b);
 				if (PixelColor == Color.green) {
 					mapTiles [i, j] = GRASS;
-					NewMainTexPixels[pixelPosition] = this.GrassTexture.GetPixel (smallTextureX, smallTextureY); 
+					NewMainTexPixels[pixelPosition] = this.GrassTexture.GetPixel (smallTextureX, smallTextureY);
+
+					PathNode.penalty = this._PENALTY_GRASS;
 				} else if (PixelColor == Color.blue) {
 					mapTiles [i, j] = WATER;
-					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY); 
+					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY);
+
+					//Walkability edit
+					PathNode.walkable = false;
+
 				} else if (PixelColor.r == (128.0f/255.0f) && PixelColor.g == (64.0f/255.0f)) { //Mountain brown
 					mapTiles [i, j] = MOUNTAIN;
 					NewMainTexPixels[pixelPosition] = this.MountainTexture.GetPixel (smallTextureX, smallTextureY); 
+
+					PathNode.penalty = this._PENALTY_MOUNTAIN;
 				} else if (PixelColor.g == (128.0f/255.0f)) { //Forest green
 					mapTiles [i, j] = FOREST;
-					NewMainTexPixels[pixelPosition] = this.ForestTexture.GetPixel (smallTextureX, smallTextureY); 
+					NewMainTexPixels[pixelPosition] = this.ForestTexture.GetPixel (smallTextureX, smallTextureY);
+
+					PathNode.penalty = this._PENALTY_FOREST;
 				}
 
-				//Get the AI path node closest to this pixel
-				//Start by shooting a ray from above the middle of the map (0,0,0) to the position
-
-				//Node PathNode = AstarPath.active.GetNearest (transform.position, NNConstraint.Default);
+				//Updating the actual node with its changes in the active grid graph?
+				GraphUpdateObject GUO = new GraphUpdateObject();
+				GUO.Apply (PathNode);
 			}
 		}
 
@@ -83,6 +104,15 @@ public class Map : MonoBehaviour {
 			//Physics.Raycast returns true if it collides with sommat; hitInfo will contain collision info in this case
 			if (Physics.Raycast (RayFromCameraToMouseClickPoint, out HitInfo, 100.0f)) {
 				Debug.Log ("Right-clicked on Point " + HitInfo.point);
+
+				Node PathNode = AstarPath.active.GetNearest (HitInfo.point).node;
+				if (!PathNode.walkable) {
+					//node is not walkable, so do noffin, jon snuh
+					Debug.Log ("Clicked on unwalkable node");
+					return;
+				}
+
+
 				//Debug.DrawLine (RayFromCameraToMouseClickPoint.origin, HitInfo.point);
 				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
 				UnitScript.setGoalPosition (HitInfo.point);
