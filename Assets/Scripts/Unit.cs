@@ -15,10 +15,10 @@ public class Unit : MonoBehaviour {
 	protected static float selectBoxBottomLeftX = 0.0f;
 	protected static float selectBoxBottomLeftY = 192.0f;
 
-	protected static float spriteStandardSize = 64.0f;
+	protected static float spriteStandardSize = 32.0f;
 
-	protected float spriteWidth = 64.0f;
-	protected float spriteHeight = 64.0f;
+	protected float spriteWidth = 32.0f;
+	protected float spriteHeight = 32.0f;
 
 	protected float spriteBottomLeftX = 0.0f;
 	protected float spriteBottomLeftY = 64.0f;

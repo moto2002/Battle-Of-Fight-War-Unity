@@ -8,9 +8,11 @@ public class Rifleman : Unit
 	public override void Start () 
 	{
 		this.spriteBottomLeftX = 0.0f;
-		this.spriteBottomLeftY = 64.0f;
+		this.spriteBottomLeftY = 32.0f;
 
 		base.Start ();
+
+		this.speed = 50;
 	}
 
 
