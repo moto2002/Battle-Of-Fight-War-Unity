@@ -105,6 +105,7 @@
      <Compile Include="Assets\Scripts\AstarPathfindingProject\Utilities\SizeProfiler.cs" />
      <Compile Include="Assets\Scripts\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\Scripts\AstarPathfindingProject\changelog.cs" />
+     <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\Monster1.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
