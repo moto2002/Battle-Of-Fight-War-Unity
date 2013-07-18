@@ -12,7 +12,7 @@ public class Rifleman : Unit
 
 		base.Start ();
 
-		this.speed = 50;
+		this.speed = 25;
 	}
 
 
