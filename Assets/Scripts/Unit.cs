@@ -93,7 +93,7 @@ public class Unit : MonoBehaviour {
 		}
 
 		this._UnitSprite.Transform();
-		//this._UnitSprite.SetDrawLayer((int)this.gameObject.transform.position.z);
+		this._UnitSprite.drawLayer = (int)this.gameObject.transform.position.z;
 
 		if (this._SelectSprite != null) {
 			this._SelectSprite.Transform();

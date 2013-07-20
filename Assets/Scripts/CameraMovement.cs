@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
+	
+	private float _camSpeed = 10.0f;
+	private float _zoomSpeed = 200.0f;
 
 	// Use this for initialization
 	void Start () 
@@ -14,16 +17,27 @@ public class CameraMovement : MonoBehaviour {
 	{
 		float translationX = Input.GetAxis ("Horizontal");
 		float translationZ = Input.GetAxis ("Vertical");
+		float mouseScrollTranslation = Input.GetAxis ("Mouse ScrollWheel");
 
 		translationX *= Time.deltaTime;
-
-		//z is special since we're at an angle
 		translationZ *= Time.deltaTime;
-		float rotationZInRad = (this.transform.rotation.z * 3.14f)/180.0f;
-		translationZ = Mathf.Cos (rotationZInRad) * translationZ;
+		mouseScrollTranslation *= Time.deltaTime;
+
+		//translationZ = Mathf.Cos (rotationZInRad) * translationZ;
+		//Debug.Log(rotationXInRad);
+		Vector3 trueForward = new Vector3 (0.0f, 0.0f, +1.0f);
 	
-		this.transform.position += transform.right * 10.0f * translationX;
-		this.transform.position += transform.forward * 10.0f * translationZ;
+		this.transform.position += this.transform.right * this._camSpeed * translationX;
+		this.transform.position += trueForward * this._camSpeed * translationZ;
+		this.transform.position += this.transform.forward * this._zoomSpeed * mouseScrollTranslation;
+
+		/*
+		if (Input.GetKeyDown(KeyCode.Q)) {
+			this.transform.position += this.transform.forward * mouseScrollTranslation;
+		} else if (Input.GetKeyDown(KeyCode.E)) {
+			this.transform.position += this.transform.forward * -mouseScrollTranslation;
+		}
+		*/
 
 		//this.transform.Translate(translationX, this.transform.position.y, translationZ);
 	}
