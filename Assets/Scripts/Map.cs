@@ -19,20 +19,30 @@ public class Map : MonoBehaviour {
 
 	private Texture2D _OriginalTexture;
 
+	//GameObjects
 	public GameObject PlayerObject;
+	public GameObject PlayerBasePrefab;
+	public GameObject EnemySpawnPrefab;
 
 	private uint _PENALTY_GRASS = 0;
 	private uint _PENALTY_FOREST = 200;
 	private uint _PENALTY_MOUNTAIN = 2000;
 
+	public Vector2 PlayerBasePosition;
+	public Vector2[] EnemySpawnPositions;
+
 	// Use this for initialization
 	void Start () 
 	{
+
+		//-------------------------------------------------------------------------------------------------------------
+		//Redoing texture to look nicer
+
 		this._OriginalTexture = (Texture2D)this.renderer.material.mainTexture;
 		Texture2D NewTexture = new Texture2D(this._mapSize, this._mapSize, TextureFormat.RGB24, true);
 
 		int[,] mapTiles = new int[this._mapSize, this._mapSize];
-
+		
 		Color[] NewMainTexPixels = new Color[this._mapSize * this._mapSize];
 		for (int i = 0; i < this._mapSize; i++) {
 			for (int j = 0; j < this._mapSize; j++) {
@@ -85,6 +95,10 @@ public class Map : MonoBehaviour {
 		NewTexture.SetPixels (NewMainTexPixels);
 		NewTexture.Apply();
 		this.renderer.material.mainTexture = NewTexture;
+
+		//-------------------------------------------------------------------------------------------------------------
+		//Adding bases/spawn points
+		this._addBases ();
 	}
 	
 	// Update is called once per frame
@@ -152,6 +166,24 @@ public class Map : MonoBehaviour {
 
 		// Apply all SetPixel calls
 		NormalMap.Apply();
+	}
+
+
+	/**
+	 * Add bases/spawn points
+	 */
+	private void _addBases()
+	{
+		if (this.PlayerBasePosition.x != 0.0f && this.PlayerBasePosition.y != 0.0f) {
+
+			Vector3 BasePosition = new Vector3 (this.PlayerBasePosition.x, 0.0f, this.PlayerBasePosition.y);
+			GameObject PlayerBase = Instantiate(this.PlayerBasePrefab, BasePosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
+		}
+
+		for (int i = 0; i < this.EnemySpawnPositions.Length; i++) {
+			Vector3 BasePosition = new Vector3 (this.EnemySpawnPositions[i].x, 0.0f, this.EnemySpawnPositions[i].y);
+			GameObject EnemySpawn = Instantiate(this.EnemySpawnPrefab, BasePosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
+		}
 	}
 
 

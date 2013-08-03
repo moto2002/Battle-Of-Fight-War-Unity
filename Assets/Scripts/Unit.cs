@@ -67,17 +67,36 @@ public class Unit : MonoBehaviour {
 
 		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
 		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
-		this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
+		//this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
 
 		//Make sure this unit is allowed to go through other friendly units
-		GameObject[] FriendlyUnits = GameObject.FindGameObjectsWithTag(this.gameObject.tag);
-		for (int i = 0; i < FriendlyUnits.Length; i++) {
-			if (this.gameObject == FriendlyUnits [i]) {
+		GameObject[] Objects = GameObject.FindGameObjectsWithTag(this.gameObject.tag);
+		for (int i = 0; i < Objects.Length; i++) {
+			if (this.gameObject == Objects [i]) {
 				continue;
 			}
 			//Can't ignore collisions with yourself or the method freaks out
-			Physics.IgnoreCollision(FriendlyUnits[i].collider, this.collider);
+			Physics.IgnoreCollision(Objects[i].collider, this.collider);
 		}
+
+		//Make sure this unit is allowed to go through bases/spawn points
+		Objects = GameObject.FindGameObjectsWithTag("PlayerBase");
+		for (int i = 0; i < Objects.Length; i++) {
+			if (this.gameObject == Objects [i]) {
+				continue;
+			}
+			//Can't ignore collisions with yourself or the method freaks out
+			Physics.IgnoreCollision(Objects[i].collider, this.collider);
+		}
+		Objects = GameObject.FindGameObjectsWithTag("EnemySpawn");
+		for (int i = 0; i < Objects.Length; i++) {
+			if (this.gameObject == Objects [i]) {
+				continue;
+			}
+			//Can't ignore collisions with yourself or the method freaks out
+			Physics.IgnoreCollision(Objects[i].collider, this.collider);
+		}
+
 	}
 	
 	// Update is called once per frame
