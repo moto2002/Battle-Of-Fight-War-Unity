@@ -28,6 +28,7 @@ public class Unit : MonoBehaviour {
 	//Public variables
 
 	public bool selected = false;
+	public bool inCombat = false;
 
 	/**
 	 * Pathfinding variables
@@ -221,7 +222,7 @@ public class Unit : MonoBehaviour {
 
 	public void pathSeekComplete(Path CompletedPath)
 	{
-		Debug.Log ("Path complete! Error? " + CompletedPath.error);
+		//Debug.Log ("Path complete! Error? " + CompletedPath.error);
 		if (!CompletedPath.error) {
 			this.PathToFollow = CompletedPath;
 			//Reset the waypoint counter
@@ -244,14 +245,20 @@ public class Unit : MonoBehaviour {
 			//Debug.Log ("Reached point " + Goal.x + "," + Goal.y + "," + Goal.z);
 			this.PathToFollow = null;
 			//this.shouldSeekPath = false;
-			Debug.Log ("End Of Path Reached");
+			//Debug.Log ("End Of Path Reached");
 			return;
 		}
 
 		//Direction to the next waypoint
 		Vector3 Direction = (this.PathToFollow.vectorPath[currentWaypoint]-transform.position).normalized;
 		Direction *= this.speed * Time.fixedDeltaTime;
-		this._Controller.SimpleMove (Direction);
+
+		this.gameObject.transform.position = new Vector3 (
+			this.gameObject.transform.position.x + Direction.x,
+			this.gameObject.transform.position.y,
+			this.gameObject.transform.position.z + Direction.z
+		);
+		//this._Controller.SimpleMove (Direction);
 
 		//Check if we are close enough to the next waypoint
 		//If we are, proceed to follow the next waypoint
@@ -290,6 +297,27 @@ public class Unit : MonoBehaviour {
 			this._SelectSprite = null;
 
 			this.selected = false;
+		}
+	}
+
+
+	public void OnTriggerEnter(Collider OtherObject)
+	{
+		Debug.Log ("Units collided");
+		Debug.Log (this.gameObject.tag);
+		Debug.Log (OtherObject.gameObject.tag);
+
+		if (OtherObject.gameObject.tag != this.gameObject.tag) {
+
+			Debug.Log ("object tags are different");
+			Unit OtherUnit = OtherObject.gameObject.GetComponent<Unit> ();
+
+			if (OtherUnit != null) { //Two unfriendly units have collided oh noes!
+				Debug.Log ("Combat!");
+				this.inCombat = true;
+				OtherUnit.inCombat = true;
+			}
+
 		}
 	}
 
