@@ -239,7 +239,7 @@ public class Unit : MonoBehaviour {
 		}
 
 		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
-			Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint-1]));
+			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint-1]));
 			//Vector3 Goal = this.PathToFollow.vectorPath [this.currentWaypoint-1];
 			//Debug.Log ("Reached point " + Goal.x + "," + Goal.y + "," + Goal.z);
 			this.PathToFollow = null;

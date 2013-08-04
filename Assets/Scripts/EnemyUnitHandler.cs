@@ -35,6 +35,14 @@ public class EnemyUnitHandler : TeamUnitHandler
 			Vector3 SpawnPosition = new Vector3 (this.gameObject.transform.position.x, 0.45f, this.gameObject.transform.position.z);
 			GameObject NewUnit = Instantiate(this.UnitPrefab, SpawnPosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
             this.Units.Add(NewUnit);
+
+			GameObject MapObj =  GameObject.Find("Map");
+			Map Map = MapObj.GetComponent<Map> ();
+			Vector2 PlayerBasePositionV2 = Map.PlayerBasePosition;
+
+			Vector3 PlayerBasePositionV3 = new Vector3 (PlayerBasePositionV2.x, 0.45f, PlayerBasePositionV2.y);
+			Unit Unit = NewUnit.GetComponent<Unit>();
+			Unit.setGoalPosition (PlayerBasePositionV3);
 		}
 	}
 }
