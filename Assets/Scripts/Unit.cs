@@ -29,6 +29,7 @@ public class Unit : MonoBehaviour {
 
 	public bool selected = false;
 	public bool inCombat = false;
+	public GameObject CombatEffects = null;
 
 	/**
 	 * Pathfinding variables
@@ -235,7 +236,7 @@ public class Unit : MonoBehaviour {
 
 	public void FixedUpdate () 
 	{
-		if (this.PathToFollow == null) {
+		if (this.PathToFollow == null || this.inCombat) {
 			//We have no path to move after yet
 			return;
 		}
@@ -317,6 +318,10 @@ public class Unit : MonoBehaviour {
 				Debug.Log ("Combat!");
 				this.inCombat = true;
 				OtherUnit.inCombat = true;
+				if (this.CombatEffects != null) {
+					Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
+					Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity);
+				}
 			}
 
 		}
