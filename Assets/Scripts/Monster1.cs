@@ -11,8 +11,8 @@ public class Monster1 : Unit
 		this.spriteBottomLeftY = 256.0f;
 
 		base.Start ();
-
-		this.speed = 8;
+		
+		this.speed = 0.40f;
 	}
 
 	void OnMouseEnter()

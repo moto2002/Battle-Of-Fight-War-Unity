@@ -11,8 +11,8 @@ public class Rifleman : Unit
 		this.spriteBottomLeftY = 32.0f;
 
 		base.Start ();
-
-		this.speed = 5;
+		
+		this.speed = 0.25f;
 	}
 
 
