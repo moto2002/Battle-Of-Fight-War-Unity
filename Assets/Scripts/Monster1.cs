@@ -12,7 +12,7 @@ public class Monster1 : Unit
 
 		base.Start ();
 
-		this.speed = 40;
+		this.speed = 8;
 	}
 
 	void OnMouseEnter()

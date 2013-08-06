@@ -40,7 +40,7 @@ public class Unit : MonoBehaviour {
 	public Path PathToFollow;
 
 	//The AI's speed per second
-	public float speed = 100;
+	protected float speed = 25;
 
 	//Whether or not the unit should currently be assigned a path
 	public bool shouldSeekPath = false;
@@ -80,7 +80,7 @@ public class Unit : MonoBehaviour {
 			Physics.IgnoreCollision(Objects[i].collider, this.collider);
 		}
 
-		//Make sure this unit is allowed to go through bases/spawn points
+		//Make sure this unit is allowed to go through bases/spawn points (enemy or otherwise)
 		Objects = GameObject.FindGameObjectsWithTag("PlayerBase");
 		for (int i = 0; i < Objects.Length; i++) {
 			if (this.gameObject == Objects [i]) {
