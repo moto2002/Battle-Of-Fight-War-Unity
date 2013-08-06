@@ -900,6 +900,12 @@ public class SpriteManager : MonoBehaviour
 	{
 	
 	}
+
+
+	public void Update()
+	{
+		this.SortDrawingOrder ();
+	}
 	
 	// LateUpdate is called once per frame
 	virtual public void LateUpdate () 

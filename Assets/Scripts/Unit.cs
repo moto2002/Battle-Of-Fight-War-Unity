@@ -123,7 +123,8 @@ public class Unit : MonoBehaviour {
 		}
 
 		this._UnitSprite.Transform();
-		this._UnitSprite.drawLayer = (int)this.gameObject.transform.position.z;
+		//Multiply the z by 100 so we get a more accurate drawLayer reading
+		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);
 
 		if (this._SelectSprite != null) {
 			this._SelectSprite.Transform();
@@ -160,7 +161,7 @@ public class Unit : MonoBehaviour {
 				Vector2 SpriteDimensions = new Vector2 ((spriteStandardSize / spriteSheetWidth), (spriteStandardSize / spriteSheetHeight));
 
 				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
-				SpriteManagerScript.MoveToFront (this._SelectSprite);
+				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 		} else {
 			if (this._SelectSprite != null) { //Deselecting a unit
