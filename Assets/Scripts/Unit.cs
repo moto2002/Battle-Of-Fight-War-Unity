@@ -316,12 +316,12 @@ public class Unit : MonoBehaviour {
 
 			if (OtherUnit != null) { //Two unfriendly units have collided oh noes!
 				Debug.Log ("Combat!");
-				this.inCombat = true;
-				OtherUnit.inCombat = true;
-				if (this.CombatEffects != null) {
-					Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
+				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
+					//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
 					Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity);
+
 				}
+				this.inCombat = true;
 			}
 
 		}

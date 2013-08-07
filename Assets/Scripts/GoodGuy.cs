@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Rifleman : Unit 
+public class GoodGuy : Unit 
 {
 
 	// Use this for initialization
