@@ -20,8 +20,9 @@ public class Unit : MonoBehaviour {
 	protected float spriteWidth = 32.0f;
 	protected float spriteHeight = 32.0f;
 
-	protected float spriteBottomLeftX = 0.0f;
-	protected float spriteBottomLeftY = 64.0f;
+	//Set these through the game engine
+	public float spriteBottomLeftX;
+	public float spriteBottomLeftY;
 	
 	protected GameObject _PlayerObject;
 	protected GameObject _MainSpriteManager;
@@ -31,6 +32,10 @@ public class Unit : MonoBehaviour {
 	public bool inCombat = false;
 	public GameObject CombatEffects = null;
 
+	//Default unit stats (Should set these through Unity)
+	public float speed = 0.25f;
+	public float health = 100.0f;
+
 	/**
 	 * Pathfinding variables
 	 */
@@ -39,9 +44,6 @@ public class Unit : MonoBehaviour {
 
 	//The calculated path
 	public Path PathToFollow;
-
-	//The AI's speed per second
-	protected float speed = 25;
 
 	//Whether or not the unit should currently be assigned a path
 	public bool shouldSeekPath = false;
@@ -98,6 +100,7 @@ public class Unit : MonoBehaviour {
 			//Can't ignore collisions with yourself or the method freaks out
 			Physics.IgnoreCollision(Objects[i].collider, this.collider);
 		}
+
 
 	}
 	
@@ -162,6 +165,7 @@ public class Unit : MonoBehaviour {
 				Vector2 SpriteDimensions = new Vector2 ((spriteStandardSize / spriteSheetWidth), (spriteStandardSize / spriteSheetHeight));
 
 				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
+				this._SelectSprite.drawLayer = 999; //pick a very large number so we know the border is drawn last; for some reason MoveToFront sucks
 				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 		} else {
