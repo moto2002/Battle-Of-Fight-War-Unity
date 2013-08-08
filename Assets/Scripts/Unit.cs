@@ -8,12 +8,16 @@ public class Unit : MonoBehaviour {
 
 	protected Sprite _UnitSprite;
 	protected Sprite _SelectSprite;
+	protected Sprite _HealthSprite;
 
 	protected static float spriteSheetWidth = 256.0f;
 	protected static float spriteSheetHeight = 256.0f;
 
 	protected static float selectBoxBottomLeftX = 0.0f;
 	protected static float selectBoxBottomLeftY = 192.0f;
+
+	protected static float healthBarBottomLeftX = 32.0f;
+	protected static float healthBarBottomLeftY = 192.0f;
 
 	protected static float spriteStandardSize = 32.0f;
 
@@ -130,8 +134,18 @@ public class Unit : MonoBehaviour {
 		//Multiply the z by 100 so we get a more accurate drawLayer reading
 		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);
 
-		if (this._SelectSprite != null) {
-			this._SelectSprite.Transform();
+		if (this.selected) {
+			this._SelectSprite.Transform ();
+
+			//Determine color of health sprite based on current health
+			this._HealthSprite.Transform ();
+			if (this.health > 70.0f) {
+				this._HealthSprite.SetColor (Color.green);
+			} else if (this.health > 30.0f) {
+				this._HealthSprite.SetColor (Color.yellow);
+			} else {
+				this._HealthSprite.SetColor (Color.red);
+			}
 			//this._SelectSprite.SetDrawLayer((int)this.gameObject.transform.position.z + 5);
 		}
 	}
@@ -161,21 +175,36 @@ public class Unit : MonoBehaviour {
 				PlayerScript.SelectedUnit = this.gameObject;
 
 				//Dimensions for unit select box
-				Vector2 SpriteStart = new Vector2 ((selectBoxBottomLeftX / spriteSheetWidth), 1.0f - (selectBoxBottomLeftY / spriteSheetHeight));
+				Vector2 SelectSpriteStart = new Vector2 ((selectBoxBottomLeftX / spriteSheetWidth), 1.0f - (selectBoxBottomLeftY / spriteSheetHeight));
+				Vector2 HealthSpriteStart = new Vector2 ((healthBarBottomLeftX / spriteSheetWidth), 1.0f - (healthBarBottomLeftY / spriteSheetHeight));
 				Vector2 SpriteDimensions = new Vector2 ((spriteStandardSize / spriteSheetWidth), (spriteStandardSize / spriteSheetHeight));
 
-				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
-				this._SelectSprite.drawLayer = 999; //pick a very large number so we know the border is drawn last; for some reason MoveToFront sucks
+				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
+				this._SelectSprite.drawLayer = 999;
+
+				this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, HealthSpriteStart, SpriteDimensions, false);
+				this._HealthSprite.offset = new Vector3 (0.0f, 5.0f, 0.0f);
+				this._HealthSprite.drawLayer = 999;
 				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 		} else {
-			if (this._SelectSprite != null) { //Deselecting a unit
-				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+			if (this._SelectSprite != null) { //Deselecting unit
 
 				PlayerScript.SelectedUnit = null;
 
 				SpriteManagerScript.RemoveSprite (this._SelectSprite);
 				this._SelectSprite = null;
+			}
+
+			if (this._HealthSprite != null) {
+
+				PlayerScript.SelectedUnit = null;
+
+				SpriteManagerScript.RemoveSprite (this._HealthSprite);
+				this._HealthSprite = null;
+
 			}
 		}
 
@@ -240,8 +269,8 @@ public class Unit : MonoBehaviour {
 
 	public void FixedUpdate () 
 	{
-		if (this.PathToFollow == null || this.inCombat) {
-			//We have no path to move after yet
+		if (this.PathToFollow == null || this.inCombat) { //do not move if in combatß
+
 			return;
 		}
 
@@ -272,7 +301,8 @@ public class Unit : MonoBehaviour {
 		 * I suspect there may be a problem here with the "distance until waypoint considered reached" variable
 		 * If it's too low then the object will never get to said waypoint due to the direction calculation fucking up
 		 * in-between waypoints
-		 * If it's too high then the object will end up only half-assing it to their goal
+		 * TODO: add a special condition for the last waypoint (i.e. the goal) because we need the unit to reach
+		 * the exact goal coordinates
 		 */ 
 		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.65f) {
 			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]));
