@@ -139,6 +139,11 @@ public class Unit : MonoBehaviour {
 
 			//Determine color of health sprite based on current health
 			this._HealthSprite.Transform ();
+
+			float healthWidth = this.health / 100.0f;
+			//For some reason calling SetSizeXY() fixed the offset problem (i.e. offset wasn't doing jack shit)
+			this._HealthSprite.SetSizeXY (healthWidth, 0.3f);
+
 			if (this.health > 70.0f) {
 				this._HealthSprite.SetColor (Color.green);
 			} else if (this.health > 30.0f) {
@@ -168,6 +173,7 @@ public class Unit : MonoBehaviour {
 				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
 				if (PlayerScript.SelectedUnit != null) {
+					//Unselect previously-selected unit
 					Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
 					UnitScript.removeSelectionBox ();
 				}
@@ -183,16 +189,15 @@ public class Unit : MonoBehaviour {
 				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
 				this._SelectSprite.drawLayer = 999;
 
-				this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, HealthSpriteStart, SpriteDimensions, false);
-				this._HealthSprite.offset = new Vector3 (0.0f, 5.0f, 0.0f);
-				this._HealthSprite.drawLayer = 999;
+				this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
+				this._HealthSprite.offset.y = 0.60f;
+				this._HealthSprite.drawLayer = 1000;
 				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 		} else {
 			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+			PlayerScript.SelectedUnit = null;
 			if (this._SelectSprite != null) { //Deselecting unit
-
-				PlayerScript.SelectedUnit = null;
 
 				SpriteManagerScript.RemoveSprite (this._SelectSprite);
 				this._SelectSprite = null;
@@ -200,9 +205,9 @@ public class Unit : MonoBehaviour {
 
 			if (this._HealthSprite != null) {
 
-				PlayerScript.SelectedUnit = null;
-
 				SpriteManagerScript.RemoveSprite (this._HealthSprite);
+				//Debug.Log ("Removed health sprite");
+
 				this._HealthSprite = null;
 
 			}
@@ -326,14 +331,14 @@ public class Unit : MonoBehaviour {
 
 	public void removeSelectionBox()
 	{
-		if (this.selected) {
-			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
-			SpriteManagerScript.RemoveSprite (this._SelectSprite);
-			this._SelectSprite = null;
+		SpriteManagerScript.RemoveSprite (this._SelectSprite);
+		SpriteManagerScript.RemoveSprite (this._HealthSprite);
+		this._SelectSprite = null;
+		this._HealthSprite = null;
 
-			this.selected = false;
-		}
+		this.selected = false;
 	}
 
 
