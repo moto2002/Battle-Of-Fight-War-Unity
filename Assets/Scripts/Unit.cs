@@ -30,15 +30,22 @@ public class Unit : MonoBehaviour {
 	
 	protected GameObject _PlayerObject;
 	protected GameObject _MainSpriteManager;
-	//Public variables
 
+	//Public variables
 	public bool selected = false;
 	public bool inCombat = false;
 	public GameObject CombatEffects = null;
 
-	//Default unit stats (Should set these through Unity)
+	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 0.25f;
 	public float health = 100.0f;
+	public float attack = 5.0f;
+	public ArrayList CombatTargets;
+
+	//The combat effects relevant to this unit; needs to be removed when combat is over
+	protected GameObject _CombatInstance = null;
+
+	protected int _timeOfLastAttack = 0;
 
 	/**
 	 * Pathfinding variables
@@ -63,6 +70,8 @@ public class Unit : MonoBehaviour {
 	// Use this for initialization
 	public virtual void Start () 
 	{
+		this.CombatTargets = new ArrayList ();
+
 		this._PlayerObject = GameObject.Find("Player");
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
 
@@ -111,6 +120,10 @@ public class Unit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		if (this.health <= 0.0f) {
+			this.die ();
+			return;
+		}
 
 		if (this.shouldSeekPath && this.PathToFollow == null) {
 
@@ -274,7 +287,20 @@ public class Unit : MonoBehaviour {
 
 	public void FixedUpdate () 
 	{
-		if (this.PathToFollow == null || this.inCombat) { //do not move if in combatß
+		if (this.PathToFollow == null || this.inCombat) { //do not move if in combat
+			if (this.inCombat) {
+				//Do combat stuff once cooldown is done
+				if ((int)Time.time >= this._timeOfLastAttack + 2) {
+					foreach (GameObject EnemyUnitObject in this.CombatTargets) {
+						if (EnemyUnitObject == null) {
+							continue;
+						}
+						Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
+						EnemyUnit.damage (this.attack);
+						this._timeOfLastAttack = (int)Time.time;
+					}
+				}
+			}
 
 			return;
 		}
@@ -342,29 +368,117 @@ public class Unit : MonoBehaviour {
 	}
 
 
-	public void OnTriggerEnter(Collider OtherObject)
+	public void OnTriggerEnter (Collider OtherObject)
 	{
-		Debug.Log ("Units collided");
+		//Debug.Log ("Units collided");
 		Debug.Log (this.gameObject.tag);
 		Debug.Log (OtherObject.gameObject.tag);
 
 		if (OtherObject.gameObject.tag != this.gameObject.tag) {
 
-			Debug.Log ("object tags are different");
+			//Debug.Log ("object tags are different");
 			Unit OtherUnit = OtherObject.gameObject.GetComponent<Unit> ();
 
 			if (OtherUnit != null) { //Two unfriendly units have collided oh noes!
-				Debug.Log ("Combat!");
+				//Debug.Log ("Combat!");
 				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
 					//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
-					Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity);
+					GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
+					this._CombatInstance = CombatEffects;
 
 				}
 				this.inCombat = true;
+				this.CombatTargets.Add (OtherObject.gameObject);
+				//Debug.Log ("Added combat target");
 			}
 
 		}
 	}
+
+
+	public void OnTriggerExit(Collider OtherObject)
+	{
+		Debug.Log ("ON TRIGGER EXITED");
+	}
+
+
+
+	public void damage(float damage)
+	{
+		this.health -= damage;
+	}
+
+
+	public void die()
+	{
+		string enemyTag = "";
+		if (this.gameObject.tag == "GoodGuy") {
+			enemyTag = "Monster";
+		} else {
+			enemyTag = "GoodGuy";
+		}
+
+		//Remove this guy from all enemy target lists, if any
+		GameObject[] Enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+
+		int deadGuyId = this.gameObject.GetInstanceID ();
+		foreach (GameObject EnemyUnitObject in Enemies) {
+			Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
+			bool foundDeadGuy = false;
+			foreach (GameObject TargetUnit in EnemyUnit.CombatTargets) {
+				Debug.Log ("LOOKING THROUGH ENEMY TARGETS FOR DEAD GUY " + deadGuyId + ", comparing with GUY " + TargetUnit.GetInstanceID());
+				if (TargetUnit.GetInstanceID () == deadGuyId) {
+					Debug.Log ("REMOVING DEAD GUY " + deadGuyId);
+					EnemyUnit.CombatTargets.Remove (TargetUnit);
+					foundDeadGuy = true;
+					//Debug.Log ("Target " + deadGuyId + " removed");
+				}
+
+				//if this dead guy is the enemy's last target, then they are no longer in combat
+				if (EnemyUnit.CombatTargets.Count == 0) {
+					EnemyUnit.removeFromCombat();
+				}
+
+				if (foundDeadGuy) {
+					break;
+				}
+			}
+		}
+
+		Destroy (this);
+		Destroy (this.gameObject);
+	}
+
+
+	void OnDestroy ()
+	{
+		if (this.gameObject == null) {
+			return;
+		}
+
+		SpriteManager SpriteManager = this._MainSpriteManager.GetComponent<SpriteManager> ();
+		SpriteManager.RemoveSprite (this._UnitSprite);
+		if (this._SelectSprite != null) {
+			SpriteManager.RemoveSprite (this._SelectSprite);
+		}
+		if (this._HealthSprite != null) {
+			SpriteManager.RemoveSprite (this._HealthSprite);
+		}
+
+		if (this._CombatInstance != null) {
+			GameObject.Destroy (this._CombatInstance);
+		}
+	}
+
+
+	public void removeFromCombat()
+	{
+		this.inCombat = false;
+		if (this._CombatInstance != null) {
+			GameObject.Destroy (this._CombatInstance);
+		}
+	}
+
 
 
 }
