@@ -181,6 +181,9 @@ public class Unit : MonoBehaviour {
 
 		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
 
+		GameObject GUIObject = GameObject.Find ("GameGUI");
+		GameGui GUI = GUIObject.GetComponent<GameGui> ();
+
 		if (this.selected) {
 			if (this._SelectSprite == null) {
 				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
@@ -207,6 +210,9 @@ public class Unit : MonoBehaviour {
 				this._HealthSprite.drawLayer = 1000;
 				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
+
+			GUI.SelectedUnit = this.gameObject;
+
 		} else {
 			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 			PlayerScript.SelectedUnit = null;
@@ -224,6 +230,8 @@ public class Unit : MonoBehaviour {
 				this._HealthSprite = null;
 
 			}
+
+			GUI.SelectedUnit = null;
 		}
 
 	}
@@ -426,9 +434,9 @@ public class Unit : MonoBehaviour {
 			Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
 			bool foundDeadGuy = false;
 			foreach (GameObject TargetUnit in EnemyUnit.CombatTargets) {
-				Debug.Log ("LOOKING THROUGH ENEMY TARGETS FOR DEAD GUY " + deadGuyId + ", comparing with GUY " + TargetUnit.GetInstanceID());
+				//Debug.Log ("LOOKING THROUGH ENEMY TARGETS FOR DEAD GUY " + deadGuyId + ", comparing with GUY " + TargetUnit.GetInstanceID());
 				if (TargetUnit.GetInstanceID () == deadGuyId) {
-					Debug.Log ("REMOVING DEAD GUY " + deadGuyId);
+					//Debug.Log ("REMOVING DEAD GUY " + deadGuyId);
 					EnemyUnit.CombatTargets.Remove (TargetUnit);
 					foundDeadGuy = true;
 					//Debug.Log ("Target " + deadGuyId + " removed");
