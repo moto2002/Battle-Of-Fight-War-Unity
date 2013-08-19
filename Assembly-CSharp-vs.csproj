@@ -116,6 +116,7 @@
      <Compile Include="Assets\Scripts\SpriteManager\LinkedSpriteManager.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\Sprite.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\SpriteManager.cs" />
+     <Compile Include="Assets\Scripts\SquadMember.cs" />
      <Compile Include="Assets\Scripts\TeamUnitHandler.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
      <None Include="Assets\Scripts\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />

@@ -8,8 +8,6 @@ public class BadGuy : Unit
 	public override void Start () 
 	{
 		base.Start ();
-		
-		this.speed = 0.40f;
 	}
 
 	void OnMouseEnter()

@@ -17,9 +17,10 @@ public class GameGui : MonoBehaviour
 	//Start the game at 8 AM just because
 	private int _startTime = 480;
 
-	public GUISkin Skin = null;
+	public GUISkin CustomGUISkin = null;
 	public Texture2D Moon;
 	public Texture2D Sun;
+	public Texture2D Flag;
 
 
 	//General stats
@@ -42,44 +43,67 @@ public class GameGui : MonoBehaviour
 
 	void OnGUI ()
 	{
-		GUI.skin = this.Skin;
+		GUI.skin = this.CustomGUISkin;
 
-		GUI.BeginGroup (
-			new Rect (0, 0, this._generalStatsWidth, this._generalStatsHeight)
-		);
-		GUI.Box (new Rect (0, 0, this._generalStatsWidth, this._generalStatsHeight), "");
+		GUILayout.BeginArea (new Rect (0, 0, this._generalStatsWidth, this._generalStatsHeight));
+		GUILayout.BeginVertical ("", GUI.skin.box);
 
-		int startX = (int)(this._generalStatsWidth * 0.10f);
-		int startY = (int)(this._generalStatsHeight * 0.10f);
-		int infoSize = (int)(this._generalStatsWidth * 0.30f);
+		GUILayout.FlexibleSpace ();
+
+		GUILayout.BeginHorizontal ();
+		GUILayout.Space (10);
 
 		int currentTime = (int)(this._startTime + Time.fixedTime);
-		GUI.Label (new Rect (startX, startY, infoSize, infoSize), "Day " + ((currentTime / 1440) + 1));
+		GUILayout.Label ("Day " + ((currentTime / 1440) + 1));
 
-		startX = (int)(this._generalStatsWidth * 0.10f);
-		startY = (int)(this._generalStatsHeight * 0.50f);
+		GUILayout.FlexibleSpace ();
+		GUILayout.EndHorizontal ();
 
 		int hour = currentTime / 60;
 		int minute = currentTime % 60;
 
-		GUI.Label (new Rect (startX, startY, 32, 32), this.Sun);
-		GUI.Label (new Rect (startX + 32, startY, infoSize, infoSize), hour + ":" + minute.ToString("D2"));
+		GUILayout.BeginHorizontal ();
+		GUILayout.FlexibleSpace ();
+
+		GUILayout.Label (this.Sun);
+		GUILayout.Label (hour + ":" + minute.ToString("D2"));
+
+		GUILayout.FlexibleSpace ();
 		//GUI.Label (new Rect (startX + (int)(infoSize * 1.5), startY, infoSize, infoSize), this.numObjectivesCaptured + "/" + this.numObjectives);
 
-		GUI.Label (new Rect (startX + 32 + (int)(infoSize * 1.5), startY, infoSize, infoSize), this.numObjectivesCaptured + "/" + this.numObjectives);
+		GUILayout.Label (this.Flag);
+		GUILayout.Label (this.numObjectivesCaptured + "/" + this.numObjectives);
 
-		GUI.EndGroup();
+		GUILayout.FlexibleSpace ();
+		GUILayout.EndHorizontal ();
+
+		GUILayout.FlexibleSpace ();
+
+		GUILayout.EndVertical ();
+		GUILayout.EndArea();
 
 		if (this.SelectedUnit != null) {
 			//Group wrapper helps collect UI controls together
-			GUI.BeginGroup (
-				new Rect (0, Screen.height - this._squadBoxHeight, this._squadBoxWidth, this._squadBoxHeight)
-				);
-			GUI.Box (new Rect (0, 0, this._squadBoxWidth, this._squadBoxHeight), "Squad Details");		
-			GUI.Label (new Rect (10, 40, 80, 20), "Restart!");
-			GUI.Label (new Rect (10, 80, 80, 20), "Options!");
+			GUILayout.BeginArea(new Rect (0, Screen.height - this._squadBoxHeight, this._squadBoxWidth, this._squadBoxHeight));
 
-			GUI.EndGroup();
+			GUILayout.BeginVertical ("", GUI.skin.box);
+			GUILayout.Label ("Squad Details");
+
+			GUILayout.FlexibleSpace ();
+
+			Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
+			GUILayout.BeginHorizontal ();
+			GUILayout.FlexibleSpace ();
+			foreach (SquadMember Squaddie in UnitDetails.SquadMembers) {
+				GUILayout.Label (Squaddie.name);
+			}
+			GUILayout.FlexibleSpace ();
+			GUILayout.EndHorizontal ();
+
+			GUILayout.FlexibleSpace ();
+			GUILayout.EndVertical ();
+
+			GUILayout.EndArea();
 		}
 	}
 }

@@ -42,6 +42,11 @@ public class Unit : MonoBehaviour {
 	public float attack = 5.0f;
 	public ArrayList CombatTargets;
 
+	public int numMembers;
+	public ArrayList SquadMembers;
+
+	public string unitClass;
+
 	//The combat effects relevant to this unit; needs to be removed when combat is over
 	protected GameObject _CombatInstance = null;
 
@@ -71,6 +76,7 @@ public class Unit : MonoBehaviour {
 	public virtual void Start () 
 	{
 		this.CombatTargets = new ArrayList ();
+		this.SquadMembers = new ArrayList ();
 
 		this._PlayerObject = GameObject.Find("Player");
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
@@ -114,6 +120,10 @@ public class Unit : MonoBehaviour {
 			Physics.IgnoreCollision(Objects[i].collider, this.collider);
 		}
 
+		for (int i = 0; i < this.numMembers; i++) {
+			SquadMember NewMember = new SquadMember ("Bob", this.unitClass);
+			this.SquadMembers.Add (NewMember);
+		}
 
 	}
 	
