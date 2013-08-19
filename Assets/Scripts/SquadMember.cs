@@ -8,12 +8,28 @@ public class SquadMember
 	public string unitClass;
 	public float health;
 
+	public Texture2D SquadViewTexture;
+
 
 	public SquadMember(string name, string unitClass, float health = 100.0f)
 	{
 		this.name = name;
 		this.unitClass = unitClass;
 		this.health = health;
+
+		switch (this.unitClass) {
+
+		case "Rifleman":
+				//Debug.Log ("Class Rifleman");
+				this.SquadViewTexture = Resources.Load ("Units/Rifleman") as Texture2D;
+				break;
+			case "Slasher":
+				//Debug.Log ("Class Slasher");
+				this.SquadViewTexture = Resources.Load ("Units/Slasher") as Texture2D;
+				break;
+			default:
+				break;
+		}
 	}
 
 	
