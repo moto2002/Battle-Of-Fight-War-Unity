@@ -11,7 +11,7 @@ public class SquadMember
 	public Texture2D SquadViewTexture;
 
 
-	public SquadMember(string name, string unitClass, float health = 100.0f)
+	public SquadMember(string unitClass, string name, float health = 100.0f)
 	{
 		this.name = name;
 		this.unitClass = unitClass;

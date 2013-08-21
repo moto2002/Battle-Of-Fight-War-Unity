@@ -11,7 +11,7 @@ public class GameGui : MonoBehaviour
 	private float _generalStatsHeight = Screen.height * .19f;
 
 	private float _squadBoxWidth = Screen.width * .30f;
-	private float _squadBoxHeight = Screen.height * .30f;
+	private float _squadBoxHeight = Screen.height * .45f;
 
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because
@@ -102,10 +102,15 @@ public class GameGui : MonoBehaviour
 				count++;
 				if (count % 3 == 1) {
 					GUILayout.BeginHorizontal ();
-					GUILayout.Space (10);
+					//GUILayout.Space (10);
+					GUILayout.FlexibleSpace ();
 				}
+
+				GUILayout.BeginVertical ();
 				GUILayout.Label (Squaddie.name);
 				GUILayout.Label (Squaddie.SquadViewTexture);
+				GUILayout.EndVertical ();
+
 				GUILayout.FlexibleSpace ();
 				if (count % 3 == 0 || count == UnitDetails.SquadMembers.Count) {
 					GUILayout.EndHorizontal ();

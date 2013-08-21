@@ -10,6 +10,8 @@ public class LevelInfo : MonoBehaviour
 
 	public int numRifleSquads;
 
+	public TextAsset Names;
+
 	// Use this for initialization
 	void Start () 
 	{

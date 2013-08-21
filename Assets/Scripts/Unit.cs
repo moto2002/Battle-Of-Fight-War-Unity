@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Text.RegularExpressions;
 using Pathfinding;
 
 
@@ -34,6 +35,7 @@ public class Unit : MonoBehaviour {
 	//Public variables
 	public bool selected = false;
 	public bool inCombat = false;
+	public bool generateNames = false;
 	public GameObject CombatEffects = null;
 
 	//Default unit stats for prefab (Should set these through Unity)
@@ -119,9 +121,20 @@ public class Unit : MonoBehaviour {
 			//Can't ignore collisions with yourself or the method freaks out
 			Physics.IgnoreCollision(Objects[i].collider, this.collider);
 		}
+		
+		GameObject LevelInfoObject = GameObject.Find ("LevelInfo");
+		LevelInfo Info = LevelInfoObject.GetComponent<LevelInfo> ();
+		string nameList = Info.Names.text;
+		string[] possibleNames = Regex.Split(nameList, "\r\n");
 
+		string unitName = "";
 		for (int i = 0; i < this.numMembers; i++) {
-			SquadMember NewMember = new SquadMember ("Bob", this.unitClass);
+			if (this.generateNames) {
+				unitName = possibleNames [Random.Range (0, possibleNames.Length)];
+			} else {
+				unitName = this.unitClass + " " + (i + 1);
+			}
+			SquadMember NewMember = new SquadMember (this.unitClass, unitName);
 			this.SquadMembers.Add (NewMember);
 		}
 
