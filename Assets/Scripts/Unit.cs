@@ -49,6 +49,10 @@ public class Unit : MonoBehaviour {
 
 	public string unitClass;
 
+	//GUI-only helper stuff
+	public string currentAction;
+
+
 	//The combat effects relevant to this unit; needs to be removed when combat is over
 	protected GameObject _CombatInstance = null;
 
@@ -73,6 +77,11 @@ public class Unit : MonoBehaviour {
 	public float nextWaypointDistance = 0.1f;
 	
 	public Vector3 GoalPosition = new Vector3(0.0f, -1.0f, 0.0f); //We should never get a neg't y value
+
+	private static string CURRENT_ACTION_HOLDING = "Holding Position";
+	private static string CURRENT_ACTION_MOVING = "Moving";
+	private static string CURRENT_ACTION_COMBAT = "In Combat";
+
 
 	// Use this for initialization
 	public virtual void Start () 
@@ -138,6 +147,7 @@ public class Unit : MonoBehaviour {
 			this.SquadMembers.Add (NewMember);
 		}
 
+		this.currentAction = CURRENT_ACTION_HOLDING;
 	}
 	
 	// Update is called once per frame
@@ -312,6 +322,7 @@ public class Unit : MonoBehaviour {
 			//Reset the waypoint counter
 			this.currentWaypoint = 0;
 			this.shouldSeekPath = false;
+			this.currentAction = CURRENT_ACTION_MOVING;
 		}
 	}
 
@@ -336,6 +347,7 @@ public class Unit : MonoBehaviour {
 			return;
 		}
 
+		//Did we reach our goal?
 		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
 			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint-1]));
 			//Vector3 Goal = this.PathToFollow.vectorPath [this.currentWaypoint-1];
@@ -343,6 +355,7 @@ public class Unit : MonoBehaviour {
 			this.PathToFollow = null;
 			//this.shouldSeekPath = false;
 			//Debug.Log ("End Of Path Reached");
+			this.currentAction = CURRENT_ACTION_HOLDING;
 			return;
 		}
 
@@ -383,6 +396,8 @@ public class Unit : MonoBehaviour {
 		this.shouldSeekPath = true;
 		this.PathToFollow = null;
 		this.currentWaypoint = 0;
+
+		this.currentAction = CURRENT_ACTION_MOVING;
 	}
 
 
@@ -416,10 +431,10 @@ public class Unit : MonoBehaviour {
 					//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
 					GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
 					this._CombatInstance = CombatEffects;
-
 				}
 				this.inCombat = true;
 				this.CombatTargets.Add (OtherObject.gameObject);
+				this.currentAction = CURRENT_ACTION_COMBAT;
 				//Debug.Log ("Added combat target");
 			}
 

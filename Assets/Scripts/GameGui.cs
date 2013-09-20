@@ -85,6 +85,9 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndArea();
 
 		if (this.SelectedUnit != null) {
+
+			Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
+
 			//Group wrapper helps collect UI controls together
 			GUILayout.BeginArea(new Rect (0, Screen.height - this._squadBoxHeight, this._squadBoxWidth, this._squadBoxHeight));
 
@@ -92,12 +95,12 @@ public class GameGui : MonoBehaviour
 			GUILayout.Space (10);
 
 			GUILayout.BeginHorizontal ();
-			GUILayout.Label ("Squad Details");
+			GUILayout.Label ("Squad Details - " + UnitDetails.currentAction);
 			GUILayout.EndHorizontal ();
 
 			GUILayout.Space (10);
 
-			Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
+
 
 			int count = 0;
 			foreach (SquadMember Squaddie in UnitDetails.SquadMembers) {
