@@ -10,8 +10,8 @@ public class GameGui : MonoBehaviour
 	private float _generalStatsWidth = Screen.width * .19f;
 	private float _generalStatsHeight = Screen.height * .19f;
 
-	private float _squadBoxWidth = Screen.width * .30f;
-	private float _squadBoxHeight = Screen.height * .45f;
+	private float _squadBoxWidth = Screen.width * .25f;
+	private float _squadBoxHeight = Screen.height * .50f;
 
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because
@@ -23,6 +23,7 @@ public class GameGui : MonoBehaviour
 	public Texture2D Moon;
 	public Texture2D Sun;
 	public Texture2D Flag;
+	public Texture2D TimeOfDay = null;
 
 	//General stats
 	public int numObjectivesCaptured = 0;
@@ -32,7 +33,7 @@ public class GameGui : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-	
+		this.TimeOfDay = this.Sun;
 	}
 	
 	// Update is called once per frame
@@ -66,7 +67,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.BeginHorizontal ();
 		GUILayout.FlexibleSpace ();
 
-		GUILayout.Label (this.Sun);
+		GUILayout.Label (this.TimeOfDay);
 		GUILayout.Label (hour + ":" + minute.ToString("D2"));
 
 		GUILayout.FlexibleSpace ();
@@ -88,12 +89,13 @@ public class GameGui : MonoBehaviour
 			GUILayout.BeginArea(new Rect (0, Screen.height - this._squadBoxHeight, this._squadBoxWidth, this._squadBoxHeight));
 
 			GUILayout.BeginVertical ("", GUI.skin.box);
+			GUILayout.Space (10);
 
 			GUILayout.BeginHorizontal ();
-			GUILayout.Space (10);
 			GUILayout.Label ("Squad Details");
-
 			GUILayout.EndHorizontal ();
+
+			GUILayout.Space (10);
 
 			Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
 
@@ -108,6 +110,18 @@ public class GameGui : MonoBehaviour
 
 				GUILayout.BeginVertical ();
 				GUILayout.Label (Squaddie.name);
+
+				GUILayout.BeginHorizontal ();
+				GUILayout.FlexibleSpace ();
+
+				Color OriginalBackgroundColor = GUI.backgroundColor;
+				GUI.backgroundColor = Color.green;
+				GUILayout.Label ("", GUI.skin.GetStyle("HealthBar"));
+				GUI.backgroundColor = OriginalBackgroundColor;
+
+				GUILayout.FlexibleSpace ();
+				GUILayout.EndHorizontal ();
+
 				GUILayout.Label (Squaddie.SquadViewTexture);
 				GUILayout.EndVertical ();
 
