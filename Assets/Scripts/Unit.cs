@@ -4,53 +4,38 @@ using System.Text.RegularExpressions;
 using Pathfinding;
 
 
-public class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour 
+{
 
 
 	protected Sprite _UnitSprite;
 	protected Sprite _SelectSprite;
 	protected Sprite _HealthSprite;
-
-	protected static float spriteSheetWidth = 256.0f;
-	protected static float spriteSheetHeight = 256.0f;
-
-	protected static float selectBoxBottomLeftX = 0.0f;
-	protected static float selectBoxBottomLeftY = 192.0f;
-
-	protected static float healthBarBottomLeftX = 32.0f;
-	protected static float healthBarBottomLeftY = 192.0f;
-
-	protected static float spriteStandardSize = 32.0f;
-
-	protected float spriteWidth = 32.0f;
-	protected float spriteHeight = 32.0f;
-
-	//Set these through the game engine
-	public float spriteBottomLeftX;
-	public float spriteBottomLeftY;
 	
 	protected GameObject _PlayerObject;
 	protected GameObject _MainSpriteManager;
 
 	//Public variables
+	public string unitClass;
 	public bool selected = false;
 	public bool inCombat = false;
+	public bool inBase = false;
+	public string currentAction;
+
+	//Setup variables
 	public bool generateNames = false;
 	public GameObject CombatEffects = null;
+	
+	public int numMembers;
 
 	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 0.25f;
 	public float health = 100.0f;
+
 	public float attack = 5.0f;
 	public ArrayList CombatTargets;
 
-	public int numMembers;
 	public ArrayList SquadMembers;
-
-	public string unitClass;
-
-	//GUI-only helper stuff
-	public string currentAction;
 
 
 	//The combat effects relevant to this unit; needs to be removed when combat is over
@@ -78,9 +63,19 @@ public class Unit : MonoBehaviour {
 	
 	public Vector3 GoalPosition = new Vector3(0.0f, -1.0f, 0.0f); //We should never get a neg't y value
 
-	private static string CURRENT_ACTION_HOLDING = "Holding Position";
-	private static string CURRENT_ACTION_MOVING = "Moving";
-	private static string CURRENT_ACTION_COMBAT = "In Combat";
+	//Set these through the game engine
+	public float spriteBottomLeftX;
+	public float spriteBottomLeftY;
+
+
+	// STATIC SHIT APPLICABLE TO ALL UNITS ----------------------------------------
+
+	public static string CURRENT_ACTION_HOLDING = "Holding Position";
+	public static string CURRENT_ACTION_MOVING = "Moving";
+	public static string CURRENT_ACTION_COMBAT = "In Combat";
+
+	//-----------------------------------------------------------------------------
+
 
 
 	// Use this for initialization
@@ -96,13 +91,15 @@ public class Unit : MonoBehaviour {
 
 		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
-		Vector2 SpriteStart = new Vector2 ((spriteBottomLeftX / spriteSheetWidth), 1.0f - (spriteBottomLeftY / spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((spriteWidth / spriteSheetWidth), (spriteHeight / spriteSheetHeight));
+		Vector2 SpriteStart = new Vector2 ((this.spriteBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (this.spriteBottomLeftY / SpriteInfo.spriteSheetHeight));
+		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteWidth / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteHeight / SpriteInfo.spriteSheetHeight));
 
 		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
 		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
 		//this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
 
+		/**
+		 * COLLISION STUFF NO LONGER NEEDED since every map asset is now just a non-collidable trigger
 		//Make sure this unit is allowed to go through other friendly units
 		GameObject[] Objects = GameObject.FindGameObjectsWithTag(this.gameObject.tag);
 		for (int i = 0; i < Objects.Length; i++) {
@@ -129,7 +126,8 @@ public class Unit : MonoBehaviour {
 			}
 			//Can't ignore collisions with yourself or the method freaks out
 			Physics.IgnoreCollision(Objects[i].collider, this.collider);
-		}
+		} 
+		*/
 		
 		GameObject LevelInfoObject = GameObject.Find ("LevelInfo");
 		LevelInfo Info = LevelInfoObject.GetComponent<LevelInfo> ();
@@ -165,10 +163,12 @@ public class Unit : MonoBehaviour {
 				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.5f
 			    ) {
 				//Goal is too close; don't look for a path, so do nothing
+				this.currentAction = CURRENT_ACTION_HOLDING;
 			} else {
-				Debug.Log ("looking for new path");
+				//Debug.Log ("looking for new path");
 				Seeker AISeeker = this.GetComponent<Seeker> ();
 				AISeeker.StartPath (this.transform.position, this.GoalPosition, pathSeekComplete);
+				this.currentAction = CURRENT_ACTION_MOVING;
 			}
 
 			//Need to stop seeking path immediately. Apparently the pathfinding algorithm doesn't do everything in one frame
@@ -230,9 +230,9 @@ public class Unit : MonoBehaviour {
 				PlayerScript.SelectedUnit = this.gameObject;
 
 				//Dimensions for unit select box
-				Vector2 SelectSpriteStart = new Vector2 ((selectBoxBottomLeftX / spriteSheetWidth), 1.0f - (selectBoxBottomLeftY / spriteSheetHeight));
-				Vector2 HealthSpriteStart = new Vector2 ((healthBarBottomLeftX / spriteSheetWidth), 1.0f - (healthBarBottomLeftY / spriteSheetHeight));
-				Vector2 SpriteDimensions = new Vector2 ((spriteStandardSize / spriteSheetWidth), (spriteStandardSize / spriteSheetHeight));
+				Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
+				Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
+				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
 
 				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
 				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
@@ -322,7 +322,6 @@ public class Unit : MonoBehaviour {
 			//Reset the waypoint counter
 			this.currentWaypoint = 0;
 			this.shouldSeekPath = false;
-			this.currentAction = CURRENT_ACTION_MOVING;
 		}
 	}
 
@@ -334,12 +333,14 @@ public class Unit : MonoBehaviour {
 				//Do combat stuff once cooldown is done
 				if ((int)Time.time >= this._timeOfLastAttack + 2) {
 					foreach (GameObject EnemyUnitObject in this.CombatTargets) {
+
 						if (EnemyUnitObject == null) {
 							continue;
 						}
 						Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
 						EnemyUnit.damage (this.attack);
 						this._timeOfLastAttack = (int)Time.time;
+
 					}
 				}
 			}
@@ -356,6 +357,13 @@ public class Unit : MonoBehaviour {
 			//this.shouldSeekPath = false;
 			//Debug.Log ("End Of Path Reached");
 			this.currentAction = CURRENT_ACTION_HOLDING;
+
+			//Start the healing process if we're in a base
+			if (this.inBase) {
+
+			}
+
+
 			return;
 		}
 
@@ -417,8 +425,8 @@ public class Unit : MonoBehaviour {
 	public void OnTriggerEnter (Collider OtherObject)
 	{
 		//Debug.Log ("Units collided");
-		Debug.Log (this.gameObject.tag);
-		Debug.Log (OtherObject.gameObject.tag);
+		//Debug.Log (this.gameObject.tag);
+		//Debug.Log (OtherObject.gameObject.tag);
 
 		if (OtherObject.gameObject.tag != this.gameObject.tag) {
 
@@ -444,14 +452,35 @@ public class Unit : MonoBehaviour {
 
 	public void OnTriggerExit(Collider OtherObject)
 	{
-		Debug.Log ("ON TRIGGER EXITED");
+		//Debug.Log ("ON TRIGGER EXITED");
 	}
 
 
 
 	public void damage(float damage)
 	{
-		this.health -= damage;
+		//Do damage to a random squad member
+		int randomGuyToDamageIndex = Random.Range (0, this.SquadMembers.Count);
+		SquadMember DamagedGuy = SquadMembers [randomGuyToDamageIndex] as SquadMember;
+		DamagedGuy.health -= damage;
+		if (DamagedGuy.health <= 0.0f) {
+			SquadMembers.RemoveAt(randomGuyToDamageIndex);
+		}
+
+		if (this.SquadMembers.Count <= 0) { //Everyone's dead, screw it
+			this.health = 0.0f;
+			return;
+		}
+
+		float totalHealth = 0.0f;
+		float maxHealth = 0.001f; //So we don't divide by 0
+		foreach (SquadMember Squaddie in this.SquadMembers) {
+			totalHealth += Squaddie.health;
+			maxHealth += 100.0f;
+		}
+
+		//Since health is a percentage
+		this.health = (totalHealth/maxHealth) * 100.0f;
 	}
 
 
@@ -502,13 +531,16 @@ public class Unit : MonoBehaviour {
 			return;
 		}
 
-		SpriteManager SpriteManager = this._MainSpriteManager.GetComponent<SpriteManager> ();
-		SpriteManager.RemoveSprite (this._UnitSprite);
-		if (this._SelectSprite != null) {
-			SpriteManager.RemoveSprite (this._SelectSprite);
-		}
-		if (this._HealthSprite != null) {
-			SpriteManager.RemoveSprite (this._HealthSprite);
+		if (this._MainSpriteManager != null) {
+			SpriteManager SpriteManager = this._MainSpriteManager.GetComponent<SpriteManager> ();
+
+			SpriteManager.RemoveSprite (this._UnitSprite);
+			if (this._SelectSprite != null) {
+				SpriteManager.RemoveSprite (this._SelectSprite);
+			}
+			if (this._HealthSprite != null) {
+				SpriteManager.RemoveSprite (this._HealthSprite);
+			}
 		}
 
 		if (this._CombatInstance != null) {

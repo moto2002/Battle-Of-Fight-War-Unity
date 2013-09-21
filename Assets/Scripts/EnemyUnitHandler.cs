@@ -23,6 +23,8 @@ public class EnemyUnitHandler : TeamUnitHandler
 		this._timeBetweenSpawns = Info.timeBetweenSpawns;
 
 		this._numSpawns = Random.Range (minSpawns, maxSpawns);
+
+		this.friendlyTag = "Monster";
 	}
 	
 	// Update is called once per frame

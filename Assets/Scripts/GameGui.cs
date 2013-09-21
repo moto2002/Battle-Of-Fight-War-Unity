@@ -119,7 +119,9 @@ public class GameGui : MonoBehaviour
 
 				Color OriginalBackgroundColor = GUI.backgroundColor;
 				GUI.backgroundColor = Color.green;
-				GUILayout.Label ("", GUI.skin.GetStyle("HealthBar"));
+
+				float healthWidth = (Squaddie.health / 100.0f) * 45.0f; //I decided 45 px to be a good size for health bar
+				GUILayout.Label ("", GUI.skin.GetStyle("HealthBar"), GUILayout.Width(healthWidth));
 				GUI.backgroundColor = OriginalBackgroundColor;
 
 				GUILayout.FlexibleSpace ();

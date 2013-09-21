@@ -113,6 +113,7 @@
      <Compile Include="Assets\Scripts\LevelInfo.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\SpriteInfo.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\LinkedSpriteManager.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\Sprite.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\SpriteManager.cs" />
