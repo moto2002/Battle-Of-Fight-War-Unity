@@ -42,6 +42,7 @@ public class Unit : MonoBehaviour
 	protected GameObject _CombatInstance = null;
 
 	protected int _timeOfLastAttack = 0;
+	protected int _timeOfLastHeal = 0;
 
 	/**
 	 * Pathfinding variables
@@ -328,6 +329,12 @@ public class Unit : MonoBehaviour
 
 	public void FixedUpdate () 
 	{
+		//Start the healing process if we're in a base
+		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING) {
+			this.heal ();
+			return;
+		}
+
 		if (this.PathToFollow == null || this.inCombat) { //do not move if in combat
 			if (this.inCombat) {
 				//Do combat stuff once cooldown is done
@@ -347,7 +354,7 @@ public class Unit : MonoBehaviour
 
 			return;
 		}
-
+		
 		//Did we reach our goal?
 		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
 			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint-1]));
@@ -357,13 +364,6 @@ public class Unit : MonoBehaviour
 			//this.shouldSeekPath = false;
 			//Debug.Log ("End Of Path Reached");
 			this.currentAction = CURRENT_ACTION_HOLDING;
-
-			//Start the healing process if we're in a base
-			if (this.inBase) {
-
-			}
-
-
 			return;
 		}
 
@@ -392,6 +392,7 @@ public class Unit : MonoBehaviour
 			this.currentWaypoint++;
 			return;
 		}
+
 	}
 
 
@@ -522,6 +523,28 @@ public class Unit : MonoBehaviour
 
 		Destroy (this);
 		Destroy (this.gameObject);
+	}
+
+
+	public void heal()
+	{
+		if ((int)Time.time <= this._timeOfLastHeal + 2) {
+			return;
+		}
+
+		this._timeOfLastHeal = (int)Time.time;
+
+		float totalHealth = 0.0f;
+		float maxHealth = 0.001f; //So we don't divide by 0
+		foreach (SquadMember Squaddie in this.SquadMembers) {
+			Squaddie.health += 2.0f;
+			totalHealth += Squaddie.health;
+			maxHealth += 100.0f;
+		}
+
+		//Since health is a percentage
+		this.health = (totalHealth/maxHealth) * 100.0f;
+
 	}
 
 
