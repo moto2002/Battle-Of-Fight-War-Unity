@@ -32,7 +32,6 @@ public class Unit : MonoBehaviour
 	public float speed = 0.25f;
 	public float health = 100.0f;
 
-	public float attack = 5.0f;
 	public ArrayList CombatTargets;
 
 	public ArrayList SquadMembers;
@@ -330,7 +329,7 @@ public class Unit : MonoBehaviour
 	public void FixedUpdate () 
 	{
 		//Start the healing process if we're in a base
-		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING) {
+		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING && this.health < 100.0f) {
 			this.heal ();
 			return;
 		}
@@ -345,7 +344,7 @@ public class Unit : MonoBehaviour
 							continue;
 						}
 						Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
-						EnemyUnit.damage (this.attack);
+						this.attack (EnemyUnit);
 						this._timeOfLastAttack = (int)Time.time;
 
 					}
@@ -457,6 +456,15 @@ public class Unit : MonoBehaviour
 	}
 
 
+	public void attack(Unit EnemyUnit)
+	{
+		foreach (SquadMember Squaddie in this.SquadMembers) {
+			EnemyUnit.damage (Squaddie.attackPower);
+		}
+	}
+
+
+
 
 	public void damage(float damage)
 	{
@@ -544,7 +552,6 @@ public class Unit : MonoBehaviour
 
 		//Since health is a percentage
 		this.health = (totalHealth/maxHealth) * 100.0f;
-
 	}
 
 

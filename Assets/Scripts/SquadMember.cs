@@ -7,6 +7,7 @@ public class SquadMember
 	public string name;
 	public string unitClass;
 	public float health;
+	public float attackPower;
 
 	public Texture2D SquadViewTexture;
 
@@ -22,10 +23,12 @@ public class SquadMember
 		case "Rifleman":
 				//Debug.Log ("Class Rifleman");
 				this.SquadViewTexture = Resources.Load ("Units/Rifleman") as Texture2D;
+				this.attackPower = 2.0f;
 				break;
 			case "Slasher":
 				//Debug.Log ("Class Slasher");
 				this.SquadViewTexture = Resources.Load ("Units/Slasher") as Texture2D;
+				this.attackPower = 1.0f;
 				break;
 			default:
 				break;

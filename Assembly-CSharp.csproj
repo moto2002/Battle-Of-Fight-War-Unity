@@ -106,8 +106,9 @@
      <Compile Include="Assets\Scripts\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\Scripts\AstarPathfindingProject\changelog.cs" />
      <Compile Include="Assets\Scripts\BadGuy.cs" />
+     <Compile Include="Assets\Scripts\Base.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
-     <Compile Include="Assets\Scripts\EnemyUnitHandler.cs" />
+     <Compile Include="Assets\Scripts\EnemyBase.cs" />
      <Compile Include="Assets\Scripts\GameGui.cs" />
      <Compile Include="Assets\Scripts\GoodGuy.cs" />
      <Compile Include="Assets\Scripts\LevelInfo.cs" />
@@ -118,7 +119,6 @@
      <Compile Include="Assets\Scripts\SpriteManager\Sprite.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\SpriteManager.cs" />
      <Compile Include="Assets\Scripts\SquadMember.cs" />
-     <Compile Include="Assets\Scripts\TeamUnitHandler.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
      <None Include="Assets\Scripts\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />
      <None Include="Assets\Scripts\AstarPathfindingProject\Plugins\DotNetZip\License.txt" />

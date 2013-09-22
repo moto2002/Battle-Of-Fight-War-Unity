@@ -21,15 +21,10 @@ public class Map : MonoBehaviour {
 
 	//GameObjects
 	public GameObject PlayerObject;
-	public GameObject PlayerBasePrefab;
-	public GameObject EnemySpawnPrefab;
 
 	private uint _PENALTY_GRASS = 0;
 	private uint _PENALTY_FOREST = 200;
 	private uint _PENALTY_MOUNTAIN = 2000;
-
-	public Vector2 PlayerBasePosition;
-	public Vector2[] EnemySpawnPositions;
 
 	// Use this for initialization
 	void Start () 
@@ -95,10 +90,7 @@ public class Map : MonoBehaviour {
 		NewTexture.SetPixels (NewMainTexPixels);
 		NewTexture.Apply();
 		this.renderer.material.mainTexture = NewTexture;
-
-		//-------------------------------------------------------------------------------------------------------------
-		//Adding bases/spawn points
-		this._addBases ();
+		
 	}
 	
 	// Update is called once per frame
@@ -170,8 +162,9 @@ public class Map : MonoBehaviour {
 
 
 	/**
+	 * USELESS NOW
 	 * Add bases/spawn points
-	 */
+
 	private void _addBases()
 	{
 		if (this.PlayerBasePosition.x != 0.0f && this.PlayerBasePosition.y != 0.0f) {
@@ -185,6 +178,6 @@ public class Map : MonoBehaviour {
 			GameObject EnemySpawn = Instantiate(this.EnemySpawnPrefab, BasePosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
 		}
 	}
-
+	*/
 
 }
