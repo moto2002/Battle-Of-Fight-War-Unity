@@ -23,7 +23,7 @@ public class SquadMember
 		case "Rifleman":
 				//Debug.Log ("Class Rifleman");
 				this.SquadViewTexture = Resources.Load ("Units/Rifleman") as Texture2D;
-				this.attackPower = 2.0f;
+				this.attackPower = 3.0f;
 				break;
 			case "Slasher":
 				//Debug.Log ("Class Slasher");

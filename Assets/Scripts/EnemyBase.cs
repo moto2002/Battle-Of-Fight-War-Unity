@@ -7,6 +7,7 @@ public class EnemyBase : Base
 	private int _timeOfLastSpawn = 0;
 	private int _timeBetweenSpawns = 0;
 
+
 	// Use this for initialization
 	public override void Start () 
 	{
@@ -25,6 +26,7 @@ public class EnemyBase : Base
 		this._numSpawns = Random.Range (minSpawns, maxSpawns);
 
 		this.friendlyTag = "Monster";
+		this.enemyTag = "GoodGuy";
 	}
 	
 	// Update is called once per frame
@@ -43,4 +45,21 @@ public class EnemyBase : Base
 			NewUnit.setGoalPosition (PlayerBaseObj.gameObject.transform.position);
 		}
 	}
+
+
+	protected override void _setGameOver()
+	{
+		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
+		if (LevelInfoObj == null) {
+			return;
+		}
+
+		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
+		LevelInfo.numObjectivesCaptured++;
+
+		Destroy (this);
+		Destroy (this.gameObject);
+	}
+
+
 }

@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour
 
 
 	//The combat effects relevant to this unit; needs to be removed when combat is over
-	protected GameObject _CombatInstance = null;
+	protected GameObject _CombatEffectsInstance = null;
 
 	protected int _timeOfLastAttack = 0;
 	protected int _timeOfLastHeal = 0;
@@ -438,7 +438,7 @@ public class Unit : MonoBehaviour
 				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
 					//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
 					GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
-					this._CombatInstance = CombatEffects;
+					this._CombatEffectsInstance = CombatEffects;
 				}
 				this.inCombat = true;
 				this.CombatTargets.Add (OtherObject.gameObject);
@@ -573,8 +573,8 @@ public class Unit : MonoBehaviour
 			}
 		}
 
-		if (this._CombatInstance != null) {
-			GameObject.Destroy (this._CombatInstance);
+		if (this._CombatEffectsInstance != null) {
+			GameObject.Destroy (this._CombatEffectsInstance);
 		}
 	}
 
@@ -582,8 +582,8 @@ public class Unit : MonoBehaviour
 	public void removeFromCombat()
 	{
 		this.inCombat = false;
-		if (this._CombatInstance != null) {
-			GameObject.Destroy (this._CombatInstance);
+		if (this._CombatEffectsInstance != null) {
+			GameObject.Destroy (this._CombatEffectsInstance);
 		}
 	}
 

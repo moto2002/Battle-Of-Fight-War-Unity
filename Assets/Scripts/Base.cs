@@ -2,73 +2,80 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Base : MonoBehaviour {
+public class Base : NeutralBase {
 
 	public GameObject UnitPrefab;
 
 	public ArrayList Units;
 
 	public string friendlyTag = "";
+	public string enemyTag = "";
 
 	protected int _numSpawns = 0;
+	protected int _numFriendlyUnits = 0;
+
 
 	// Use this for initialization
 	public virtual void Start () 
 	{
 		this.Units = new ArrayList ();
 
-		/**
-		//Find all current units and make them noncollidable with this object (spawner/base)
-		GameObject[] GoodGuys = GameObject.FindGameObjectsWithTag("GoodGuy");
-		GameObject[] Monsters = GameObject.FindGameObjectsWithTag("Monster");
-
-		List<GameObject> AllUnitsList = new List<GameObject> ();
-		AllUnitsList.AddRange (GoodGuys);
-		AllUnitsList.AddRange (Monsters);
-
-		GameObject[] AllUnits = AllUnitsList.ToArray ();
-		foreach (GameObject Unit in AllUnits) {
-			//Can't ignore collisions with yourself or the method freaks out
-			Physics.IgnoreCollision(Unit.collider, this.collider);
-			//Debug.Log ("IGNORING COLLISION");
-		} */
-
 		this.friendlyTag = "GoodGuy";
+		this.enemyTag = "Monster";
 	}
 
 
 	// Update is called once per frame
-	public virtual void Update () 
+	public override void Update () 
 	{
 	
 	}
 
 
-	public void OnTriggerEnter (Collider OtherObject)
+	public override void OnTriggerEnter (Collider OtherObject)
 	{
-		Debug.Log ("Unit in base");
+		//Debug.Log ("Unit in base");
 		if (OtherObject.gameObject.tag != this.friendlyTag) {
 			return;
 		}
 
-		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
-
-		if (UnitInBase != null) { //We actually have a unit
-			UnitInBase.inBase = true;
-		}
+		this._numFriendlyUnits++;
+		base.OnTriggerEnter (OtherObject);
 	}
 
 
-	public void OnTriggerExit (Collider OtherObject)
+	public override void OnTriggerExit (Collider OtherObject)
 	{
 		if (OtherObject.gameObject.tag != this.friendlyTag) {
 			return;
 		}
 
-		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
+		this._numFriendlyUnits--;
+		base.OnTriggerExit (OtherObject);
+	}
 
-		if (UnitInBase != null) { //We actually have a unit
-			UnitInBase.inBase = false;
+
+	public virtual void OnTriggerStay(Collider OtherObject) 
+	{
+		if (OtherObject.gameObject.tag != this.enemyTag) {
+			return; //Nothing to do here for non-enemy units
+		}
+
+		if (this._numFriendlyUnits <= 0) {
+			this._setGameOver ();
 		}
 	}
+
+
+	protected virtual void _setGameOver()
+	{
+		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
+		if (LevelInfoObj == null) {
+			return;
+		}
+
+		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
+		LevelInfo.setPlayerLost();
+	}
+
 }
