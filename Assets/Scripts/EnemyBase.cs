@@ -47,7 +47,7 @@ public class EnemyBase : Base
 	}
 
 
-	protected override void _setGameOver()
+	protected override void _baseCaptured()
 	{
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj == null) {
@@ -55,7 +55,8 @@ public class EnemyBase : Base
 		}
 
 		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
-		LevelInfo.numObjectivesCaptured++;
+		LevelInfo.objectiveCaptured();
+		LevelInfo.setStatusUpdateLocation (this.transform.position);
 
 		Destroy (this);
 		Destroy (this.gameObject);

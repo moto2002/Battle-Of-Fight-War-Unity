@@ -151,11 +151,6 @@ public class Unit : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (this.health <= 0.0f) {
-			this.die ();
-			return;
-		}
-
 		if (this.shouldSeekPath && this.PathToFollow == null) {
 
 			if (
@@ -328,6 +323,11 @@ public class Unit : MonoBehaviour
 
 	public void FixedUpdate () 
 	{
+		if (this.health <= 0.0f) {
+			this.die ();
+			return;
+		}
+
 		//Start the healing process if we're in a base
 		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING && this.health < 100.0f) {
 			this.heal ();

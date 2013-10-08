@@ -10,14 +10,18 @@ public class LevelInfo : MonoBehaviour
 
 	public int numObjectivesCaptured;
 	public int totalNumObjectives;
-	public int gameStatus;
+	public int gameEvent;
+
+	public Vector3 StatusUpdateLocation;
 
 	public TextAsset Names;
 
-	public const int GAME_STATUS_RUNNING = 0;
-	public const int GAME_STATUS_PAUSED = 1;
-	public const int GAME_STATUS_PLAYER_WON = 2;
-	public const int GAME_STATUS_PLAYER_LOST = 3;
+	public const int GAME_EVENT_NONE = 0;
+	public const int GAME_EVENT_PAUSED = 1;
+	public const int GAME_EVENT_PLAYER_WON = 2;
+	public const int GAME_EVENT_PLAYER_LOST = 3;
+
+	public const int GAME_EVENT_OBJECTIVE_SECURED = 1;
 
 	// Use this for initialization
 	void Start () 
@@ -25,7 +29,7 @@ public class LevelInfo : MonoBehaviour
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;
 
-		this.gameStatus = GAME_STATUS_RUNNING;
+		this.gameEvent = GAME_EVENT_NONE;
 	}
 
 
@@ -38,12 +42,50 @@ public class LevelInfo : MonoBehaviour
 
 	public void setPlayerWon()
 	{
-		this.gameStatus = GAME_STATUS_PLAYER_WON;
+		this.gameEvent = GAME_EVENT_PLAYER_WON;
 	}
 
 
 	public void setPlayerLost()
 	{
-		this.gameStatus = GAME_STATUS_PLAYER_LOST;
+		this.gameEvent = GAME_EVENT_PLAYER_LOST;
 	}
+
+
+	public void clearGameStatus()
+	{
+		this.gameEvent = GAME_EVENT_NONE;
+	}
+
+
+	public void objectiveCaptured()
+	{
+		this.numObjectivesCaptured++;
+
+		if (this.numObjectivesCaptured >= this.totalNumObjectives) {
+			this.setPlayerWon ();
+		} else {
+			this.gameEvent = GAME_EVENT_OBJECTIVE_SECURED;
+		}
+	}
+
+
+	public bool gameEventEndsGame()
+	{
+		switch (this.gameEvent) {
+
+			case GAME_EVENT_PLAYER_WON:
+			case GAME_EVENT_PLAYER_LOST:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+
+	public void setStatusUpdateLocation(Vector3 UpdateLocation)
+	{
+		this.StatusUpdateLocation = UpdateLocation;
+	}
+
 }

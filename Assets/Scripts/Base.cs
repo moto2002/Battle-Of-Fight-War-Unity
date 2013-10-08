@@ -62,12 +62,12 @@ public class Base : NeutralBase {
 		}
 
 		if (this._numFriendlyUnits <= 0) {
-			this._setGameOver ();
+			this._baseCaptured ();
 		}
 	}
 
 
-	protected virtual void _setGameOver()
+	protected virtual void _baseCaptured()
 	{
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj == null) {
@@ -76,6 +76,7 @@ public class Base : NeutralBase {
 
 		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
 		LevelInfo.setPlayerLost();
+		LevelInfo.setStatusUpdateLocation (this.transform.position);
 	}
 
 }
