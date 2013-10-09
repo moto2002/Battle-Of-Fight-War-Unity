@@ -30,11 +30,11 @@ public class EnemyBase : Base
 	}
 	
 	// Update is called once per frame
-	public override void Update () 
+	public void FixedUpdate () 
 	{
-		if (this.Units.Count < this._numSpawns && (int)Time.time > this._timeOfLastSpawn + this._timeBetweenSpawns) {
+		if (this.Units.Count < this._numSpawns && (int)Time.fixedTime > this._timeOfLastSpawn + this._timeBetweenSpawns) {
 
-			this._timeOfLastSpawn = (int)Time.time;
+			this._timeOfLastSpawn = (int)Time.fixedTime;
 			Debug.Log ("SPAWN TIME " + this._timeOfLastSpawn);
 			Vector3 SpawnPosition = new Vector3 (this.gameObject.transform.position.x, 0.45f, this.gameObject.transform.position.z);
 			GameObject NewUnitObj = Instantiate(this.UnitPrefab, SpawnPosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
