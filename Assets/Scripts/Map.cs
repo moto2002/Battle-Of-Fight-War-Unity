@@ -7,6 +7,7 @@ public class Map : MonoBehaviour {
 
 	private int _mapSize = 512;
 
+	//MAKE SURE THESE #s MATCH UP WITH THE TAGS IN THE UNITY A* OBJECT
 	public const int GRASS = 1;
 	public const int WATER = 2;
 	public const int MOUNTAIN = 3;
@@ -24,7 +25,7 @@ public class Map : MonoBehaviour {
 
 	private uint _PENALTY_GRASS = 0;
 	private uint _PENALTY_FOREST = 100;
-	private uint _PENALTY_MOUNTAIN = 2000;
+	private uint _PENALTY_MOUNTAIN = 500;
 
 	// Use this for initialization
 	void Start () 
@@ -62,23 +63,26 @@ public class Map : MonoBehaviour {
 					NewMainTexPixels[pixelPosition] = this.GrassTexture.GetPixel (smallTextureX, smallTextureY);
 
 					PathNode.penalty = this._PENALTY_GRASS;
+					PathNode.tags = GRASS;
 				} else if (PixelColor == Color.blue) {
 					mapTiles [i, j] = WATER;
 					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY);
 
 					//Walkability edit
 					PathNode.walkable = false;
-
+					PathNode.tags = WATER;
 				} else if (PixelColor.r == (128.0f/255.0f) && PixelColor.g == (64.0f/255.0f)) { //Mountain brown
 					mapTiles [i, j] = MOUNTAIN;
 					NewMainTexPixels[pixelPosition] = this.MountainTexture.GetPixel (smallTextureX, smallTextureY); 
 
 					PathNode.penalty = this._PENALTY_MOUNTAIN;
+					PathNode.tags = MOUNTAIN;
 				} else if (PixelColor.g == (128.0f/255.0f)) { //Forest green
 					mapTiles [i, j] = FOREST;
 					NewMainTexPixels[pixelPosition] = this.ForestTexture.GetPixel (smallTextureX, smallTextureY);
 
 					PathNode.penalty = this._PENALTY_FOREST;
+					PathNode.tags = FOREST;
 				}
 
 				//Updating the actual node with its changes in the active grid graph?

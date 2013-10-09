@@ -368,7 +368,22 @@ public class Unit : MonoBehaviour
 
 		//Direction to the next waypoint
 		Vector3 Direction = (this.PathToFollow.vectorPath[currentWaypoint]-transform.position).normalized;
-		Direction *= this.speed * Time.fixedDeltaTime;
+
+		//Determine if we should modify speed based on the node terrain type
+		float speedModifier = 1.0f;
+		switch (AstarPath.active.GetNearest (this.transform.position).node.tags) {
+
+			case Map.FOREST:
+				speedModifier = 0.5f;
+					break;
+			case Map.MOUNTAIN:
+				speedModifier = 0.3f;
+				break;
+			default:
+				break;
+		}
+
+		Direction *= (this.speed * speedModifier) * Time.fixedDeltaTime;
 
 		this.gameObject.transform.position = new Vector3 (
 			this.gameObject.transform.position.x + Direction.x,
