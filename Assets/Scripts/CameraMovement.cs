@@ -55,8 +55,8 @@ public class CameraMovement : MonoBehaviour {
 			//Debug.Log (translationX);
 			//Debug.Log (translationZ);
 
-			translationX *= Time.deltaTime;
-			translationZ *= Time.deltaTime;
+			translationX *= 0.02f;
+			translationZ *= 0.02f;
 
 			this.transform.position += this.transform.right * this._camSpeed * translationX;
 			this.transform.position += trueForward * this._camSpeed * translationZ;
@@ -65,11 +65,12 @@ public class CameraMovement : MonoBehaviour {
 			//Debug.Log (Vector3.Distance (this.transform.position, this.TargetPosition));
 			float yzRatio = Mathf.Abs(this.transform.position.y / (this.TargetPosition.z - this.transform.position.z ));
 
-			float d = Vector3.Distance (this.transform.position, this.TargetPosition);
-			float idealD = Vector3.Distance (new Vector3(this.TargetPosition.x, this.transform.position.x, targetZ), this.TargetPosition);
+			//float d = Vector3.Distance (this.transform.position, this.TargetPosition);
+			//float idealD = Vector3.Distance (new Vector3(this.TargetPosition.x, this.transform.position.x, targetZ), this.TargetPosition);
 
-			Debug.Log ("yzRatio: " + yzRatio + ", targetZ: " + targetZ);
+			//Debug.Log ("yzRatio: " + yzRatio + ", targetZ: " + targetZ);
 
+			//Make sure camera is in front of our target position (more negative z) and far away enough from it
 			if (this.transform.position.z <= this.TargetPosition.z && 0.44f <= yzRatio && yzRatio <= 0.46f && distanceToX <= 0.10f) {
 				this.forcedMove = false;
 				this.cameraFocusedOnEvent = true;

@@ -61,7 +61,7 @@ public class GameGui : MonoBehaviour
 				if (this.LevelInformation.gameEventEndsGame ()) {
 
 
-				} else { //It was just a normal status update
+				} else { //It was just a normal status update... resume game
 					Time.timeScale = 1;
 					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
 					this.LevelInformation.StatusUpdateLocation = new Vector3(-1.0f, -1.0f, -1.0f);
@@ -84,8 +84,13 @@ public class GameGui : MonoBehaviour
 		if (this.LevelInformation.gameEvent > LevelInfo.GAME_EVENT_NONE) {
 
 			if (!this.Camera.isForcedMove()) {
+
 				this.Camera.setForcedMove (true);
 				this.Camera.setFocusPosition (this.LevelInformation.StatusUpdateLocation);
+
+				//Pause the game
+				//Setting timeScale to 0 basically disables any framerate-independent shit (FixedUpdate, Time.deltaTime, etc)
+				Time.timeScale = 0;
 			}
 
 			if (!this.Camera.isFocusedOnEvent()) {
@@ -260,10 +265,6 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndArea();
 		
 		LabelStyle.fontSize = originalFontSize;
-
-		//Status box appears, now we can pause
-		//Note that this causes FixedUpdate to no longer be called
-		Time.timeScale = 0;
 	}
 
 

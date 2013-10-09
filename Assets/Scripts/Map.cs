@@ -23,7 +23,7 @@ public class Map : MonoBehaviour {
 	public GameObject PlayerObject;
 
 	private uint _PENALTY_GRASS = 0;
-	private uint _PENALTY_FOREST = 200;
+	private uint _PENALTY_FOREST = 100;
 	private uint _PENALTY_MOUNTAIN = 2000;
 
 	// Use this for initialization
