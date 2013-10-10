@@ -14,7 +14,7 @@ public class GameGui : MonoBehaviour
 	private float _gameEventWidth = Screen.width * .33f;
 	private float _gameEventHeight = Screen.height * .33f;
 
-	private float _squadBoxWidth = Screen.width * .25f;
+	private float _squadBoxWidth = Screen.width * .30f;
 	private float _squadBoxHeight = Screen.height * .50f;
 
 	//We'll treat each second as an in-game minute
@@ -24,7 +24,6 @@ public class GameGui : MonoBehaviour
 	private int _statusTextFontSize = 16;
 
 	public GUISkin CustomGUISkin = null;
-
 
 	//Icons
 	public Texture2D Moon;
@@ -50,7 +49,6 @@ public class GameGui : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-
 		//If game is paused
 		if (Time.timeScale == 0) {
 
@@ -64,7 +62,7 @@ public class GameGui : MonoBehaviour
 				} else { //It was just a normal status update... resume game
 					Time.timeScale = 1;
 					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
-					this.LevelInformation.StatusUpdateLocation = new Vector3(-1.0f, -1.0f, -1.0f);
+					this.LevelInformation.StatusUpdateLocation = new Vector3 (-1.0f, -1.0f, -1.0f);
 					this.Camera.setFocusedOnEvent (false);
 					this.Camera.setForcedMove (false);
 				}
@@ -111,7 +109,8 @@ public class GameGui : MonoBehaviour
 					switch (this.LevelInformation.gameEvent) {
 
 						case LevelInfo.GAME_EVENT_OBJECTIVE_SECURED:
-							this.drawStatusBox ("Your forces secured an objective");
+							int numLeft = LevelInformation.totalNumObjectives - LevelInformation.numObjectivesCaptured;
+							this.drawStatusBox ("Your forces secured an objective\nYou have " + numLeft + " objectives remaining");
 							break;
 						default:
 							break;
@@ -144,6 +143,8 @@ public class GameGui : MonoBehaviour
 
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndHorizontal ();
+
+		GUILayout.FlexibleSpace ();
 
 		int hour = currentTime / 60;
 		int minute = currentTime % 60;
@@ -181,7 +182,11 @@ public class GameGui : MonoBehaviour
 		GUILayout.Space (10);
 
 		GUILayout.BeginHorizontal ();
-		GUILayout.Label ("Squad Details - " + UnitDetails.currentAction);
+		GUILayout.Label ("Squad Details");
+		GUILayout.EndHorizontal ();
+
+		GUILayout.BeginHorizontal ();
+		GUILayout.Label (UnitDetails.currentAction);
 		GUILayout.EndHorizontal ();
 
 		GUILayout.Space (10);
@@ -219,6 +224,7 @@ public class GameGui : MonoBehaviour
 			GUILayout.FlexibleSpace ();
 			if (count % 3 == 0 || count == UnitDetails.SquadMembers.Count) {
 				GUILayout.EndHorizontal ();
+				GUILayout.Space (15);
 			}
 		}
 
@@ -243,10 +249,10 @@ public class GameGui : MonoBehaviour
 
 	void drawStatusBox(string message)
 	{
-		GUIStyle LabelStyle = this.CustomGUISkin.GetStyle ("Label");
-		int originalFontSize = LabelStyle.fontSize;
+		//GUIStyle LabelStyle = this.CustomGUISkin.GetStyle ("Label");
+		//int originalFontSize = LabelStyle.fontSize;
 
-		LabelStyle.fontSize = this._statusTextFontSize;
+		//LabelStyle.fontSize = this._statusTextFontSize;
 
 		GUILayout.BeginArea (new Rect ((Screen.width * 0.5f) - (this._gameEventWidth * 0.5f), (Screen.height * 0.5f) - (this._gameEventWidth * 0.5f), this._gameEventWidth, this._gameEventHeight));
 		GUILayout.BeginVertical ("", GUI.skin.box);
@@ -264,7 +270,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndVertical ();
 		GUILayout.EndArea();
 		
-		LabelStyle.fontSize = originalFontSize;
+		//LabelStyle.fontSize = originalFontSize;
 	}
 
 

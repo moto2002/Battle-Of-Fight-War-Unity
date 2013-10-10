@@ -109,7 +109,9 @@
      <Compile Include="Assets\Scripts\Base.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\EnemyBase.cs" />
-     <Compile Include="Assets\Scripts\GameGui.cs" />
+     <Compile Include="Assets\Scripts\GUI\CommonMenuUtilities.cs" />
+     <Compile Include="Assets\Scripts\GUI\GameGui.cs" />
+     <Compile Include="Assets\Scripts\GUI\MainMenuGui.cs" />
      <Compile Include="Assets\Scripts\GoodGuy.cs" />
      <Compile Include="Assets\Scripts\LevelInfo.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
