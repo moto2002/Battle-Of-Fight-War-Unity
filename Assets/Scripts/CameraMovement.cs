@@ -109,6 +109,20 @@ public class CameraMovement : MonoBehaviour {
 
 		//this.transform.Translate(translationX, this.transform.position.y, translationZ);
 	}
+	
+	
+	public bool gameEventRequiresCameraMovement(int gameEvent)
+	{
+		switch (gameEvent) {
+			
+			case LevelInfo.GAME_EVENT_PLAYER_WON:
+			case LevelInfo.GAME_EVENT_PLAYER_LOST:
+			case LevelInfo.GAME_EVENT_OBJECTIVE_SECURED:
+				return true;
+			default:
+				return false;
+		}
+	}
 
 
 	public bool isForcedMove()

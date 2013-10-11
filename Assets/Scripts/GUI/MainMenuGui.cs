@@ -5,10 +5,7 @@ public class MainMenuGui : MonoBehaviour
 {
 
 	public GUISkin CustomGUISkin = null;
-
-	private float _mainMenuWidth = Screen.width * 0.35f;
-	private float _mainMenuHeight = Screen.height * 0.50f;
-
+	
 
 	// Use this for initialization
 	void Start () 
@@ -27,40 +24,21 @@ public class MainMenuGui : MonoBehaviour
 	void OnGUI()
 	{
 		GUI.skin = this.CustomGUISkin;
-
-		GUILayout.BeginArea (
-			new Rect (
-				(Screen.width * 0.50f) - (this._mainMenuWidth * 0.50f), 
-				(Screen.height * 0.50f) - (this._mainMenuHeight * 0.50f), 
-				this._mainMenuWidth, 
-				this._mainMenuHeight)
-			);
-		GUILayout.BeginVertical ("", GUI.skin.box);
-
-
-		GUIStyle LabelStyle = this.CustomGUISkin.GetStyle ("Label");
-		int originalFontSize = LabelStyle.fontSize;
-
-		LabelStyle.fontSize = 12;
-
-		GUILayout.Space (20);
-		GUILayout.Label ("Main Menu");
-
-		LabelStyle.fontSize = originalFontSize;
-
-		GUILayout.FlexibleSpace ();
+		
+		if (CommonMenuUtilities.showOptions) {
+			CommonMenuUtilities.drawOptionsMenu(GUI.skin);
+			return;
+		}
+		
+		CommonMenuUtilities.drawMainMenuHeader(GUI.skin);
+		
 		CommonMenuUtilities.drawButton ("Start Game", startGame);
 
 		CommonMenuUtilities.drawCommonMainMenuItems ();
-
-		GUILayout.FlexibleSpace ();
-		GUILayout.EndVertical ();
-		GUILayout.EndArea();
+		
+		CommonMenuUtilities.endMainMenu();
 	}
-
-
-	public delegate void buttonResponse();
-
+	
 
 	public void startGame()
 	{

@@ -20,8 +20,9 @@ public class GameGui : MonoBehaviour
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because
 	private int _startTime = 480;
-
 	private int _statusTextFontSize = 16;
+	private bool _showPauseMenu = false;
+	
 
 	public GUISkin CustomGUISkin = null;
 
@@ -49,8 +50,9 @@ public class GameGui : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		//If game is paused
-		if (Time.timeScale == 0) {
+		//If game is paused and camera is moving on its own
+		//This should take precedence over every other GUI thingy since it's an important event	
+		if (Time.timeScale == 0 && this.Camera.isForcedMove()) {
 
 			//User hit esc during pause
 			if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -59,28 +61,43 @@ public class GameGui : MonoBehaviour
 				if (this.LevelInformation.gameEventEndsGame ()) {
 
 
-				} else { //It was just a normal status update... resume game
+				} else { //It was just a normal status update... resume game as normal
 					Time.timeScale = 1;
 					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
 					this.LevelInformation.StatusUpdateLocation = new Vector3 (-1.0f, -1.0f, -1.0f);
 					this.Camera.setFocusedOnEvent (false);
 					this.Camera.setForcedMove (false);
 				}
-
+				
+			}
+			
+			return;
+		}
+		
+		//Game is not paused; no other special circumstances
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			
+			this._showPauseMenu = !this._showPauseMenu;
+			if (this._showPauseMenu) {
+				Time.timeScale = 0;	
+			} else {
+				Time.timeScale = 1;	
 			}
 		}
-	
 	}
 
 
 	void OnGUI ()
 	{
 		GUI.skin = this.CustomGUISkin;
-
-		this.drawGeneralStatsBox ();
-
+		
+		//Always show the general stats box
+		this._drawGeneralStatsBox ();
+		
+		//Check if there's a game event going on
 		if (this.LevelInformation.gameEvent > LevelInfo.GAME_EVENT_NONE) {
-
+			
+			//We have an event, move the camera to focus on said event
 			if (!this.Camera.isForcedMove()) {
 
 				this.Camera.setForcedMove (true);
@@ -90,7 +107,8 @@ public class GameGui : MonoBehaviour
 				//Setting timeScale to 0 basically disables any framerate-independent shit (FixedUpdate, Time.deltaTime, etc)
 				Time.timeScale = 0;
 			}
-
+			
+			//Is the camera still moving on its own?
 			if (!this.Camera.isFocusedOnEvent()) {
 				return;
 			}
@@ -98,10 +116,10 @@ public class GameGui : MonoBehaviour
 			switch (this.LevelInformation.gameEvent) {
 
 				case LevelInfo.GAME_EVENT_PLAYER_WON:
-					this.drawPlayerWonBox ();
+					this._drawPlayerWonBox ();
 					break;
 				case LevelInfo.GAME_EVENT_PLAYER_LOST:
-					this.drawPlayerLostBox ();
+					this._drawPlayerLostBox ();
 					break;
 
 				default: //Not a game-ending event
@@ -110,7 +128,7 @@ public class GameGui : MonoBehaviour
 
 						case LevelInfo.GAME_EVENT_OBJECTIVE_SECURED:
 							int numLeft = LevelInformation.totalNumObjectives - LevelInformation.numObjectivesCaptured;
-							this.drawStatusBox ("Your forces secured an objective\nYou have " + numLeft + " objectives remaining");
+							this._drawStatusBox ("Your forces secured an objective\nYou have " + numLeft + " objectives remaining");
 							break;
 						default:
 							break;
@@ -123,12 +141,16 @@ public class GameGui : MonoBehaviour
 		} 
 
 		if (this.SelectedUnit != null) {
-			this.drawSquadBox ();
+			this._drawSquadBox ();
+		}
+		
+		if (this._showPauseMenu) {
+			this._drawPauseMenu();			
 		}
 	}
 
 
-	void drawGeneralStatsBox()
+	private void _drawGeneralStatsBox()
 	{
 		GUILayout.BeginArea (new Rect (0, 0, this._generalStatsWidth, this._generalStatsHeight));
 		GUILayout.BeginVertical ("", GUI.skin.box);
@@ -171,7 +193,7 @@ public class GameGui : MonoBehaviour
 	}
 
 
-	void drawSquadBox()
+	private void _drawSquadBox()
 	{
 		Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
 
@@ -190,8 +212,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndHorizontal ();
 
 		GUILayout.Space (10);
-
-
+		
 
 		int count = 0;
 		foreach (SquadMember Squaddie in UnitDetails.SquadMembers) {
@@ -235,19 +256,19 @@ public class GameGui : MonoBehaviour
 	}
 
 
-	void drawPlayerWonBox()
+	private void _drawPlayerWonBox()
 	{
-		this.drawStatusBox ("All objectives have been secured\nYour forces are victorious");
+		this._drawStatusBox ("All objectives have been secured\nYour forces are victorious");
 	}
 
 
-	void drawPlayerLostBox()
+	private void _drawPlayerLostBox()
 	{
-		this.drawStatusBox ("Your base has been captured\nYour forces have been defeated");
+		this._drawStatusBox ("Your base has been captured\nYour forces have been defeated");
 	}
 
 
-	void drawStatusBox(string message)
+	private void _drawStatusBox(string message)
 	{
 		//GUIStyle LabelStyle = this.CustomGUISkin.GetStyle ("Label");
 		//int originalFontSize = LabelStyle.fontSize;
@@ -271,6 +292,30 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndArea();
 		
 		//LabelStyle.fontSize = originalFontSize;
+	}
+	
+	
+	private void _drawPauseMenu()
+	{
+		if (CommonMenuUtilities.showOptions) {
+			CommonMenuUtilities.drawOptionsMenu(GUI.skin);
+			return;
+		}
+		
+		CommonMenuUtilities.drawMainMenuHeader(GUI.skin);
+		
+		CommonMenuUtilities.drawButton ("Resume Game", unpauseGame);
+
+		CommonMenuUtilities.drawCommonMainMenuItems ();
+
+		CommonMenuUtilities.endMainMenu();
+	}
+	
+	
+	public void unpauseGame()
+	{
+		this._showPauseMenu = false;
+		Time.timeScale = 1;
 	}
 
 
