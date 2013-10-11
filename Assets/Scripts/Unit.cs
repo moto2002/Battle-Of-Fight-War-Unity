@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Text.RegularExpressions;
 using Pathfinding;
 
 
@@ -131,8 +130,7 @@ public class Unit : MonoBehaviour
 		
 		GameObject LevelInfoObject = GameObject.Find ("LevelInfo");
 		LevelInfo Info = LevelInfoObject.GetComponent<LevelInfo> ();
-		string nameList = Info.Names.text;
-		string[] possibleNames = Regex.Split(nameList, "\r\n");
+		string[] possibleNames = Info.getPossibleNames();
 
 		string unitName = "";
 		for (int i = 0; i < this.numMembers; i++) {

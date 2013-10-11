@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.IO;
+using System.Text.RegularExpressions;
 
 public class LevelInfo : MonoBehaviour 
 {
@@ -15,6 +17,7 @@ public class LevelInfo : MonoBehaviour
 	public Vector3 StatusUpdateLocation;
 
 	public TextAsset Names;
+	private string[] _possibleNames;
 
 	public const int GAME_EVENT_NONE = 0;
 	public const int GAME_EVENT_PAUSED = 1;
@@ -86,6 +89,30 @@ public class LevelInfo : MonoBehaviour
 	public void setStatusUpdateLocation(Vector3 UpdateLocation)
 	{
 		this.StatusUpdateLocation = UpdateLocation;
+	}
+	
+	
+	public string[] getPossibleNames()
+	{
+		if (this._possibleNames.Length == 0) {
+			return this._possibleNames;	
+		}
+		
+		//Generate list of names
+		string nameList = this.Names.text;
+		StringReader Reader = new StringReader(nameList);
+		
+	    string line;
+		string namesSeparatedByCommas = "";
+	    while ((line = Reader.ReadLine()) != null)
+	    {
+	        namesSeparatedByCommas += line + ",";
+	    }
+		//Debug.Log (namesSeparatedByCommas);
+
+		this._possibleNames = namesSeparatedByCommas.Split(',');
+		
+		return this._possibleNames;
 	}
 
 }
