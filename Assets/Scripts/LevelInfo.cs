@@ -94,7 +94,7 @@ public class LevelInfo : MonoBehaviour
 	
 	public string[] getPossibleNames()
 	{
-		if (this._possibleNames.Length == 0) {
+		if (this._possibleNames != null) {
 			return this._possibleNames;	
 		}
 		
