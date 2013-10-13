@@ -59,8 +59,7 @@ public class GameGui : MonoBehaviour
 
 				//Game-ending event? Then let's go to the post-game stats page
 				if (this.LevelInformation.gameEventEndsGame ()) {
-
-
+					Application.LoadLevel("PostGameStats");
 				} else { //It was just a normal status update... resume game as normal
 					Time.timeScale = 1;
 					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
