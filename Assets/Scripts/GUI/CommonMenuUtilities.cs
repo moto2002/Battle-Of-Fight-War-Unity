@@ -33,14 +33,20 @@ public class CommonMenuUtilities
 	}
 	
 	
-	public static void drawMainMenuHeader(GUISkin CustomGuiSkin, string menuHeading = "Main Menu")
+	public static void drawMainMenuHeader(GUISkin CustomGuiSkin, string menuHeading = "MAIN MENU")
+	{
+		CommonMenuUtilities.drawCenterBoxHeader(CustomGuiSkin, menuHeading, CommonMenuUtilities._mainMenuWidth, CommonMenuUtilities._mainMenuHeight);
+	}
+	
+	
+	public static void drawCenterBoxHeader(GUISkin CustomGuiSkin, string menuHeading, float width, float height)
 	{
 		GUILayout.BeginArea (
 			new Rect (
-				(Screen.width * 0.50f) - (CommonMenuUtilities._mainMenuWidth * 0.50f), 
-				(Screen.height * 0.50f) - (CommonMenuUtilities._mainMenuHeight * 0.50f), 
-				CommonMenuUtilities._mainMenuWidth, 
-				CommonMenuUtilities._mainMenuHeight)
+				(Screen.width * 0.50f) - (width * 0.50f), 
+				(Screen.height * 0.50f) - (height * 0.50f), 
+				width, 
+				height)
 			);
 		GUILayout.BeginVertical ("", GUI.skin.box);
 		
@@ -58,7 +64,7 @@ public class CommonMenuUtilities
 	}
 	
 	
-	public static void endMainMenu()
+	public static void endCenterBox()
 	{
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndVertical ();
@@ -78,11 +84,11 @@ public class CommonMenuUtilities
 	
 	public static void drawOptionsMenu(GUISkin CustomGuiSkin)
 	{
-		CommonMenuUtilities.drawMainMenuHeader(CustomGuiSkin, "Options");
+		CommonMenuUtilities.drawCenterBoxHeader(CustomGuiSkin, "OPTIONS", CommonMenuUtilities._mainMenuWidth, CommonMenuUtilities._mainMenuHeight);
 		
 		CommonMenuUtilities.drawButton("Back", exitOptions);
 		
-		CommonMenuUtilities.endMainMenu();
+		CommonMenuUtilities.endCenterBox();
 	}
 	
 	
@@ -93,6 +99,16 @@ public class CommonMenuUtilities
 		if (GUILayout.Button (buttonText)) {
 			buttonResponseFunction ();
 		};
+		GUILayout.FlexibleSpace ();
+		GUILayout.EndHorizontal ();
+	}
+	
+	
+	public static void drawHorizonalLabel(string labelText)
+	{
+		GUILayout.BeginHorizontal ();
+		GUILayout.FlexibleSpace ();
+		GUILayout.Label(labelText);
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndHorizontal ();
 	}

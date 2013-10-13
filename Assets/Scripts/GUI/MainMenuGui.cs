@@ -36,7 +36,7 @@ public class MainMenuGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCommonMainMenuItems ();
 		
-		CommonMenuUtilities.endMainMenu();
+		CommonMenuUtilities.endCenterBox();
 	}
 	
 

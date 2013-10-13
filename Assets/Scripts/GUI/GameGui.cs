@@ -308,7 +308,7 @@ public class GameGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCommonMainMenuItems ();
 
-		CommonMenuUtilities.endMainMenu();
+		CommonMenuUtilities.endCenterBox();
 	}
 	
 	
