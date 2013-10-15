@@ -17,22 +17,6 @@ public class SquadMember
 		this.name = name;
 		this.unitClass = unitClass;
 		this.health = health;
-
-		switch (this.unitClass) {
-
-		case "Rifleman":
-				//Debug.Log ("Class Rifleman");
-				this.SquadViewTexture = Resources.Load ("Units/Rifleman") as Texture2D;
-				this.attackPower = 3.0f;
-				break;
-			case "Slasher":
-				//Debug.Log ("Class Slasher");
-				this.SquadViewTexture = Resources.Load ("Units/Slasher") as Texture2D;
-				this.attackPower = 1.0f;
-				break;
-			default:
-				break;
-		}
 	}
 
 	

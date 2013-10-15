@@ -133,13 +133,14 @@ public class Unit : MonoBehaviour
 		string[] possibleNames = Info.getPossibleNames();
 
 		string unitName = "";
+		SquadMemberCreator SquaddieCreator = new SquadMemberCreator();
 		for (int i = 0; i < this.numMembers; i++) {
 			if (this.generateNames) {
 				unitName = possibleNames [Random.Range (0, possibleNames.Length - 1)];
 			} else {
 				unitName = this.unitClass + " " + (i + 1);
 			}
-			SquadMember NewMember = new SquadMember (this.unitClass, unitName);
+			SquadMember NewMember = SquaddieCreator.createSquadMember(this.unitClass, unitName);
 			this.SquadMembers.Add (NewMember);
 		}
 

@@ -118,11 +118,16 @@
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\NeutralBase.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\SoldierClasses\BadSquadMember.cs" />
+     <Compile Include="Assets\Scripts\SoldierClasses\GoodSquadMember.cs" />
+     <Compile Include="Assets\Scripts\SoldierClasses\Rifleman.cs" />
+     <Compile Include="Assets\Scripts\SoldierClasses\Slasher.cs" />
+     <Compile Include="Assets\Scripts\SoldierClasses\SquadMember.cs" />
      <Compile Include="Assets\Scripts\SpriteInfo.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\LinkedSpriteManager.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\Sprite.cs" />
      <Compile Include="Assets\Scripts\SpriteManager\SpriteManager.cs" />
-     <Compile Include="Assets\Scripts\SquadMember.cs" />
+     <Compile Include="Assets\Scripts\SquadMemberCreator.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
      <None Include="Assets\Scripts\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />
      <None Include="Assets\Scripts\AstarPathfindingProject\Plugins\DotNetZip\License.txt" />
