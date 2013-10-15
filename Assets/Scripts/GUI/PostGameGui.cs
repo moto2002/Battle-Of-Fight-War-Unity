@@ -5,7 +5,7 @@ public class PostGameGui : MonoBehaviour
 {
 	
 	public GUISkin CustomGUISkin = null;
-	public BattleInfo BattleInformation;
+
 	
 	float _boxWidth = Screen.width * 0.5f;
 	float _boxHeight = Screen.height * 0.7f;

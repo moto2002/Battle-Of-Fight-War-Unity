@@ -63,7 +63,7 @@ public class GameGui : MonoBehaviour
 				} else { //It was just a normal status update... resume game as normal
 					Time.timeScale = 1;
 					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
-					this.LevelInformation.StatusUpdateLocation = new Vector3 (-1.0f, -1.0f, -1.0f);
+					this.LevelInformation.setStatusUpdateLocation(new Vector3 (-1.0f, -1.0f, -1.0f));
 					this.Camera.setFocusedOnEvent (false);
 					this.Camera.setForcedMove (false);
 				}
@@ -100,7 +100,7 @@ public class GameGui : MonoBehaviour
 			if (!this.Camera.isForcedMove()) {
 
 				this.Camera.setForcedMove (true);
-				this.Camera.setFocusPosition (this.LevelInformation.StatusUpdateLocation);
+				this.Camera.setFocusPosition (this.LevelInformation.getStatusUpdateLocation());
 
 				//Pause the game
 				//Setting timeScale to 0 basically disables any framerate-independent shit (FixedUpdate, Time.deltaTime, etc)
@@ -126,7 +126,7 @@ public class GameGui : MonoBehaviour
 					switch (this.LevelInformation.gameEvent) {
 
 						case LevelInfo.GAME_EVENT_OBJECTIVE_SECURED:
-							int numLeft = LevelInformation.totalNumObjectives - LevelInformation.numObjectivesCaptured;
+							int numLeft = LevelInformation.getTotalNumObjectives() - LevelInformation.numObjectivesCaptured;
 							this._drawStatusBox ("Your forces secured an objective\nYou have " + numLeft + " objectives remaining");
 							break;
 						default:
@@ -180,7 +180,7 @@ public class GameGui : MonoBehaviour
 		//GUI.Label (new Rect (startX + (int)(infoSize * 1.5), startY, infoSize, infoSize), this.numObjectivesCaptured + "/" + this.numObjectives);
 
 		GUILayout.Label (this.Flag);
-		GUILayout.Label (LevelInformation.numObjectivesCaptured + "/" + LevelInformation.totalNumObjectives);
+		GUILayout.Label (LevelInformation.numObjectivesCaptured + "/" + LevelInformation.getTotalNumObjectives());
 
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndHorizontal ();

@@ -1,6 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\Desktop\Dropbox\AMinerZombieProblem\Assets\Standard Assets\Scripts\StatsCounterScript.cs">
+    <Files>
+      <File FileName="..\..\..\..\Desktop\Dropbox\AMinerZombieProblem\Assets\Standard Assets\Scripts\StatsCounterScript.cs" Line="28" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

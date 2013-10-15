@@ -13,6 +13,13 @@ public class LevelInfo : MonoBehaviour
 	public int numObjectivesCaptured;
 	public int totalNumObjectives;
 	public int gameEvent;
+	
+	public int numSoldiers;
+	public int numSoldiersKilled;
+	
+	public int numEnemiesRemaining;
+	public int numEnemiesKilled;
+	
 
 	public Vector3 StatusUpdateLocation;
 
@@ -25,6 +32,7 @@ public class LevelInfo : MonoBehaviour
 	public const int GAME_EVENT_PLAYER_LOST = 3;
 
 	public const int GAME_EVENT_OBJECTIVE_SECURED = 1;
+	
 
 	// Use this for initialization
 	void Start () 
@@ -40,6 +48,12 @@ public class LevelInfo : MonoBehaviour
 	void Update () 
 	{
 	
+	}
+	
+	
+	void OnLevelWasLoaded ()
+	{
+		
 	}
 
 
@@ -92,6 +106,12 @@ public class LevelInfo : MonoBehaviour
 	}
 	
 	
+	public Vector3 getStatusUpdateLocation()
+	{
+		return this.StatusUpdateLocation;
+	}
+	
+	
 	public string[] getPossibleNames()
 	{
 		if (this._possibleNames != null) {
@@ -114,5 +134,60 @@ public class LevelInfo : MonoBehaviour
 		
 		return this._possibleNames;
 	}
+	
+	
+	public int getTotalNumObjectives()
+	{
+		return this.totalNumObjectives;	
+	}
+	
+	
+	public void updateNumSoldiers(int addNumSoldiers)
+	{
+		this.numSoldiers += addNumSoldiers;
+	}
+	
+	
+	public int getNumSoldiers()
+	{
+		return this.numSoldiers;	
+	}
+	
+	
+	public void updateNumSoldiersKilled(int addNumSoldiersKilled)
+	{
+		this.numSoldiersKilled += addNumSoldiersKilled;	
+	}
+	
+	
+	public int getNumSoldiersKilled()
+	{
+		return this.numSoldiersKilled;	
+	}
+	
+	
+	public void updateNumEnemies(int addNumEnemies)
+	{
+		this.numEnemiesRemaining += addNumEnemies;
+	}
+	
+	
+	public int getNumEnemies()
+	{
+		return this.numEnemiesRemaining;	
+	}
+	
+	
+	public void updateNumEnemiesKilled(int addNumKilled)
+	{
+		this.numEnemiesKilled += addNumKilled;
+	}
+	
+	
+	public int getNumEnemiesKilled()
+	{
+		return this.numEnemiesKilled;
+	}
+	
 
 }

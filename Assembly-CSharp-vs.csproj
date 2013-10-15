@@ -107,7 +107,6 @@
      <Compile Include="Assets\Scripts\AstarPathfindingProject\changelog.cs" />
      <Compile Include="Assets\Scripts\BadGuy.cs" />
      <Compile Include="Assets\Scripts\Base.cs" />
-     <Compile Include="Assets\Scripts\BattleInfo.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\EnemyBase.cs" />
      <Compile Include="Assets\Scripts\GUI\CommonMenuUtilities.cs" />
