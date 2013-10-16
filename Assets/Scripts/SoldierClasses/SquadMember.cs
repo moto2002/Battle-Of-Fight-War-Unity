@@ -25,4 +25,10 @@ public class SquadMember
 	{
 	
 	}
+	
+	
+	public virtual void die()
+	{
+		
+	}
 }

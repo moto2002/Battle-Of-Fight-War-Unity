@@ -104,13 +104,13 @@ public class CommonMenuUtilities
 	}
 	
 	
-	public static void drawHorizonalLabel(string labelText)
-	{
-		GUILayout.BeginHorizontal ();
+	public static void drawSingleLabelLine(string labelText)
+	{	
+		GUILayout.BeginHorizontal();
 		GUILayout.FlexibleSpace ();
 		GUILayout.Label(labelText);
 		GUILayout.FlexibleSpace ();
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 	}
 
 

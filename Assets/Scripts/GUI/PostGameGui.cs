@@ -6,14 +6,22 @@ public class PostGameGui : MonoBehaviour
 	
 	public GUISkin CustomGUISkin = null;
 
-	
 	float _boxWidth = Screen.width * 0.5f;
 	float _boxHeight = Screen.height * 0.7f;
+	
+	private LevelInfo _LevelInformations;
 	
 	// Use this for initialization
 	void Start () 
 	{
-	
+		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
+		if (LevelInfoObj != null) {
+			this._LevelInformations = LevelInfoObj.GetComponent<LevelInfo>();
+		} else {
+			//For debugging really
+			this._LevelInformations = new LevelInfo();
+		}
+		
 	}
 	
 	// Update is called once per frame
@@ -29,15 +37,15 @@ public class PostGameGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "BATTLE REPORT", this._boxWidth, this._boxHeight);
 		
-		CommonMenuUtilities.drawHorizonalLabel("# of Days");
+		CommonMenuUtilities.drawSingleLabelLine("# of Days Fought\t\t" + this._LevelInformations.getBattleEndTime());
 		GUILayout.FlexibleSpace();
 		
-		CommonMenuUtilities.drawHorizonalLabel("Soldiers Remaining");
-		CommonMenuUtilities.drawHorizonalLabel("Soldiers Lost");
+		CommonMenuUtilities.drawSingleLabelLine("Soldiers Remaining\t\t" + this._LevelInformations.getNumSoldiers());
+		CommonMenuUtilities.drawSingleLabelLine("Soldiers Lost\t\t" + this._LevelInformations.getNumSoldiersKilled());
 		GUILayout.FlexibleSpace();
 		
-		CommonMenuUtilities.drawHorizonalLabel("Enemies Remaining");
-		CommonMenuUtilities.drawHorizonalLabel("Enemies Killed");
+		CommonMenuUtilities.drawSingleLabelLine("Enemies Remaining\t\t" + this._LevelInformations.getNumEnemies());
+		CommonMenuUtilities.drawSingleLabelLine("Enemies Killed\t\t" + this._LevelInformations.getNumEnemiesKilled());
 		GUILayout.FlexibleSpace();
 		
 		CommonMenuUtilities.endCenterBox();

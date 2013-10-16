@@ -18,7 +18,7 @@ public class GameGui : MonoBehaviour
 	private float _squadBoxHeight = Screen.height * .50f;
 
 	//We'll treat each second as an in-game minute
-	//Start the game at 8 AM just because
+	//Start the game at 8 AM just because that's what time people work and shit or something
 	private int _startTime = 480;
 	private int _statusTextFontSize = 16;
 	private bool _showPauseMenu = false;

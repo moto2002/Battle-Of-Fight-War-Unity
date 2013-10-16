@@ -486,7 +486,8 @@ public class Unit : MonoBehaviour
 		int randomGuyToDamageIndex = Random.Range (0, this.SquadMembers.Count);
 		SquadMember DamagedGuy = SquadMembers [randomGuyToDamageIndex] as SquadMember;
 		DamagedGuy.health -= damage;
-		if (DamagedGuy.health <= 0.0f) {
+		if (DamagedGuy.health <= 0.0f) { //Oh noes squaddie is dead
+			DamagedGuy.die();
 			SquadMembers.RemoveAt(randomGuyToDamageIndex);
 		}
 

@@ -10,16 +10,21 @@ public class LevelInfo : MonoBehaviour
 	public int maxSpawnsFromEnemySpawner;
 	public int timeBetweenSpawns;
 
-	public int numObjectivesCaptured;
-	public int totalNumObjectives;
-	public int gameEvent;
+	public int totalNumObjectives = 0;
+	public int gameEvent = GAME_EVENT_NONE;
 	
-	public int numSoldiers;
-	public int numSoldiersKilled;
+	public int numObjectivesCaptured = 0;
 	
-	public int numEnemiesRemaining;
-	public int numEnemiesKilled;
+	public int numSoldiers = 0;
+	public int numSoldiersKilled = 0;
 	
+	public int numEnemiesRemaining = 0;
+	public int numEnemiesKilled = 0;
+	
+	public int battleEndTime = 0;
+	
+	//To record battle time (in seconds)
+	private int _startTime = 0;
 
 	public Vector3 StatusUpdateLocation;
 
@@ -37,10 +42,24 @@ public class LevelInfo : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		
+	}
+	
+	
+	//Using this because we don't want to reset records of shit after everything's all initialized
+	//Thus we reset records before any Start() stuff is called
+	void Awake()
+	{
+		//Reset all non-zero "record" statistics to start just to be sure.
+		this._startTime = (int)Time.fixedTime;
+		
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;
-
-		this.gameEvent = GAME_EVENT_NONE;
+		
+		if (Application.loadedLevel != 1) { //If this is post-game-stats, don't do shit
+			DontDestroyOnLoad(this.gameObject);
+		}
+		
 	}
 
 
@@ -51,21 +70,27 @@ public class LevelInfo : MonoBehaviour
 	}
 	
 	
+	//Note that this is only triggered by Application.LoadLevel
+	//The order is OnLevelWasLoaded, Awake, Start
 	void OnLevelWasLoaded ()
 	{
-		
+		if (Application.loadedLevel != 1) { //If this is post-game-stats, don't do shit
+			DontDestroyOnLoad(this.gameObject);
+		}
 	}
 
 
 	public void setPlayerWon()
 	{
 		this.gameEvent = GAME_EVENT_PLAYER_WON;
+		this.updateBattleEndTime();
 	}
 
 
 	public void setPlayerLost()
 	{
 		this.gameEvent = GAME_EVENT_PLAYER_LOST;
+		this.updateBattleEndTime();
 	}
 
 
@@ -187,6 +212,19 @@ public class LevelInfo : MonoBehaviour
 	public int getNumEnemiesKilled()
 	{
 		return this.numEnemiesKilled;
+	}
+	
+	
+	public void updateBattleEndTime()
+	{
+		this.battleEndTime = (int)Time.fixedTime - this._startTime + 480;
+		//Debug.Log (this.battleEndTime);
+	}
+	
+	
+	public int getBattleEndTime()
+	{
+		return this.battleEndTime;	
 	}
 	
 
