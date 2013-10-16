@@ -208,9 +208,6 @@ public class Unit : MonoBehaviour
 
 		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
 
-		GameObject GUIObject = GameObject.Find ("GameGUI");
-		GameGui GUI = GUIObject.GetComponent<GameGui> ();
-
 		if (this.selected) {
 			if (this._SelectSprite == null) {
 				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
@@ -220,8 +217,6 @@ public class Unit : MonoBehaviour
 					Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
 					UnitScript.removeSelectionBox ();
 				}
-
-				PlayerScript.SelectedUnit = this.gameObject;
 
 				//Dimensions for unit select box
 				Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
@@ -238,11 +233,10 @@ public class Unit : MonoBehaviour
 				//SpriteManagerScript.MoveToFront (this._SelectSprite);
 			}
 
-			GUI.SelectedUnit = this.gameObject;
+			PlayerScript.SelectedUnit = this.gameObject;
 
 		} else {
 			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-			PlayerScript.SelectedUnit = null;
 			if (this._SelectSprite != null) { //Deselecting unit
 
 				SpriteManagerScript.RemoveSprite (this._SelectSprite);
@@ -258,7 +252,7 @@ public class Unit : MonoBehaviour
 
 			}
 
-			GUI.SelectedUnit = null;
+			PlayerScript.SelectedUnit = null;
 		}
 
 	}

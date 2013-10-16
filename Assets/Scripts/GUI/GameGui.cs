@@ -4,10 +4,6 @@ using System.Collections;
 public class GameGui : MonoBehaviour 
 {
 
-
-	public GameObject SelectedUnit = null;
-
-
 	private float _generalStatsWidth = Screen.width * .19f;
 	private float _generalStatsHeight = Screen.height * .19f;
 
@@ -25,6 +21,8 @@ public class GameGui : MonoBehaviour
 	
 
 	public GUISkin CustomGUISkin = null;
+	
+	private Player _Player;
 
 	//Icons
 	public Texture2D Moon;
@@ -45,6 +43,8 @@ public class GameGui : MonoBehaviour
 
 		GameObject CameraObj = GameObject.Find ("MainCamera");
 		this.Camera = CameraObj.GetComponent<CameraMovement> ();
+		
+		this._Player = GameObject.Find("Player").GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
@@ -62,17 +62,8 @@ public class GameGui : MonoBehaviour
 			
 			//User hit esc during pause
 			if (Input.GetKeyDown (KeyCode.Escape)) {
-
-				//Game-ending event? Then let's go to the post-game stats page
-				if (this.LevelInformation.gameEventEndsGame ()) {
-					Application.LoadLevel("PostGameStats");
-				} else { //It was just a normal status update... resume game as normal
-					Time.timeScale = 1;
-					this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
-					this.LevelInformation.setStatusUpdateLocation(new Vector3 (-1.0f, -1.0f, -1.0f));
-					this.Camera.setFocusedOnEvent (false);
-					this.Camera.setForcedMove (false);
-				}
+				
+				this._playerPauseDuringEventDisplay();
 				
 			}
 			
@@ -82,12 +73,7 @@ public class GameGui : MonoBehaviour
 		//Game is not paused; no other special circumstances
 		if (Time.timeScale > 0 && Input.GetKeyDown(KeyCode.Escape)) {
 			
-			this._showPauseMenu = !this._showPauseMenu;
-			if (this._showPauseMenu) {
-				Time.timeScale = 0;	
-			} else {
-				Time.timeScale = 1;	
-			}
+			this._playerPauseNormal();
 		}
 	}
 
@@ -145,7 +131,7 @@ public class GameGui : MonoBehaviour
 			return;
 		} 
 
-		if (this.SelectedUnit != null) {
+		if (this._Player.SelectedUnit != null) {
 			this._drawSquadBox ();
 		}
 		
@@ -200,7 +186,7 @@ public class GameGui : MonoBehaviour
 
 	private void _drawSquadBox()
 	{
-		Unit UnitDetails = this.SelectedUnit.GetComponent<Unit> ();
+		Unit UnitDetails = this._Player.SelectedUnit.GetComponent<Unit> ();
 
 		//Group wrapper helps collect UI controls together
 		GUILayout.BeginArea(new Rect (0, Screen.height - this._squadBoxHeight, this._squadBoxWidth, this._squadBoxHeight));
@@ -322,6 +308,33 @@ public class GameGui : MonoBehaviour
 		this._showPauseMenu = false;
 		Time.timeScale = 1;
 	}
+		
+	
+	private void _playerPauseNormal()
+	{
+		this._showPauseMenu = !this._showPauseMenu;
+		if (this._showPauseMenu) {
+			Time.timeScale = 0;	
+		} else {
+			Time.timeScale = 1;	
+		}
+	}
+	
+	
+	private void _playerPauseDuringEventDisplay()
+	{
+		//Game-ending event? Then let's go to the post-game stats page
+		if (this.LevelInformation.gameEventEndsGame ()) {
+			Application.LoadLevel("PostGameStats");
+		} else { //It was just a normal status update... resume game as normal
+			Time.timeScale = 1;
+			this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
+			this.LevelInformation.setStatusUpdateLocation(new Vector3 (-1.0f, -1.0f, -1.0f));
+			this.Camera.setFocusedOnEvent (false);
+			this.Camera.setForcedMove (false);
+		}		
+	}
+
 
 
 }
