@@ -53,7 +53,13 @@ public class GameGui : MonoBehaviour
 		//If game is paused and camera is moving on its own
 		//This should take precedence over every other GUI thingy since it's an important event	
 		if (Time.timeScale == 0 && this.Camera.isForcedMove()) {
-
+			
+			//Don't let the user escape out of this until the camera is focused
+			//(and thus the corresponding event window info shows up)
+			if (!this.Camera.isFocusedOnEvent()) {
+				return;
+			}
+			
 			//User hit esc during pause
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 
@@ -74,7 +80,7 @@ public class GameGui : MonoBehaviour
 		}
 		
 		//Game is not paused; no other special circumstances
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (Time.timeScale > 0 && Input.GetKeyDown(KeyCode.Escape)) {
 			
 			this._showPauseMenu = !this._showPauseMenu;
 			if (this._showPauseMenu) {
