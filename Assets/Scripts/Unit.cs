@@ -204,55 +204,26 @@ public class Unit : MonoBehaviour
 
 	void OnMouseDown()
 	{
+		ArrayList CloseUnits = this._getCloseUnits();
+		if (CloseUnits.Count > 0) {
+			//Debug.Log ("Selected lotsa units");
+			Player PlayerScript = this._PlayerObject.GetComponent<Player>();
+			
+			//Make sure to add this guy to the list of potential selectables
+			CloseUnits.Add(this.gameObject);
+			PlayerScript.PotentialSelectedUnits = CloseUnits;
+			return;
+		}
+		
 		this.selected = !this.selected;
 
-		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
-
 		if (this.selected) {
-			if (this._SelectSprite == null) {
-				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-
-				if (PlayerScript.SelectedUnit != null) {
-					//Unselect previously-selected unit
-					Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
-					UnitScript.removeSelectionBox ();
-				}
-
-				//Dimensions for unit select box
-				Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
-				Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
-				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-
-				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-				this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
-				this._SelectSprite.drawLayer = 999;
-
-				this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
-				this._HealthSprite.offset.y = 0.60f;
-				this._HealthSprite.drawLayer = 1000;
-				//SpriteManagerScript.MoveToFront (this._SelectSprite);
-			}
-
-			PlayerScript.SelectedUnit = this.gameObject;
+			
+			this._displaySelectSprite();		
 
 		} else {
-			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-			if (this._SelectSprite != null) { //Deselecting unit
-
-				SpriteManagerScript.RemoveSprite (this._SelectSprite);
-				this._SelectSprite = null;
-			}
-
-			if (this._HealthSprite != null) {
-
-				SpriteManagerScript.RemoveSprite (this._HealthSprite);
-				//Debug.Log ("Removed health sprite");
-
-				this._HealthSprite = null;
-
-			}
-
-			PlayerScript.SelectedUnit = null;
+			
+			this._hideSelectSprite();
 		}
 
 	}
@@ -594,6 +565,91 @@ public class Unit : MonoBehaviour
 		if (this._CombatEffectsInstance != null) {
 			GameObject.Destroy (this._CombatEffectsInstance);
 		}
+	}
+	
+	
+	private void _displaySelectSprite()
+	{
+		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
+
+		if (this._SelectSprite == null) {
+				
+			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+
+			if (PlayerScript.SelectedUnit != null) {
+				//Unselect previously-selected unit
+				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
+				UnitScript.removeSelectionBox ();
+			}
+	
+			//Dimensions for unit select box
+			Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
+			Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
+			Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
+	
+			//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+			this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
+			this._SelectSprite.drawLayer = 999;
+	
+			this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
+			this._HealthSprite.offset.y = 0.60f;
+			this._HealthSprite.drawLayer = 1000;
+			//SpriteManagerScript.MoveToFront (this._SelectSprite);				
+		}
+		
+		PlayerScript.SelectedUnit = this.gameObject;
+	}
+	
+	
+	private void _hideSelectSprite()
+	{
+		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
+		
+		if (this._SelectSprite != null) { //Deselecting unit
+
+			SpriteManagerScript.RemoveSprite (this._SelectSprite);
+			this._SelectSprite = null;
+		}
+
+		if (this._HealthSprite != null) {
+
+			SpriteManagerScript.RemoveSprite (this._HealthSprite);
+			//Debug.Log ("Removed health sprite");
+
+			this._HealthSprite = null;
+
+		}
+
+		PlayerScript.SelectedUnit = null;
+	}
+	
+	
+	private ArrayList _getCloseUnits()
+	{
+		GameObject[] GoodGuys = GameObject.FindGameObjectsWithTag("GoodGuy");
+		GameObject[] BadGuys = GameObject.FindGameObjectsWithTag("Monster");
+		
+		GameObject[] AllUnits = new GameObject[GoodGuys.Length + BadGuys.Length];
+		GoodGuys.CopyTo(AllUnits, 0);
+		BadGuys.CopyTo(AllUnits, GoodGuys.Length);
+		
+		ArrayList CloseUnits = new ArrayList();
+		foreach (GameObject OtherUnit in AllUnits) {
+			
+			//we don't want to compare against ourselves
+			if (this.gameObject.GetInstanceID() == OtherUnit.gameObject.GetInstanceID()) {
+				continue;
+			}
+			
+			float d = Vector3.Distance(this.gameObject.transform.position, OtherUnit.gameObject.transform.position);
+			if (d < 0.5f) {
+				Debug.Log(d);
+				CloseUnits.Add(OtherUnit);			
+			}
+		}
+		
+		return CloseUnits;
 	}
 
 

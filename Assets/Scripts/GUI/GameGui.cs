@@ -63,10 +63,20 @@ public class GameGui : MonoBehaviour
 			//User hit esc during pause
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				
-				this._playerPauseDuringEventDisplay();
+				this._playerHitsEscapeDuringEventDisplay();
 				
 			}
 			
+			return;
+		}
+		
+		//Displaying potential selectable units
+		if (Time.timeScale == 0 && this._Player.PotentialSelectedUnits.Count > 0 && Input.GetKeyDown(KeyCode.Escape)) {
+			
+			//Unpause the game and empty player selectabru units
+			Time.timeScale = 1;
+			this._Player.PotentialSelectedUnits.RemoveRange(0, this._Player.PotentialSelectedUnits.Count);	
+			//Must return or the game will try to pause as normal
 			return;
 		}
 		
@@ -85,7 +95,7 @@ public class GameGui : MonoBehaviour
 		//Always show the general stats box
 		this._drawGeneralStatsBox ();
 		
-		//Check if there's a game event going on
+		//Check if there's a game event going on... this should override every other GUI event
 		if (this.LevelInformation.gameEvent > LevelInfo.GAME_EVENT_NONE) {
 			
 			//We have an event, move the camera to focus on said event
@@ -130,7 +140,15 @@ public class GameGui : MonoBehaviour
 
 			return;
 		} 
-
+		
+		//Player tried to select clusterfuck of units
+		if (this._Player.PotentialSelectedUnits.Count > 0) {
+			Time.timeScale = 0;
+			this._drawPotentialSelectableUnitsBox();
+			return; //Not continuing here on purpose; we don't wanna show anything else
+		}
+		
+		//Player actually has selected unit
 		if (this._Player.SelectedUnit != null) {
 			this._drawSquadBox ();
 		}
@@ -303,6 +321,42 @@ public class GameGui : MonoBehaviour
 	}
 	
 	
+	private void _drawPotentialSelectableUnitsBox()
+	{
+		CommonMenuUtilities.drawMainMenuHeader(GUI.skin, "Select Unit");
+		
+		foreach (GameObject SelectableUnit in this._Player.PotentialSelectedUnits) {
+			
+			GUILayout.BeginHorizontal ();
+			GUILayout.FlexibleSpace ();
+
+			if (SelectableUnit.tag == "GoodGuy") {
+				GUILayout.Button(Resources.Load ("Units/Rifleman") as Texture2D);	
+			} else {
+				GUILayout.Button(Resources.Load ("Units/Slasher") as Texture2D);	
+			}
+
+			GUILayout.Space(10.0f);
+			
+			//Just display the first squaddie name for now
+			//In reality we should display the unit name
+			Unit UnitInfo = SelectableUnit.GetComponent<Unit>();
+			SquadMember FirstSquaddie = UnitInfo.SquadMembers[0] as SquadMember;
+			GUILayout.Button(FirstSquaddie.name);
+			
+			GUILayout.FlexibleSpace ();
+			
+			GUILayout.EndHorizontal ();
+			
+			//For vertical space
+			GUILayout.FlexibleSpace();
+			
+		}
+		
+		CommonMenuUtilities.endCenterBox();
+	}
+	
+	
 	public void unpauseGame()
 	{
 		this._showPauseMenu = false;
@@ -321,7 +375,7 @@ public class GameGui : MonoBehaviour
 	}
 	
 	
-	private void _playerPauseDuringEventDisplay()
+	private void _playerHitsEscapeDuringEventDisplay()
 	{
 		//Game-ending event? Then let's go to the post-game stats page
 		if (this.LevelInformation.gameEventEndsGame ()) {
