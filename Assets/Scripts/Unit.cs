@@ -433,6 +433,16 @@ public class Unit : MonoBehaviour
 	{
 		//Debug.Log ("ON TRIGGER EXITED");
 	}
+	
+	
+	public void createCombatEffects()
+	{
+		if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
+			//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
+			GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
+			this._CombatEffectsInstance = CombatEffects;
+		}
+	}
 
 
 	public void attack(Unit EnemyUnit)
