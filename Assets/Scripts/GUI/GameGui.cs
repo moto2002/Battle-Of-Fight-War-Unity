@@ -329,20 +329,23 @@ public class GameGui : MonoBehaviour
 			
 			GUILayout.BeginHorizontal ();
 			GUILayout.FlexibleSpace ();
-
-			if (SelectableUnit.tag == "GoodGuy") {
-				GUILayout.Button(Resources.Load ("Units/Rifleman") as Texture2D);	
-			} else {
-				GUILayout.Button(Resources.Load ("Units/Slasher") as Texture2D);	
-			}
-
-			GUILayout.Space(10.0f);
-			
-			//Just display the first squaddie name for now
-			//In reality we should display the unit name
+						
+			//Just display the first squaddie info for now
+			//In reality we should display the leader stuff
 			Unit UnitInfo = SelectableUnit.GetComponent<Unit>();
 			SquadMember FirstSquaddie = UnitInfo.SquadMembers[0] as SquadMember;
-			GUILayout.Button(FirstSquaddie.name);
+			
+			GUILayout.Label(FirstSquaddie.SquadViewTexture);
+			GUILayout.Space(10.0f);
+			if (GUILayout.Button(FirstSquaddie.name)) { //Player selected one of these guys
+				
+				Time.timeScale = 1;
+				this._Player.PotentialSelectedUnits.RemoveRange(0, this._Player.PotentialSelectedUnits.Count);
+
+				//Unit.displaySelectSprite() should already handle deselecting previously-selected unit
+				UnitInfo.displaySelectSprite();
+				break;
+			}
 			
 			GUILayout.FlexibleSpace ();
 			

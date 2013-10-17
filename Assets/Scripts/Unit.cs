@@ -219,11 +219,11 @@ public class Unit : MonoBehaviour
 
 		if (this.selected) {
 			
-			this._displaySelectSprite();		
+			this.displaySelectSprite();		
 
 		} else {
 			
-			this._hideSelectSprite();
+			this.hideSelectSprite();
 		}
 
 	}
@@ -568,7 +568,7 @@ public class Unit : MonoBehaviour
 	}
 	
 	
-	private void _displaySelectSprite()
+	public void displaySelectSprite()
 	{
 		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
 
@@ -598,10 +598,11 @@ public class Unit : MonoBehaviour
 		}
 		
 		PlayerScript.SelectedUnit = this.gameObject;
+		this.selected = true;
 	}
 	
 	
-	private void _hideSelectSprite()
+	public void hideSelectSprite()
 	{
 		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
@@ -622,6 +623,7 @@ public class Unit : MonoBehaviour
 		}
 
 		PlayerScript.SelectedUnit = null;
+		this.selected = false;
 	}
 	
 	

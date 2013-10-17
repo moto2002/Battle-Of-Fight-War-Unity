@@ -127,7 +127,7 @@ public class Map : MonoBehaviour {
 				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
 				UnitScript.setGoalPosition (HitInfo.point);
 			}
-		}
+		} 
 	}
 
 
