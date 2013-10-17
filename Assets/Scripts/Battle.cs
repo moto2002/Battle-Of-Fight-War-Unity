@@ -29,28 +29,56 @@ public class Battle : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		//Animate sommat?	
 	}
 	
 	
 	//"Rounds" of combat
 	public void FixedUpdate()
 	{
-		foreach (ArrayList Team in this.CombatantsByTeam) {
+		//Don't do this every frame in case of lagony
+		
+		//First go through the teams
+		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
 			
-			foreach (GameObject Unit in Team) {
+			int targetTeam = TEAM_MONSTERS;
+			if (i == TEAM_MONSTERS) {
+				targetTeam = TEAM_GOOD_GUYS;
+			}
+			
+			//Now go through the units in the team
+			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
 				
+				Unit AttackingUnit = UnitObj.GetComponent<Unit>();
+				//Now go through the squaddies in the unit
+				//Attack a rando on the other team with each squaddie
+				foreach (SquadMember Squaddie in AttackingUnit.SquadMembers) {
+					
+				}
 			}
 		}
 	}
 	
 	
-	public void addUnit(GameObject NewUnit, int team)
+	public void addUnit(GameObject NewUnitObj)
 	{
-		this.CombatantsByTeam[team].Add(NewUnit);		
+		Unit NewUnit = NewUnitObj.GetComponent<Unit>();
+		//Just as a precaution check that the unit was not already added to a battle
+		//Things can get repetitive since we're creating battles from the OnTriggerEnter event
+		//which gets called on all units involved in the event
+		if (NewUnit.getBattle() != null) {
+			return;	
+		}
 		
-		Unit UnitGuy = NewUnit.GetComponent<Unit>();
-		UnitGuy.createCombatEffects();
+		int team = TEAM_MONSTERS;
+		if (NewUnitObj.tag == "GoodGuy") {
+			team = TEAM_GOOD_GUYS; 	
+		}
+		
+		this.CombatantsByTeam[team].Add(NewUnitObj);		
+		
+		NewUnit.createCombatEffects();
+		NewUnit.setBattle(this.gameObject);
 	}
 	
 	

@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour
 	//Setup variables
 	public bool generateNames = false;
 	public GameObject CombatEffects = null;
+	public GameObject BattlePrefab;
 	
 	public int numMembers;
 
@@ -31,11 +32,12 @@ public class Unit : MonoBehaviour
 	public float speed = 0.25f;
 	public float health = 100.0f;
 
-	public ArrayList CombatTargets;
 
 	public ArrayList SquadMembers;
 
-
+	public ArrayList CombatTargets;
+	private GameObject _Battle = null;
+		
 	//The combat effects relevant to this unit; needs to be removed when combat is over
 	protected GameObject _CombatEffectsInstance = null;
 
@@ -302,6 +304,8 @@ public class Unit : MonoBehaviour
 			if (this.inCombat) {
 				//Do combat stuff once cooldown is done
 				if ((int)Time.time >= this._timeOfLastAttack + 2) {
+					
+					/**
 					foreach (GameObject EnemyUnitObject in this.CombatTargets) {
 
 						if (EnemyUnitObject == null) {
@@ -312,6 +316,7 @@ public class Unit : MonoBehaviour
 						this._timeOfLastAttack = (int)Time.time;
 
 					}
+					*/
 				}
 			}
 
@@ -414,14 +419,41 @@ public class Unit : MonoBehaviour
 
 			if (OtherUnit != null) { //Two unfriendly units have collided oh noes!
 				//Debug.Log ("Combat!");
+				
+				//Neither is in battle yet				
+				if (!this.inCombat && !OtherUnit.inCombat) {
+					
+					//Battle should appear between the two
+					Vector3 BattleArea = (this.transform.position + OtherObject.transform.position) / 2.0f;
+					GameObject BattleObj = Instantiate (this.BattlePrefab, BattleArea, Quaternion.identity) as GameObject;
+					
+					Battle NewBattle = BattleObj.GetComponent<Battle>();
+					NewBattle.addUnit(this.gameObject);
+					NewBattle.addUnit(OtherUnit.gameObject);
+					
+				} else if (this.inCombat) { //We're already in battle
+					
+					Battle ExistingBattle = this._Battle.GetComponent<Battle>();
+					ExistingBattle.addUnit(OtherUnit.gameObject);
+						
+				} else { //Other guy is already in battle
+					
+					Battle ExistingBattle = OtherUnit.getBattle().GetComponent<Battle>();
+					ExistingBattle.addUnit(this.gameObject);
+				}
+				
+				this.inCombat = true;
+
+				/**
 				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
 					//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
 					GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
 					this._CombatEffectsInstance = CombatEffects;
 				}
-				this.inCombat = true;
 				this.CombatTargets.Add (OtherObject.gameObject);
-				this.currentAction = CURRENT_ACTION_COMBAT;
+				*/
+				
+				
 				//Debug.Log ("Added combat target");
 			}
 
@@ -491,11 +523,13 @@ public class Unit : MonoBehaviour
 		} else {
 			enemyTag = "GoodGuy";
 		}
-
+		
+		/**
 		//Remove this guy from all enemy target lists, if any
 		GameObject[] Enemies = GameObject.FindGameObjectsWithTag(enemyTag);
 
 		int deadGuyId = this.gameObject.GetInstanceID ();
+
 		foreach (GameObject EnemyUnitObject in Enemies) {
 			Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
 			bool foundDeadGuy = false;
@@ -517,7 +551,7 @@ public class Unit : MonoBehaviour
 					break;
 				}
 			}
-		}
+		} */
 
 		Destroy (this);
 		Destroy (this.gameObject);
@@ -634,6 +668,23 @@ public class Unit : MonoBehaviour
 
 		PlayerScript.SelectedUnit = null;
 		this.selected = false;
+	}
+	
+	
+	public GameObject getBattle()
+	{
+		return this._Battle;	
+	}
+	
+	
+	public void setBattle(GameObject NewBattle)
+	{
+		this._Battle = NewBattle;
+		if (this._Battle != null) {
+			this.inCombat = true;	
+		} else {
+			this.inCombat = false;	
+		}
 	}
 	
 	
