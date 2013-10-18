@@ -24,7 +24,6 @@ public class Unit : MonoBehaviour
 	//Setup variables
 	public bool generateNames = false;
 	public GameObject CombatEffects = null;
-	public GameObject BattlePrefab;
 	
 	public int numMembers;
 
@@ -35,7 +34,6 @@ public class Unit : MonoBehaviour
 
 	public ArrayList SquadMembers;
 
-	public ArrayList CombatTargets;
 	private GameObject _Battle = null;
 		
 	//The combat effects relevant to this unit; needs to be removed when combat is over
@@ -82,7 +80,6 @@ public class Unit : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		this.CombatTargets = new ArrayList ();
 		this.SquadMembers = new ArrayList ();
 
 		this._PlayerObject = GameObject.Find("Player");
@@ -303,7 +300,7 @@ public class Unit : MonoBehaviour
 		if (this.PathToFollow == null || this.inCombat) { //do not move if in combat
 			if (this.inCombat) {
 				//Do combat stuff once cooldown is done
-				if ((int)Time.time >= this._timeOfLastAttack + 2) {
+				
 					
 					/**
 					foreach (GameObject EnemyUnitObject in this.CombatTargets) {
@@ -317,11 +314,14 @@ public class Unit : MonoBehaviour
 
 					}
 					*/
-				}
+				
 			}
 
 			return;
 		}
+		
+		//Then we must be moving
+		this.currentAction = CURRENT_ACTION_MOVING;
 		
 		//Did we reach our goal?
 		if (this.currentWaypoint >= this.PathToFollow.vectorPath.Count) {
@@ -411,7 +411,9 @@ public class Unit : MonoBehaviour
 		//Debug.Log ("Units collided");
 		//Debug.Log (this.gameObject.tag);
 		//Debug.Log (OtherObject.gameObject.tag);
-
+		
+		//Add Unit LOS logic here
+		
 		if (OtherObject.gameObject.tag != this.gameObject.tag) {
 
 			//Debug.Log ("object tags are different");
@@ -425,7 +427,7 @@ public class Unit : MonoBehaviour
 					
 					//Battle should appear between the two
 					Vector3 BattleArea = (this.transform.position + OtherObject.transform.position) / 2.0f;
-					GameObject BattleObj = Instantiate (this.BattlePrefab, BattleArea, Quaternion.identity) as GameObject;
+					GameObject BattleObj = Instantiate (Resources.Load("Prefabs/Battle"), BattleArea, Quaternion.identity) as GameObject;
 					
 					Battle NewBattle = BattleObj.GetComponent<Battle>();
 					NewBattle.addUnit(this.gameObject);
@@ -469,7 +471,7 @@ public class Unit : MonoBehaviour
 	
 	public void createCombatEffects()
 	{
-		if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
+		if (this.CombatEffects != null) { //Only create combat effects if they're not already there!
 			//Vector3 EffectsPosition = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z); 
 			GameObject CombatEffects = Instantiate (this.CombatEffects, this.transform.position, Quaternion.identity) as GameObject;
 			this._CombatEffectsInstance = CombatEffects;
@@ -477,8 +479,14 @@ public class Unit : MonoBehaviour
 	}
 
 
-	public void attack(Unit EnemyUnit)
+	public void attack(GameObject EnemyUnitObj)
 	{
+		bool attackCooldownDone = (int)Time.fixedTime >= this._timeOfLastAttack + 2;
+		if (!attackCooldownDone) {
+			return;	
+		}
+		
+		Unit EnemyUnit = EnemyUnitObj.GetComponent<Unit>();
 		foreach (SquadMember Squaddie in this.SquadMembers) {
 			EnemyUnit.damage (Squaddie.attackPower);
 		}
@@ -560,7 +568,7 @@ public class Unit : MonoBehaviour
 
 	public void heal()
 	{
-		if ((int)Time.time <= this._timeOfLastHeal + 2) {
+		if ((int)Time.fixedTime <= this._timeOfLastHeal + 2) {
 			return;
 		}
 
@@ -681,9 +689,11 @@ public class Unit : MonoBehaviour
 	{
 		this._Battle = NewBattle;
 		if (this._Battle != null) {
-			this.inCombat = true;	
+			this.inCombat = true;
+			this.currentAction = CURRENT_ACTION_COMBAT;
 		} else {
-			this.inCombat = false;	
+			this.inCombat = false;
+			this.currentAction = CURRENT_ACTION_HOLDING;
 		}
 	}
 	

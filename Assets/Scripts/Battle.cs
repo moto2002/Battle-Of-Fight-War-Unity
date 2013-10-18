@@ -4,11 +4,16 @@ using System.Collections;
 public class Battle : MonoBehaviour 
 {
 	
+	private int _timeOfLastRound = 0;
+	
 	//Yeah this might seem weird but bear with me
 	//We have an array full of array lists
 	//In practice this is an array of teams of units, where the teams can
 	//shrink/grow in size as units join/leave a battle
-	public ArrayList[] CombatantsByTeam;
+	public ArrayList[] CombatantsByTeam = new ArrayList[2] {
+		new ArrayList(),
+		new ArrayList()
+	};
 	
 	//Correspond to the relevant team in the combatants array
 	public const int TEAM_GOOD_GUYS = 0;
@@ -16,13 +21,9 @@ public class Battle : MonoBehaviour
 	
 	
 	// Use this for initialization
+	// Not sure if this is being called after manual Initialization
 	void Start () 
 	{
-		//Initializing all possible teams
-		this.CombatantsByTeam = new ArrayList[2] {
-			new ArrayList(),
-			new ArrayList()
-		};
 	}
 	
 	
@@ -37,7 +38,14 @@ public class Battle : MonoBehaviour
 	public void FixedUpdate()
 	{
 		//Don't do this every frame in case of lagony
+		if ((int)Time.fixedTime <= this._timeOfLastRound + 2) {
+			Debug.Log("Not attacking bc time is " + this._timeOfLastRound);
+			return;
+		}
 		
+		//Check if either team is empty... if so, stop this battle
+		
+				
 		//First go through the teams
 		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
 			
@@ -47,16 +55,26 @@ public class Battle : MonoBehaviour
 			}
 			
 			//Now go through the units in the team
+			ArrayList TargetTeam = this.CombatantsByTeam[targetTeam];
 			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
 				
 				Unit AttackingUnit = UnitObj.GetComponent<Unit>();
-				//Now go through the squaddies in the unit
-				//Attack a rando on the other team with each squaddie
-				foreach (SquadMember Squaddie in AttackingUnit.SquadMembers) {
-					
+
+				//Attack a rando on the other team
+				int targetIndex = Random.Range(0, TargetTeam.Count - 1);
+				
+				Debug.Log("ATTACKING");
+				GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
+				AttackingUnit.attack(TargetUnitObj);
+				
+				Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
+				if (TargetUnit.health <= 0.0f) {
+					TargetTeam.Remove(TargetUnitObj);	
 				}
 			}
 		}
+		
+		this._timeOfLastRound = (int)Time.fixedTime;
 	}
 	
 	
@@ -77,8 +95,8 @@ public class Battle : MonoBehaviour
 		
 		this.CombatantsByTeam[team].Add(NewUnitObj);		
 		
-		NewUnit.createCombatEffects();
 		NewUnit.setBattle(this.gameObject);
+		NewUnit.createCombatEffects();
 	}
 	
 	
