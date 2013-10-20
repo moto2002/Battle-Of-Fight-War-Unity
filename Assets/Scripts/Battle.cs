@@ -43,43 +43,8 @@ public class Battle : MonoBehaviour
 			return;
 		}
 		
-		//Check if either team is empty... if so, stop this battle
-		
+		this._doRound();
 				
-		//First go through the teams
-		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
-			
-			int targetTeam = TEAM_MONSTERS;
-			if (i == TEAM_MONSTERS) {
-				targetTeam = TEAM_GOOD_GUYS;
-			}
-			
-			//Now go through the units in the team
-			ArrayList TargetTeam = this.CombatantsByTeam[targetTeam];
-			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
-				
-				Unit AttackingUnit = UnitObj.GetComponent<Unit>();
-
-				//Attack a rando on the other team
-				int targetIndex = Random.Range(0, TargetTeam.Count - 1);
-				
-				//Debug.Log("ATTACKING");
-				GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
-				AttackingUnit.attack(TargetUnitObj);
-				
-				Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
-				Debug.Log(TargetUnit.health);
-				if (TargetUnit.health <= 0.0f) {
-					
-					TargetTeam.RemoveAt(targetIndex);	
-					if (TargetTeam.Count <= 0) { //The other team is dead oh neos!
-						this._endBattle();
-						break;
-					}
-				}
-			}
-		}
-		
 		this._timeOfLastRound = (int)Time.fixedTime;
 	}
 	
@@ -103,6 +68,44 @@ public class Battle : MonoBehaviour
 		
 		NewUnit.setBattle(this.gameObject);
 		NewUnit.createCombatEffects();
+	}
+	
+	
+	private void _doRound()
+	{
+		//First go through the teams
+		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
+			
+			int targetTeam = TEAM_MONSTERS;
+			if (i == TEAM_MONSTERS) {
+				targetTeam = TEAM_GOOD_GUYS;
+			}
+			
+			//Now go through the units in the team
+			ArrayList TargetTeam = this.CombatantsByTeam[targetTeam];
+			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
+				
+				Unit AttackingUnit = UnitObj.GetComponent<Unit>();
+
+				//Attack a rando on the other team
+				int targetIndex = Random.Range(0, TargetTeam.Count - 1);
+				
+				//Debug.Log("ATTACKING");
+				GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
+				AttackingUnit.attack(TargetUnitObj);
+				
+				Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
+				//Debug.Log(TargetUnit.health);
+				if (TargetUnit.health <= 0.0f) {
+					
+					TargetTeam.RemoveAt(targetIndex);	
+					if (TargetTeam.Count <= 0) { //The other team is dead oh neos!
+						this._endBattle();
+						return;
+					}
+				}
+			}
+		}
 	}
 	
 	
