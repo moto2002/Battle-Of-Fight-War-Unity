@@ -299,22 +299,7 @@ public class Unit : MonoBehaviour
 
 		if (this.PathToFollow == null || this.inCombat) { //do not move if in combat
 			if (this.inCombat) {
-				//Do combat stuff once cooldown is done
-				
-					
-					/**
-					foreach (GameObject EnemyUnitObject in this.CombatTargets) {
-
-						if (EnemyUnitObject == null) {
-							continue;
-						}
-						Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
-						this.attack (EnemyUnit);
-						this._timeOfLastAttack = (int)Time.time;
-
-					}
-					*/
-				
+				this.currentAction = CURRENT_ACTION_COMBAT; //Just to make sure the status is right				
 			}
 
 			return;
@@ -490,6 +475,8 @@ public class Unit : MonoBehaviour
 		foreach (SquadMember Squaddie in this.SquadMembers) {
 			EnemyUnit.damage (Squaddie.attackPower);
 		}
+		
+		this._timeOfLastAttack = (int)Time.fixedTime;
 	}
 
 
@@ -525,42 +512,6 @@ public class Unit : MonoBehaviour
 
 	public void die()
 	{
-		string enemyTag = "";
-		if (this.gameObject.tag == "GoodGuy") {
-			enemyTag = "Monster";
-		} else {
-			enemyTag = "GoodGuy";
-		}
-		
-		/**
-		//Remove this guy from all enemy target lists, if any
-		GameObject[] Enemies = GameObject.FindGameObjectsWithTag(enemyTag);
-
-		int deadGuyId = this.gameObject.GetInstanceID ();
-
-		foreach (GameObject EnemyUnitObject in Enemies) {
-			Unit EnemyUnit = EnemyUnitObject.GetComponent<Unit> ();
-			bool foundDeadGuy = false;
-			foreach (GameObject TargetUnit in EnemyUnit.CombatTargets) {
-				//Debug.Log ("LOOKING THROUGH ENEMY TARGETS FOR DEAD GUY " + deadGuyId + ", comparing with GUY " + TargetUnit.GetInstanceID());
-				if (TargetUnit.GetInstanceID () == deadGuyId) {
-					//Debug.Log ("REMOVING DEAD GUY " + deadGuyId);
-					EnemyUnit.CombatTargets.Remove (TargetUnit);
-					foundDeadGuy = true;
-					//Debug.Log ("Target " + deadGuyId + " removed");
-				}
-
-				//if this dead guy is the enemy's last target, then they are no longer in combat
-				if (EnemyUnit.CombatTargets.Count == 0) {
-					EnemyUnit.removeFromCombat();
-				}
-
-				if (foundDeadGuy) {
-					break;
-				}
-			}
-		} */
-
 		Destroy (this);
 		Destroy (this.gameObject);
 	}
@@ -694,6 +645,8 @@ public class Unit : MonoBehaviour
 		} else {
 			this.inCombat = false;
 			this.currentAction = CURRENT_ACTION_HOLDING;
+			Destroy(this._CombatEffectsInstance);
+			this._CombatEffectsInstance = null;
 		}
 	}
 	

@@ -39,7 +39,7 @@ public class Battle : MonoBehaviour
 	{
 		//Don't do this every frame in case of lagony
 		if ((int)Time.fixedTime <= this._timeOfLastRound + 2) {
-			Debug.Log("Not attacking bc time is " + this._timeOfLastRound);
+			//Debug.Log("Not attacking bc time is " + this._timeOfLastRound);
 			return;
 		}
 		
@@ -63,13 +63,19 @@ public class Battle : MonoBehaviour
 				//Attack a rando on the other team
 				int targetIndex = Random.Range(0, TargetTeam.Count - 1);
 				
-				Debug.Log("ATTACKING");
+				//Debug.Log("ATTACKING");
 				GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
 				AttackingUnit.attack(TargetUnitObj);
 				
 				Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
+				Debug.Log(TargetUnit.health);
 				if (TargetUnit.health <= 0.0f) {
-					TargetTeam.Remove(TargetUnitObj);	
+					
+					TargetTeam.RemoveAt(targetIndex);	
+					if (TargetTeam.Count <= 0) { //The other team is dead oh neos!
+						this._endBattle();
+						break;
+					}
 				}
 			}
 		}
@@ -97,6 +103,22 @@ public class Battle : MonoBehaviour
 		
 		NewUnit.setBattle(this.gameObject);
 		NewUnit.createCombatEffects();
+	}
+	
+	
+	private void _endBattle()
+	{
+		Debug.Log("ENDING BATTLE");
+		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
+			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
+				
+				Unit SurvivingUnit = UnitObj.GetComponent<Unit>();
+				SurvivingUnit.setBattle(null);
+			}			
+		}
+		
+		Destroy (this);
+		Destroy(this.gameObject);
 	}
 	
 	

@@ -12,7 +12,6 @@ public class Base : NeutralBase {
 	public string enemyTag = "";
 
 	protected int _numSpawns = 0;
-	protected int _numFriendlyUnits = 0;
 
 
 	// Use this for initialization
@@ -30,40 +29,26 @@ public class Base : NeutralBase {
 	{
 	
 	}
-
-
-	public override void OnTriggerEnter (Collider OtherObject)
+	
+	
+	public void OnTriggerStay(Collider OtherObject)
 	{
-		//Debug.Log ("Unit in base");
-		if (OtherObject.gameObject.tag != this.friendlyTag) {
-			return;
-		}
-
-		this._numFriendlyUnits++;
-		base.OnTriggerEnter (OtherObject);
-	}
-
-
-	public override void OnTriggerExit (Collider OtherObject)
-	{
-		if (OtherObject.gameObject.tag != this.friendlyTag) {
-			return;
-		}
-
-		this._numFriendlyUnits--;
-		base.OnTriggerExit (OtherObject);
-	}
-
-
-	public virtual void OnTriggerStay(Collider OtherObject) 
-	{
-		if (OtherObject.gameObject.tag != this.enemyTag) {
-			return; //Nothing to do here for non-enemy units
-		}
-
-		if (this._numFriendlyUnits <= 0) {
-			this._baseCaptured ();
-		}
+		if (OtherObject.gameObject.tag == this.enemyTag) {
+			
+			Vector3 spherePosition = new Vector3(
+				this.transform.position.x,
+				this.transform.position.y + 0.5f,
+				this.transform.position.z
+			);
+			Collider[] ObjsInCenterOfBase = Physics.OverlapSphere(spherePosition, 0.005f);
+			foreach (Collider ObjectWithin in ObjsInCenterOfBase) {
+				//Debug.Log(ObjectWithin.name);
+				if (ObjectWithin.tag == this.enemyTag) {
+					this._baseCaptured ();	
+				}
+			}
+			
+		}	
 	}
 
 
