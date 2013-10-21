@@ -175,7 +175,8 @@ public class GameGui : MonoBehaviour
 		GUILayout.EndHorizontal ();
 
 		GUILayout.FlexibleSpace ();
-
+		
+		currentTime = currentTime % 1440;
 		int hour = currentTime / 60;
 		int minute = currentTime % 60;
 
