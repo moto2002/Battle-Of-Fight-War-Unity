@@ -169,7 +169,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.BeginHorizontal ();
 		GUILayout.Space (10);
 
-		int currentTime = (int)(this._startTime + Time.fixedTime);
+		int currentTime = (int)(this._startTime + Time.fixedTime * 2);
 		GUILayout.Label ("Day " + ((currentTime / 1440) + 1));
 
 		GUILayout.FlexibleSpace ();
