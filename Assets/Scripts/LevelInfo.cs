@@ -40,6 +40,9 @@ public class LevelInfo : MonoBehaviour
 
 	public const int GAME_EVENT_OBJECTIVE_SECURED = 1;
 	
+	public const int TIME_DAY_THRESHOLD = 390;
+	public const int TIME_NIGHT_THRESHOLD = 1170;
+	
 
 	// Use this for initialization
 	void Start () 

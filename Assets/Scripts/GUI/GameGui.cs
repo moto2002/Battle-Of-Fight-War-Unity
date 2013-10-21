@@ -181,7 +181,12 @@ public class GameGui : MonoBehaviour
 
 		GUILayout.BeginHorizontal ();
 		GUILayout.FlexibleSpace ();
-
+		
+		this.TimeOfDay = this.Moon;
+		if (currentTime >= LevelInfo.TIME_DAY_THRESHOLD && currentTime <= LevelInfo.TIME_NIGHT_THRESHOLD) {
+			this.TimeOfDay = this.Sun;
+		}
+		
 		GUILayout.Label (this.TimeOfDay);
 		GUILayout.Label (hour + ":" + minute.ToString("D2"));
 
