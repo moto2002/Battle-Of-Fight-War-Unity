@@ -56,7 +56,7 @@ public class LevelInfo : MonoBehaviour
 	{
 		//Reset all non-zero "record" statistics to start just to be sure.
 		
-		this._startTime = (int)480; //Battles start at 8 AM just because that's what time people wake up and do shit
+		this._startTime = 300; //Battles start at early just because that's what time people wake up and do shit
 		
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;

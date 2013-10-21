@@ -168,7 +168,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.BeginHorizontal ();
 		GUILayout.Space (10);
 
-		int currentTime = (int)(this.LevelInformation.getBattleTime());
+		int currentTime = (int)(this.LevelInformation.battleTime);
 		GUILayout.Label ("Day " + ((currentTime / 1440) + 1));
 
 		GUILayout.FlexibleSpace ();
@@ -381,7 +381,9 @@ public class GameGui : MonoBehaviour
 	{
 		//Game-ending event? Then let's go to the post-game stats page
 		if (this.LevelInformation.gameEventEndsGame ()) {
-			Application.LoadLevel("PostGameStats");
+			
+			Application.LoadLevel("PostGameStats"); //Note that we don't unpause the game here!
+		
 		} else { //It was just a normal status update... resume game as normal
 			Time.timeScale = 1;
 			this.LevelInformation.gameEvent = LevelInfo.GAME_EVENT_NONE;
