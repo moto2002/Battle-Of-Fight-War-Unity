@@ -473,6 +473,9 @@ public class Unit : MonoBehaviour
 		
 		Unit EnemyUnit = EnemyUnitObj.GetComponent<Unit>();
 		foreach (SquadMember Squaddie in this.SquadMembers) {
+			if (EnemyUnit.SquadMembers.Count <= 0) {
+				break;
+			}
 			EnemyUnit.damage (Squaddie.attackPower);
 		}
 		
@@ -489,15 +492,15 @@ public class Unit : MonoBehaviour
 		SquadMember DamagedGuy = SquadMembers [randomGuyToDamageIndex] as SquadMember;
 		DamagedGuy.health -= damage;
 		if (DamagedGuy.health <= 0.0f) { //Oh noes squaddie is dead
-			DamagedGuy.die();
 			SquadMembers.RemoveAt(randomGuyToDamageIndex);
+			DamagedGuy.die();
 		}
 
 		if (this.SquadMembers.Count <= 0) { //Everyone's dead, screw it
 			this.health = 0.0f;
 			return;
 		}
-
+		
 		float totalHealth = 0.0f;
 		float maxHealth = 0.001f; //So we don't divide by 0
 		foreach (SquadMember Squaddie in this.SquadMembers) {
@@ -670,7 +673,7 @@ public class Unit : MonoBehaviour
 			
 			float d = Vector3.Distance(this.gameObject.transform.position, OtherUnit.gameObject.transform.position);
 			if (d < 0.5f) {
-				Debug.Log(d);
+				//Debug.Log(d);
 				CloseUnits.Add(OtherUnit);			
 			}
 		}

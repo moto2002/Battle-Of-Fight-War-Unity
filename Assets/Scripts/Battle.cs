@@ -43,7 +43,10 @@ public class Battle : MonoBehaviour
 			return;
 		}
 		
-		this._doRound();
+		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
+			this._doRoundForTeam(i);
+		}
+		
 				
 		this._timeOfLastRound = (int)Time.fixedTime;
 	}
@@ -71,41 +74,41 @@ public class Battle : MonoBehaviour
 	}
 	
 	
-	private void _doRound()
+	private void _doRoundForTeam(int teamNumber)
 	{
-		//First go through the teams
-		for (int i = TEAM_GOOD_GUYS; i < this.CombatantsByTeam.Length; i++) {
+		int targetTeam = TEAM_MONSTERS;
+		if (teamNumber == TEAM_MONSTERS) {
+			targetTeam = TEAM_GOOD_GUYS;
+		}
+		
+		//Now go through the units in the team
+		ArrayList TargetTeam = this.CombatantsByTeam[targetTeam];
+		foreach (GameObject UnitObj in this.CombatantsByTeam[teamNumber]) {
 			
-			int targetTeam = TEAM_MONSTERS;
-			if (i == TEAM_MONSTERS) {
-				targetTeam = TEAM_GOOD_GUYS;
-			}
-			
-			//Now go through the units in the team
-			ArrayList TargetTeam = this.CombatantsByTeam[targetTeam];
-			foreach (GameObject UnitObj in this.CombatantsByTeam[i]) {
-				
-				Unit AttackingUnit = UnitObj.GetComponent<Unit>();
+			Unit AttackingUnit = UnitObj.GetComponent<Unit>();
 
-				//Attack a rando on the other team
-				int targetIndex = Random.Range(0, TargetTeam.Count - 1);
+			//Attack a rando on the other team
+			//Debug.Log ("Target team size: " + TargetTeam.Count);
+			int targetIndex = Random.Range(0, TargetTeam.Count - 1);
+			
+			//Debug.Log("ATTACKING");
+			GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
+			
+			AttackingUnit.attack(TargetUnitObj);
+			
+			Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
+			//Debug.Log(TargetUnit.health);
+			if (TargetUnit.health <= 0.0f) {
 				
-				//Debug.Log("ATTACKING");
-				GameObject TargetUnitObj = TargetTeam[targetIndex] as GameObject;
-				AttackingUnit.attack(TargetUnitObj);
+				TargetTeam.RemoveAt(targetIndex);	
+				TargetUnit.die();
 				
-				Unit TargetUnit = TargetUnitObj.GetComponent<Unit>();
-				//Debug.Log(TargetUnit.health);
-				if (TargetUnit.health <= 0.0f) {
-					
-					TargetTeam.RemoveAt(targetIndex);	
-					if (TargetTeam.Count <= 0) { //The other team is dead oh neos!
-						this._endBattle();
-						return;
-					}
+				if (TargetTeam.Count <= 0) { //The other team is dead oh neos!
+					this._endBattle();
+					return;
 				}
 			}
-		}
+		}//end foreach
 	}
 	
 	

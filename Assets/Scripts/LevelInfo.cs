@@ -42,7 +42,9 @@ public class LevelInfo : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		
+		if (Application.loadedLevelName != "PostGameStats") { //If this is post-game-stats, don't do shit
+			DontDestroyOnLoad(this.gameObject);
+		}
 	}
 	
 	
@@ -56,7 +58,7 @@ public class LevelInfo : MonoBehaviour
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;
 		
-		if (Application.loadedLevel != 1) { //If this is post-game-stats, don't do shit
+		if (Application.loadedLevelName != "PostGameStats") { //If this is post-game-stats, don't do shit
 			DontDestroyOnLoad(this.gameObject);
 		}
 		
@@ -74,9 +76,11 @@ public class LevelInfo : MonoBehaviour
 	//The order is OnLevelWasLoaded, Awake, Start
 	void OnLevelWasLoaded ()
 	{
+		/**
 		if (Application.loadedLevel != 1) { //If this is post-game-stats, don't do shit
 			DontDestroyOnLoad(this.gameObject);
 		}
+		*/
 	}
 
 
