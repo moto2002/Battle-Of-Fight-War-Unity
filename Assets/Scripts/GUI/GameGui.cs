@@ -15,7 +15,6 @@ public class GameGui : MonoBehaviour
 
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because that's what time people work and shit or something
-	private int _startTime = 480;
 	private int _statusTextFontSize = 16;
 	private bool _showPauseMenu = false;
 	
@@ -169,7 +168,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.BeginHorizontal ();
 		GUILayout.Space (10);
 
-		int currentTime = (int)(this._startTime + Time.fixedTime * 2);
+		int currentTime = (int)(this.LevelInformation.getBattleTime());
 		GUILayout.Label ("Day " + ((currentTime / 1440) + 1));
 
 		GUILayout.FlexibleSpace ();

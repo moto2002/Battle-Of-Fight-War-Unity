@@ -21,7 +21,9 @@ public class LevelInfo : MonoBehaviour
 	public int numEnemiesRemaining = 0;
 	public int numEnemiesKilled = 0;
 	
-	public int battleEndTime = 0;
+	public int battleTime = 0;
+	
+	
 	
 	//To record battle time (in seconds)
 	private int _startTime = 0;
@@ -53,7 +55,8 @@ public class LevelInfo : MonoBehaviour
 	void Awake()
 	{
 		//Reset all non-zero "record" statistics to start just to be sure.
-		this._startTime = (int)Time.fixedTime;
+		
+		this._startTime = (int)480; //Battles start at 8 AM just because that's what time people wake up and do shit
 		
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;
@@ -72,6 +75,12 @@ public class LevelInfo : MonoBehaviour
 	}
 	
 	
+	void FixedUpdate()
+	{
+		this.battleTime = (int)(Time.fixedTime * 3) + this._startTime;	
+	}
+	
+	
 	//Note that this is only triggered by Application.LoadLevel
 	//The order is OnLevelWasLoaded, Awake, Start
 	void OnLevelWasLoaded ()
@@ -87,14 +96,12 @@ public class LevelInfo : MonoBehaviour
 	public void setPlayerWon()
 	{
 		this.gameEvent = GAME_EVENT_PLAYER_WON;
-		this.updateBattleEndTime();
 	}
 
 
 	public void setPlayerLost()
 	{
 		this.gameEvent = GAME_EVENT_PLAYER_LOST;
-		this.updateBattleEndTime();
 	}
 
 
@@ -219,16 +226,9 @@ public class LevelInfo : MonoBehaviour
 	}
 	
 	
-	public void updateBattleEndTime()
+	public int getBattleTime()
 	{
-		this.battleEndTime = (int)Time.fixedTime - this._startTime + 480;
-		//Debug.Log (this.battleEndTime);
-	}
-	
-	
-	public int getBattleEndTime()
-	{
-		return this.battleEndTime;	
+		return this.battleTime;	
 	}
 	
 

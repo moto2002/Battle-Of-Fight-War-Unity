@@ -22,6 +22,8 @@ public class PostGameGui : MonoBehaviour
 			this._LevelInformations = new LevelInfo();
 		}
 		
+		//Technically this is all paused
+		Time.timeScale = 0;		
 	}
 	
 	// Update is called once per frame
@@ -37,7 +39,7 @@ public class PostGameGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "BATTLE REPORT", this._boxWidth, this._boxHeight);
 		
-		CommonMenuUtilities.drawSingleLabelLine("# of Days Fought\t\t" + this._LevelInformations.getBattleEndTime());
+		CommonMenuUtilities.drawSingleLabelLine("# of Days Fought\t\t" + this._LevelInformations.getBattleTime());
 		GUILayout.FlexibleSpace();
 		
 		CommonMenuUtilities.drawSingleLabelLine("Soldiers Remaining\t\t" + this._LevelInformations.getNumSoldiers());
