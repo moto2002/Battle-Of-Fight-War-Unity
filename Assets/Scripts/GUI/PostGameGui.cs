@@ -39,7 +39,7 @@ public class PostGameGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "BATTLE REPORT", this._boxWidth, this._boxHeight);
 		
-		CommonMenuUtilities.drawSingleLabelLine("# of Days Fought\t\t" + this._LevelInformations.getBattleTime());
+		CommonMenuUtilities.drawSingleLabelLine("# of Days Fought\t\t" + (this._LevelInformations.getBattleTime() / 1440) + 1);
 		GUILayout.FlexibleSpace();
 		
 		CommonMenuUtilities.drawSingleLabelLine("Soldiers Remaining\t\t" + this._LevelInformations.getNumSoldiers());

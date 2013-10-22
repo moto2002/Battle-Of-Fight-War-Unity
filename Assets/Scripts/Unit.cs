@@ -412,6 +412,7 @@ public class Unit : MonoBehaviour
 					
 					//Battle should appear between the two
 					Vector3 BattleArea = (this.transform.position + OtherObject.transform.position) / 2.0f;
+					BattleArea.y = 0.20f;
 					GameObject BattleObj = Instantiate (Resources.Load("Prefabs/Battle"), BattleArea, Quaternion.identity) as GameObject;
 					
 					Battle NewBattle = BattleObj.GetComponent<Battle>();
