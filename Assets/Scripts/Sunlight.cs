@@ -7,7 +7,7 @@ public class Sunlight : MonoBehaviour
 	
 	private LevelInfo _LevelInformations;
 	
-	private Color _Night = new Color(8.0f/255.0f, 50.0f/255.0f, 71.0f/255.0f);
+	private Color _Night = new Color(8.0f/255.0f, 50.0f/255.0f, 100.0f/255.0f);
 	
 	
 	// Use this for initialization
