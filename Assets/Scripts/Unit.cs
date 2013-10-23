@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour
 	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 0.25f;
 	public float health = 100.0f;
+	public bool visible = false;
 
 
 	public ArrayList SquadMembers;
@@ -144,6 +145,10 @@ public class Unit : MonoBehaviour
 		}
 
 		this.currentAction = CURRENT_ACTION_HOLDING;
+		
+		//LOS shit
+		GameObject NewUnitLOS = Instantiate(Resources.Load("Prefabs/UnitLOS"), this.transform.position, Quaternion.identity) as GameObject;
+		NewUnitLOS.transform.parent = this.gameObject.transform;
 	}
 	
 	// Update is called once per frame
@@ -393,11 +398,14 @@ public class Unit : MonoBehaviour
 
 	public void OnTriggerEnter (Collider OtherObject)
 	{
+		//Add Unit LOS logic here
+		if (OtherObject.gameObject.GetComponent<Unit>() == null) {
+			return;		
+		}
+		
 		//Debug.Log ("Units collided");
 		//Debug.Log (this.gameObject.tag);
 		//Debug.Log (OtherObject.gameObject.tag);
-		
-		//Add Unit LOS logic here
 		
 		if (OtherObject.gameObject.tag != this.gameObject.tag) {
 
