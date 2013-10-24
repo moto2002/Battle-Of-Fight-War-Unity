@@ -16,8 +16,20 @@ public class UnitLOS : MonoBehaviour {
 	
 	public void OnTriggerEnter (Collider OtherObject)
 	{
+		//GameObject OtherParentObject = OtherObject.transform.parent;
+		Debug.Log("LOS found something");
+		/**
+		if (this.transform.parent.gameObject.tag == OtherParentObject.tag) {
+			return;	
+		}
 		
+		Debug.Log("FOUND ENEMY");
+		*/
 	}
 	
 	
+	
+	
+	
+			
 }

@@ -147,7 +147,12 @@ public class Unit : MonoBehaviour
 		this.currentAction = CURRENT_ACTION_HOLDING;
 		
 		//LOS shit
-		GameObject NewUnitLOS = Instantiate(Resources.Load("Prefabs/UnitLOS"), this.transform.position, Quaternion.identity) as GameObject;
+		Vector3 LOSPosition = new Vector3(
+			this.transform.position.x,
+			this.transform.position.y - 0.25f,
+			this.transform.position.z
+		);
+		GameObject NewUnitLOS = Instantiate(Resources.Load("Prefabs/UnitLOS"), LOSPosition, Quaternion.identity) as GameObject;
 		NewUnitLOS.transform.parent = this.gameObject.transform;
 	}
 	
@@ -400,6 +405,7 @@ public class Unit : MonoBehaviour
 	{
 		//Add Unit LOS logic here
 		if (OtherObject.gameObject.GetComponent<Unit>() == null) {
+			//Debug.Log ("Found something but no unit in it");
 			return;		
 		}
 		
