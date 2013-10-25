@@ -30,7 +30,7 @@ public class Unit : MonoBehaviour
 	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 0.25f;
 	public float health = 100.0f;
-	public bool visible = false;
+	public bool visibleToEnemy = false;
 
 
 	public ArrayList SquadMembers;
@@ -157,8 +157,9 @@ public class Unit : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	public virtual void Update () 
 	{
+		//Should probably move this to FixedUpdate		
 		if (this.shouldSeekPath && this.PathToFollow == null) {
 
 			if (
@@ -178,7 +179,7 @@ public class Unit : MonoBehaviour
 			//(which is pretty awesome), so we shouldn't keep restarting it
 			this.shouldSeekPath = false; 
 		}
-
+		
 		this._UnitSprite.Transform();
 		//Multiply the z by 100 so we get a more accurate drawLayer reading
 		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);

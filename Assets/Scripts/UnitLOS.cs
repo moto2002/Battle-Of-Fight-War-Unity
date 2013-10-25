@@ -16,15 +16,38 @@ public class UnitLOS : MonoBehaviour {
 	
 	public void OnTriggerEnter (Collider OtherObject)
 	{
-		//GameObject OtherParentObject = OtherObject.transform.parent;
-		Debug.Log("LOS found something");
-		/**
-		if (this.transform.parent.gameObject.tag == OtherParentObject.tag) {
+		GameObject OtherGameObject = OtherObject.gameObject;
+		if (OtherGameObject.tag == this.transform.parent.gameObject.tag) {
+			return;	
+		}
+
+		Unit OtherUnit = OtherGameObject.GetComponent<Unit>();
+		if (OtherUnit == null) {
+			//Not seeing a unit
+			return;	
+		}
+				
+		OtherUnit.visibleToEnemy = true;
+		
+		//Debug.Log("FOUND ENEMY");
+	}
+	
+	
+	public void OnTriggerExit (Collider OtherObject)
+	{
+		GameObject OtherGameObject = OtherObject.gameObject;
+		if (OtherGameObject.tag == this.transform.parent.gameObject.tag) {
 			return;	
 		}
 		
-		Debug.Log("FOUND ENEMY");
-		*/
+		Unit OtherUnit = OtherGameObject.GetComponent<Unit>();
+		if (OtherUnit == null) {
+			//Not seeing a unit
+			return;	
+		}
+				
+		OtherUnit.visibleToEnemy = false;
+		//Debug.Log("LOST ENEMY");
 	}
 	
 	
