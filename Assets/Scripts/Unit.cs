@@ -317,7 +317,7 @@ public class Unit : MonoBehaviour
 		}
 
 		if (this.PathToFollow == null || this.inCombat) { //do not move if in combat
-			if (this.inCombat) {
+			if (this.inCombat) {		
 				this.currentAction = CURRENT_ACTION_COMBAT; //Just to make sure the status is right				
 			}
 
@@ -417,7 +417,7 @@ public class Unit : MonoBehaviour
 	
 	public void removeStatusSprite()
 	{
-		if (_StatusSprite == null) {
+		if (this._StatusSprite == null) {
 			return;	
 		}
 		
@@ -471,6 +471,21 @@ public class Unit : MonoBehaviour
 				}
 				
 				this.inCombat = true;
+				//Remove any existing status sprites, replace with the combat one
+				this.removeStatusSprite();
+				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+		
+				Vector2 SpriteStart = new Vector2 ((SpriteInfo.combatIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.combatIconBottomRightY / SpriteInfo.spriteSheetHeight));
+				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
+				
+				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+				this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
+				this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
+				//this._StatusSprite.drawLayer = 1001;
+				this._StatusSprite.offset.x = -0.40f;
+				this._StatusSprite.offset.y = +0.10f;
+				//Offset doesn't take effect until we call setSizeXY
+				this._StatusSprite.SetSizeXY(0.35f, 0.35f);
 
 				/**
 				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
@@ -714,10 +729,12 @@ public class Unit : MonoBehaviour
 			this.inCombat = true;
 			this.currentAction = CURRENT_ACTION_COMBAT;
 		} else {
+			//Ending the battle
 			this.inCombat = false;
 			this.currentAction = CURRENT_ACTION_HOLDING;
 			Destroy(this._CombatEffectsInstance);
 			this._CombatEffectsInstance = null;
+			this.removeStatusSprite();
 		}
 	}
 	
