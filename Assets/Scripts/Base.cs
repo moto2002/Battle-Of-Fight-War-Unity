@@ -31,6 +31,20 @@ public class Base : NeutralBase {
 	}
 	
 	
+	public override void OnTriggerEnter(Collider OtherObject)
+	{
+		//Do nothing for enemies entering
+		if (OtherObject.gameObject.tag == this.enemyTag) {
+			return;	
+		}
+		
+		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
+		if (UnitInBase != null) { //We actually have a unit
+			UnitInBase.inBase = true;
+		}
+	}
+	
+	
 	public void OnTriggerStay(Collider OtherObject)
 	{
 		if (OtherObject.gameObject.tag == this.enemyTag) {
