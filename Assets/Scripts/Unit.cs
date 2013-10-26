@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
 	protected Sprite _UnitSprite;
 	protected Sprite _SelectSprite;
 	protected Sprite _HealthSprite;
+	protected Sprite _StatusSprite;
 	
 	protected GameObject _PlayerObject;
 	protected GameObject _MainSpriteManager;
@@ -30,7 +31,7 @@ public class Unit : MonoBehaviour
 	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 0.25f;
 	public float health = 100.0f;
-	public bool visibleToEnemy = false;
+	public int visibleToEnemy = 0;
 
 
 	public ArrayList SquadMembers;
@@ -141,8 +142,11 @@ public class Unit : MonoBehaviour
 				unitName = this.unitClass + " " + (i + 1);
 			}
 			SquadMember NewMember = SquaddieCreator.createSquadMember(this.unitClass, unitName);
+			NewMember.health = 50.0f;
+			this.health = 50.0f;
 			this.SquadMembers.Add (NewMember);
 		}
+		
 
 		this.currentAction = CURRENT_ACTION_HOLDING;
 		
@@ -183,6 +187,10 @@ public class Unit : MonoBehaviour
 		this._UnitSprite.Transform();
 		//Multiply the z by 100 so we get a more accurate drawLayer reading
 		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);
+		
+		if (this._StatusSprite != null) {
+			this._StatusSprite.Transform();	
+		}
 
 		if (this.selected) {
 			this._SelectSprite.Transform ();
@@ -191,8 +199,7 @@ public class Unit : MonoBehaviour
 			this._HealthSprite.Transform ();
 
 			float healthWidth = this.health / 100.0f;
-			//For some reason calling SetSizeXY() fixed the offset problem (i.e. offset wasn't doing jack shit)
-			this._HealthSprite.SetSizeXY (healthWidth, 0.3f);
+			this._HealthSprite.SetSizeXY (healthWidth, 0.26f);
 
 			if (this.health > 70.0f) {
 				this._HealthSprite.SetColor (Color.green);
@@ -304,6 +311,26 @@ public class Unit : MonoBehaviour
 
 		//Start the healing process if we're in a base
 		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING && this.health < 100.0f) {
+			
+			if (this._StatusSprite == null) {
+				
+				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+				
+				Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomRightY / SpriteInfo.spriteSheetHeight));
+				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
+				
+				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+				this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
+				this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
+				//this._StatusSprite.drawLayer = 1001;
+				this._StatusSprite.offset.x = -0.40f;
+				this._StatusSprite.offset.y = +0.10f;
+				//Offset doesn't take effect until we call setSizeXY
+				this._StatusSprite.SetSizeXY(0.35f, 0.35f);
+					
+			}
+			
+			//Debug.Log (this._StatusSprite.offset);
 			this.heal ();
 			return;
 		}
@@ -314,6 +341,11 @@ public class Unit : MonoBehaviour
 			}
 
 			return;
+		}
+		
+		//Not healing and not in combat and not holding position
+		if (this._StatusSprite != null) {
+			this.removeStatusSprite();	
 		}
 		
 		//Then we must be moving
@@ -400,6 +432,14 @@ public class Unit : MonoBehaviour
 
 		this.selected = false;
 	}
+	
+	
+	public void removeStatusSprite()
+	{
+		SpriteManager Manager = this._MainSpriteManager.GetComponent<SpriteManager>();
+		Manager.RemoveSprite(this._StatusSprite);
+		this._StatusSprite = null;
+	}	
 
 
 	public void OnTriggerEnter (Collider OtherObject)
@@ -554,6 +594,12 @@ public class Unit : MonoBehaviour
 
 		//Since health is a percentage
 		this.health = (totalHealth/maxHealth) * 100.0f;
+		
+		if (this.health >= 100.0f) {
+			if (this._StatusSprite != null) {
+				this.removeStatusSprite();
+			}	
+		}
 	}
 
 
@@ -572,6 +618,9 @@ public class Unit : MonoBehaviour
 			}
 			if (this._HealthSprite != null) {
 				SpriteManager.RemoveSprite (this._HealthSprite);
+			}
+			if (this._StatusSprite != null) {
+				SpriteManager.RemoveSprite(this._StatusSprite);	
 			}
 		}
 

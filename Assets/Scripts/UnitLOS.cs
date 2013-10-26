@@ -27,7 +27,7 @@ public class UnitLOS : MonoBehaviour {
 			return;	
 		}
 				
-		OtherUnit.visibleToEnemy = true;
+		OtherUnit.visibleToEnemy++;
 		
 		//Debug.Log("FOUND ENEMY");
 	}
@@ -46,12 +46,9 @@ public class UnitLOS : MonoBehaviour {
 			return;	
 		}
 				
-		OtherUnit.visibleToEnemy = false;
+		OtherUnit.visibleToEnemy--;
 		//Debug.Log("LOST ENEMY");
-	}
-	
-	
-	
+	}	
 	
 	
 			

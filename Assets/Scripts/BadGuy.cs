@@ -21,19 +21,18 @@ public class BadGuy : Unit
 	{
 		//Sprite graphics stuff
 		
-		if (!this.visibleToEnemy) {
+		if (this.visibleToEnemy <= 0) {
 			if (this._UnitSprite.color.a > 0.0f) {
 				Color Invisibo = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 				this._UnitSprite.SetColor(Invisibo);
 				if (this.selected) {
 					this.hideSelectSprite();
 				}
-				
 			}
 		} else {
 			if (this._UnitSprite.color.a <= 0.0f) {
-				Color Visible = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-				this._UnitSprite.SetColor(Visible);
+				Color Visibo = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+				this._UnitSprite.SetColor(Visibo);
 			}
 		}
 		
