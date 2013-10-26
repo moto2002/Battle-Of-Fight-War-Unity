@@ -28,6 +28,7 @@ public class BadGuy : Unit
 				if (this.selected) {
 					this.hideSelectSprite();
 				}
+				this.removeStatusSprite();
 			}
 		} else {
 			if (this._UnitSprite.color.a <= 0.0f) {

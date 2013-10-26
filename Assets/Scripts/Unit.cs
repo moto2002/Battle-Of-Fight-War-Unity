@@ -312,25 +312,6 @@ public class Unit : MonoBehaviour
 		//Start the healing process if we're in a base
 		if (this.inBase && this.currentAction == CURRENT_ACTION_HOLDING && this.health < 100.0f) {
 			
-			if (this._StatusSprite == null) {
-				
-				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-				
-				Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomRightY / SpriteInfo.spriteSheetHeight));
-				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-				
-				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-				this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
-				this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
-				//this._StatusSprite.drawLayer = 1001;
-				this._StatusSprite.offset.x = -0.40f;
-				this._StatusSprite.offset.y = +0.10f;
-				//Offset doesn't take effect until we call setSizeXY
-				this._StatusSprite.SetSizeXY(0.35f, 0.35f);
-					
-			}
-			
-			//Debug.Log (this._StatusSprite.offset);
 			this.heal ();
 			return;
 		}
@@ -436,6 +417,10 @@ public class Unit : MonoBehaviour
 	
 	public void removeStatusSprite()
 	{
+		if (_StatusSprite == null) {
+			return;	
+		}
+		
 		SpriteManager Manager = this._MainSpriteManager.GetComponent<SpriteManager>();
 		Manager.RemoveSprite(this._StatusSprite);
 		this._StatusSprite = null;
@@ -580,6 +565,24 @@ public class Unit : MonoBehaviour
 	{
 		if ((int)Time.fixedTime <= this._timeOfLastHeal + 2) {
 			return;
+		}
+		
+		if (this._StatusSprite == null) {
+				
+			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
+			
+			Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomRightY / SpriteInfo.spriteSheetHeight));
+			Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
+			
+			//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+			this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
+			this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
+			//this._StatusSprite.drawLayer = 1001;
+			this._StatusSprite.offset.x = -0.40f;
+			this._StatusSprite.offset.y = +0.10f;
+			//Offset doesn't take effect until we call setSizeXY
+			this._StatusSprite.SetSizeXY(0.35f, 0.35f);
+				
 		}
 
 		this._timeOfLastHeal = (int)Time.time;
