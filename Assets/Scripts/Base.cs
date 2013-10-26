@@ -58,7 +58,7 @@ public class Base : NeutralBase {
 			foreach (Collider ObjectWithin in ObjsInCenterOfBase) {
 				//Debug.Log(ObjectWithin.name);
 				if (ObjectWithin.tag == this.enemyTag) {
-					this._baseCaptured ();	
+					StartCoroutine(this._baseCaptured());	
 				}
 			}
 			
@@ -66,16 +66,16 @@ public class Base : NeutralBase {
 	}
 
 
-	protected virtual void _baseCaptured()
+	protected virtual IEnumerator _baseCaptured()
 	{
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
-		if (LevelInfoObj == null) {
-			return;
+		if (LevelInfoObj != null) {
+			LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
+			LevelInfo.setPlayerLost();
+			LevelInfo.setStatusUpdateLocation (this.transform.position);
 		}
-
-		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
-		LevelInfo.setPlayerLost();
-		LevelInfo.setStatusUpdateLocation (this.transform.position);
+		
+		yield return new WaitForSeconds(1);
 	}
 
 }

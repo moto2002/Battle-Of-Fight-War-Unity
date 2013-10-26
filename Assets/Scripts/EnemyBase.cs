@@ -6,6 +6,8 @@ public class EnemyBase : Base
 
 	private int _timeOfLastSpawn = 0;
 	private int _timeBetweenSpawns = 0;
+	
+	private bool _captured = false;
 
 
 	// Use this for initialization
@@ -47,13 +49,24 @@ public class EnemyBase : Base
 	}
 
 
-	protected override void _baseCaptured()
+	protected override IEnumerator _baseCaptured()
 	{
+		if (this._captured) {
+			return false;	
+		}
+		
+		this._captured = true;
+		
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj == null) {
-			return;
+			return false;
 		}
-
+		
+		Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity);
+		yield return new WaitForSeconds(3);
+		//Fire.transform.rotation = new Quaternion(-90.0f, 0.0f, 0.0f, 0.0f);
+		//Debug.Log (Fire.transform.rotation);
+		
 		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();
 		LevelInfo.objectiveCaptured();
 		LevelInfo.setStatusUpdateLocation (this.transform.position);
