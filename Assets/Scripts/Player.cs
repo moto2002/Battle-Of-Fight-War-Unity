@@ -12,13 +12,37 @@ public class Player : MonoBehaviour
 	private Sprite _SelectSprite = null;
 	private Sprite _HealthSprite = null;
 	
-	private Sprite _UnitDestination = null;
+	private Sprite _UnitDestinationSprite = null;
+	private GameObject _DestFlagObj = null;
 
 
 	// Use this for initialization
 	void Start () 
-	{
-	
+	{	
+		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
+		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
+		
+		this._DestFlagObj = Instantiate(Resources.Load("Prefabs/DestinationFlag"), this.transform.position, Quaternion.identity) as GameObject;
+		//Dimensions for unit select box
+		Vector2 FlagSpriteStart = new Vector2 ((SpriteInfo.destinationFlagBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.destinationFlagBottomLeftY / SpriteInfo.spriteSheetHeight));
+		
+		this._UnitDestinationSprite = SpriteManagerScript.AddSprite(this._DestFlagObj, 1.0f, 1.0f, FlagSpriteStart, SpriteDimensions, false);
+		this._UnitDestinationSprite.hidden = true;
+		this._UnitDestinationSprite.drawLayer = 998;
+			
+		//Dimensions for unit select box
+		Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
+		Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
+
+		//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
+		this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
+		this._SelectSprite.drawLayer = 999;
+		this._SelectSprite.hidden = true;
+
+		this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
+		this._HealthSprite.offset.y = 0.60f;
+		this._HealthSprite.drawLayer = 1000;
+		this._HealthSprite.hidden = true;
 	}
 	
 	// Update is called once per frame
@@ -38,6 +62,18 @@ public class Player : MonoBehaviour
 		//Determine color of health sprite based on current health
 		this._HealthSprite.Transform ();
 		
+		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING) {
+			
+			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x, 0.60f, TargetUnit.GoalPosition.z);
+			this._UnitDestinationSprite.Transform();
+			this._UnitDestinationSprite.hidden = false;
+
+		} else { //Selected Unit has no movement goal
+
+			this._UnitDestinationSprite.hidden = true;
+			
+		}
+		
 		if (TargetUnit.health > 70.0f) {
 			this._HealthSprite.SetColor (Color.green);
 		} else if (TargetUnit.health > 30.0f) {
@@ -53,43 +89,18 @@ public class Player : MonoBehaviour
 	
 	public void displaySelectSprite()
 	{	
-		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
+		this._SelectSprite.client = this.SelectedUnit;
+		this._HealthSprite.client = this.SelectedUnit;
 		
-		//Dimensions for unit select box
-		Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
-		Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-
-		//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-		this._SelectSprite = SpriteManagerScript.AddSprite(this.SelectedUnit, 1, 1, SelectSpriteStart, SpriteDimensions, false);
-		this._SelectSprite.drawLayer = 999;
-
-		this._HealthSprite = SpriteManagerScript.AddSprite(this.SelectedUnit, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
-		this._HealthSprite.offset.y = 0.60f;
-		this._HealthSprite.drawLayer = 1000;
-		//SpriteManagerScript.MoveToFront (this._SelectSprite);	
-		
+		this._SelectSprite.hidden = false;
+		this._HealthSprite.hidden = false;
 	}
 	
 	
 	public void hideSelectSprite()
 	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
-		
-		if (this._SelectSprite != null) {
-
-			SpriteManagerScript.RemoveSprite (this._SelectSprite);
-			this._SelectSprite = null;
-		}
-
-		if (this._HealthSprite != null) {
-
-			SpriteManagerScript.RemoveSprite (this._HealthSprite);
-			//Debug.Log ("Removed health sprite");
-
-			this._HealthSprite = null;
-
-		}
+		this._SelectSprite.hidden = true;
+		this._HealthSprite.hidden = true;
 	}
 	
 	
