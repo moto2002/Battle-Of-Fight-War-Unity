@@ -14,10 +14,13 @@ public class SpriteInfo
 	public static float healthBarBottomLeftY = 192.0f;
 	
 	public static float healingIconBottomLeftX = 64.0f;
-	public static float healingIconBottomRightY = 192.0f;
+	public static float healingIconBottomLeftY = 192.0f;
 	
 	public static float combatIconBottomLeftX = 96.0f;
-	public static float combatIconBottomRightY = 192.0f;
+	public static float combatIconBottomLeftY = 192.0f;
+	
+	public static float destinationFlagBottomLeftX = 0.0f;
+	public static float destinationFlagBottomLeftY = 160.0f;
 
 	public static float spriteStandardSize = 32.0f;
 

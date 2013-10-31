@@ -448,7 +448,7 @@ public class Unit : MonoBehaviour
 				this.removeStatusSprite();
 				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 		
-				Vector2 SpriteStart = new Vector2 ((SpriteInfo.combatIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.combatIconBottomRightY / SpriteInfo.spriteSheetHeight));
+				Vector2 SpriteStart = new Vector2 ((SpriteInfo.combatIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.combatIconBottomLeftY / SpriteInfo.spriteSheetHeight));
 				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
 				
 				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
@@ -559,7 +559,7 @@ public class Unit : MonoBehaviour
 				
 			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
 			
-			Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomRightY / SpriteInfo.spriteSheetHeight));
+			Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomLeftY / SpriteInfo.spriteSheetHeight));
 			Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
 			
 			//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
