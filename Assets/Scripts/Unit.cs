@@ -10,7 +10,6 @@ public class Unit : MonoBehaviour
 	protected Sprite _UnitSprite;
 	protected Sprite _StatusSprite;
 	
-	protected GameObject _PlayerObject;
 	protected GameObject _MainSpriteManager;
 
 	//Public variables
@@ -82,7 +81,6 @@ public class Unit : MonoBehaviour
 	{
 		this.SquadMembers = new ArrayList ();
 
-		this._PlayerObject = GameObject.Find("Player");
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
 
 		this._Controller = this.GetComponent<CharacterController> ();
@@ -200,7 +198,7 @@ public class Unit : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		Player PlayerScript = this._PlayerObject.GetComponent<Player>();
+		Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
 		
 		ArrayList CloseUnits = this._getCloseUnits();
 		if (CloseUnits.Count > 0) {
