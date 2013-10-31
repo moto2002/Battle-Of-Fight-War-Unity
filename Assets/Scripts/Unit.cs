@@ -8,8 +8,6 @@ public class Unit : MonoBehaviour
 
 
 	protected Sprite _UnitSprite;
-	protected Sprite _SelectSprite;
-	protected Sprite _HealthSprite;
 	protected Sprite _StatusSprite;
 	
 	protected GameObject _PlayerObject;
@@ -191,25 +189,6 @@ public class Unit : MonoBehaviour
 		if (this._StatusSprite != null) {
 			this._StatusSprite.Transform();	
 		}
-
-		if (this.selected) {
-			this._SelectSprite.Transform ();
-
-			//Determine color of health sprite based on current health
-			this._HealthSprite.Transform ();
-
-			float healthWidth = this.health / 100.0f;
-			this._HealthSprite.SetSizeXY (healthWidth, 0.26f);
-
-			if (this.health > 70.0f) {
-				this._HealthSprite.SetColor (Color.green);
-			} else if (this.health > 30.0f) {
-				this._HealthSprite.SetColor (Color.yellow);
-			} else {
-				this._HealthSprite.SetColor (Color.red);
-			}
-			//this._SelectSprite.SetDrawLayer((int)this.gameObject.transform.position.z + 5);
-		}
 	}
 
 
@@ -221,10 +200,17 @@ public class Unit : MonoBehaviour
 
 	void OnMouseDown()
 	{
+		Player PlayerScript = this._PlayerObject.GetComponent<Player>();
+		
 		ArrayList CloseUnits = this._getCloseUnits();
 		if (CloseUnits.Count > 0) {
 			//Debug.Log ("Selected lotsa units");
-			Player PlayerScript = this._PlayerObject.GetComponent<Player>();
+			if (PlayerScript.SelectedUnit != null) {			
+				Unit AlreadySelectedUnit = PlayerScript.SelectedUnit.GetComponent<Unit>();
+				AlreadySelectedUnit.selected = false;
+				PlayerScript.SelectedUnit = null;
+				PlayerScript.hideSelectSprite();
+			}
 			
 			//Make sure to add this guy to the list of potential selectables
 			CloseUnits.Add(this.gameObject);
@@ -233,16 +219,26 @@ public class Unit : MonoBehaviour
 		}
 		
 		this.selected = !this.selected;
-
-		if (this.selected) {
+		
+		if (PlayerScript.SelectedUnit != null) {			
 			
-			this.displaySelectSprite();		
-
-		} else {
+			Unit AlreadySelectedUnit = PlayerScript.SelectedUnit.GetComponent<Unit>();
+			AlreadySelectedUnit.selected = false;
+			PlayerScript.SelectedUnit = null;
+			PlayerScript.hideSelectSprite();
 			
-			this.hideSelectSprite();
 		}
-
+		
+		if (this.selected) {
+			//Debug.Log ("Setting player selected unit");
+			PlayerScript.SelectedUnit = this.gameObject;
+			PlayerScript.displaySelectSprite();		
+		}
+		
+		if (PlayerScript.SelectedUnit == null) {
+			PlayerScript.hideSelectSprite();	
+		}
+		
 	}
 
 
@@ -400,20 +396,6 @@ public class Unit : MonoBehaviour
 
 		this.currentAction = CURRENT_ACTION_MOVING;
 	}
-
-
-	public void removeSelectionBox()
-	{
-		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-
-		SpriteManagerScript.RemoveSprite (this._SelectSprite);
-		SpriteManagerScript.RemoveSprite (this._HealthSprite);
-		this._SelectSprite = null;
-		this._HealthSprite = null;
-
-		this.selected = false;
-	}
-	
 	
 	public void removeStatusSprite()
 	{
@@ -631,12 +613,6 @@ public class Unit : MonoBehaviour
 			SpriteManager SpriteManager = this._MainSpriteManager.GetComponent<SpriteManager> ();
 
 			SpriteManager.RemoveSprite (this._UnitSprite);
-			if (this._SelectSprite != null) {
-				SpriteManager.RemoveSprite (this._SelectSprite);
-			}
-			if (this._HealthSprite != null) {
-				SpriteManager.RemoveSprite (this._HealthSprite);
-			}
 			if (this._StatusSprite != null) {
 				SpriteManager.RemoveSprite(this._StatusSprite);	
 			}
@@ -645,6 +621,19 @@ public class Unit : MonoBehaviour
 		if (this._CombatEffectsInstance != null) {
 			GameObject.Destroy (this._CombatEffectsInstance);
 		}
+		
+		//In case player has this guy selected
+		GameObject PlayerObject = GameObject.Find("Player");
+		if (PlayerObject != null) {
+			Player Player = PlayerObject.GetComponent<Player>();
+			if (Player.SelectedUnit != null) {
+				if (Player.SelectedUnit.GetInstanceID() == this.gameObject.GetInstanceID()) {
+					Player.removeSelectionBox();
+					Player.SelectedUnit = null;	
+				}
+			}
+		}
+		
 	}
 
 
@@ -654,65 +643,6 @@ public class Unit : MonoBehaviour
 		if (this._CombatEffectsInstance != null) {
 			GameObject.Destroy (this._CombatEffectsInstance);
 		}
-	}
-	
-	
-	public void displaySelectSprite()
-	{
-		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
-
-		if (this._SelectSprite == null) {
-				
-			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-
-			if (PlayerScript.SelectedUnit != null) {
-				//Unselect previously-selected unit
-				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
-				UnitScript.removeSelectionBox ();
-			}
-	
-			//Dimensions for unit select box
-			Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
-			Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
-			Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-	
-			//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-			this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
-			this._SelectSprite.drawLayer = 999;
-	
-			this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
-			this._HealthSprite.offset.y = 0.60f;
-			this._HealthSprite.drawLayer = 1000;
-			//SpriteManagerScript.MoveToFront (this._SelectSprite);				
-		}
-		
-		PlayerScript.SelectedUnit = this.gameObject;
-		this.selected = true;
-	}
-	
-	
-	public void hideSelectSprite()
-	{
-		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-		Player PlayerScript = this._PlayerObject.GetComponent<Player> ();
-		
-		if (this._SelectSprite != null) { //Deselecting unit
-
-			SpriteManagerScript.RemoveSprite (this._SelectSprite);
-			this._SelectSprite = null;
-		}
-
-		if (this._HealthSprite != null) {
-
-			SpriteManagerScript.RemoveSprite (this._HealthSprite);
-			//Debug.Log ("Removed health sprite");
-
-			this._HealthSprite = null;
-
-		}
-
-		PlayerScript.SelectedUnit = null;
-		this.selected = false;
 	}
 	
 	

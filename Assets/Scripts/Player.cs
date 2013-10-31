@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
 	
 	private Sprite _SelectSprite = null;
 	private Sprite _HealthSprite = null;
-	private Sprite _StatusSprite = null;
 	
 	private Sprite _UnitDestination = null;
 
@@ -53,8 +52,8 @@ public class Player : MonoBehaviour
 	
 	
 	public void displaySelectSprite()
-	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("SpriteManager").GetComponent<SpriteManager>();
+	{	
+		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
 		
 		//Dimensions for unit select box
 		Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
@@ -75,7 +74,7 @@ public class Player : MonoBehaviour
 	
 	public void hideSelectSprite()
 	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("SpriteManager").GetComponent<SpriteManager>();
+		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
 		
 		if (this._SelectSprite != null) {
 
@@ -91,68 +90,18 @@ public class Player : MonoBehaviour
 			this._HealthSprite = null;
 
 		}
-
-		this.SelectedUnit = null;
 	}
 	
 	
 	public void removeSelectionBox()
 	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("SpriteManager").GetComponent<SpriteManager> ();
+		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager> ();
 
 		SpriteManagerScript.RemoveSprite (this._SelectSprite);
 		SpriteManagerScript.RemoveSprite (this._HealthSprite);
 		this._SelectSprite = null;
 		this._HealthSprite = null;
 	}
-	
-	
-	public void addCombatStatusSprite()
-	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("SpriteManager").GetComponent<SpriteManager> ();
-		
-		Vector2 SpriteStart = new Vector2 ((SpriteInfo.combatIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.combatIconBottomRightY / SpriteInfo.spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-		
-		//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-		this._StatusSprite = SpriteManagerScript.AddSprite(this.SelectedUnit,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
-		this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
-		//this._StatusSprite.drawLayer = 1001;
-		this._StatusSprite.offset.x = -0.40f;
-		this._StatusSprite.offset.y = +0.10f;
-		//Offset doesn't take effect until we call setSizeXY
-		this._StatusSprite.SetSizeXY(0.35f, 0.35f);	
-	}
-	
-	
-	public void addHealingStatusSprite()
-	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("SpriteManager").GetComponent<SpriteManager> ();
-			
-		Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomRightY / SpriteInfo.spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-		
-		//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-		this._StatusSprite = SpriteManagerScript.AddSprite(this.SelectedUnit, 0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
-		this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
-		//this._StatusSprite.drawLayer = 1001;
-		this._StatusSprite.offset.x = -0.40f;
-		this._StatusSprite.offset.y = +0.10f;
-		//Offset doesn't take effect until we call setSizeXY
-		this._StatusSprite.SetSizeXY(0.35f, 0.35f);
-	}
-	
-	
-	public void removeStatusSprite()
-	{
-		if (this._StatusSprite == null) {
-			return;	
-		}
-		
-		SpriteManager Manager = GameObject.Find ("SpriteManager").GetComponent<SpriteManager>();
-		Manager.RemoveSprite(this._StatusSprite);
-		this._StatusSprite = null;
-	}	
 
 
 

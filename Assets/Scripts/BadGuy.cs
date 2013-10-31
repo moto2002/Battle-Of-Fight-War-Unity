@@ -25,9 +25,12 @@ public class BadGuy : Unit
 			if (this._UnitSprite.color.a > 0.0f) {
 				Color Invisibo = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 				this._UnitSprite.SetColor(Invisibo);
+				
 				if (this.selected) {
-					this.hideSelectSprite();
+					Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
+					PlayerScript.hideSelectSprite();
 				}
+				
 				this.removeStatusSprite();
 			}
 		} else {

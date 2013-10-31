@@ -346,9 +346,10 @@ public class GameGui : MonoBehaviour
 				
 				Time.timeScale = 1;
 				this._Player.PotentialSelectedUnits.RemoveRange(0, this._Player.PotentialSelectedUnits.Count);
+				this._Player.SelectedUnit = SelectableUnit;
 
 				//Unit.displaySelectSprite() should already handle deselecting previously-selected unit
-				UnitInfo.displaySelectSprite();
+				this._Player.displaySelectSprite();
 				break;
 			}
 			
