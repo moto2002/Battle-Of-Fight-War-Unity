@@ -138,8 +138,8 @@ public class Unit : MonoBehaviour
 				unitName = this.unitClass + " " + (i + 1);
 			}
 			SquadMember NewMember = SquaddieCreator.createSquadMember(this.unitClass, unitName);
-			NewMember.health = 50.0f;
-			this.health = 50.0f;
+			//NewMember.health = 50.0f;
+			//this.health = 50.0f;
 			this.SquadMembers.Add (NewMember);
 		}
 		
