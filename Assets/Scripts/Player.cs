@@ -93,6 +93,18 @@ public class Player : MonoBehaviour
 	}
 	
 	
+	public void removeSelectedUnitAndSprite()
+	{
+		if (this.SelectedUnit != null) {
+			Unit AlreadySelectedUnit = this.SelectedUnit.GetComponent<Unit>();		
+			AlreadySelectedUnit.selected = false;
+		}
+		
+		this.SelectedUnit = null;
+		this.hideSelectSprite();
+	}
+	
+	
 	public void removeSelectionBox()
 	{
 		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager> ();

@@ -206,10 +206,7 @@ public class Unit : MonoBehaviour
 		if (CloseUnits.Count > 0) {
 			//Debug.Log ("Selected lotsa units");
 			if (PlayerScript.SelectedUnit != null) {			
-				Unit AlreadySelectedUnit = PlayerScript.SelectedUnit.GetComponent<Unit>();
-				AlreadySelectedUnit.selected = false;
-				PlayerScript.SelectedUnit = null;
-				PlayerScript.hideSelectSprite();
+				PlayerScript.removeSelectedUnitAndSprite();
 			}
 			
 			//Make sure to add this guy to the list of potential selectables
@@ -220,12 +217,8 @@ public class Unit : MonoBehaviour
 		
 		this.selected = !this.selected;
 		
-		if (PlayerScript.SelectedUnit != null) {			
-			
-			Unit AlreadySelectedUnit = PlayerScript.SelectedUnit.GetComponent<Unit>();
-			AlreadySelectedUnit.selected = false;
-			PlayerScript.SelectedUnit = null;
-			PlayerScript.hideSelectSprite();
+		if (PlayerScript.SelectedUnit != null) {
+			PlayerScript.removeSelectedUnitAndSprite();
 			
 		}
 		
