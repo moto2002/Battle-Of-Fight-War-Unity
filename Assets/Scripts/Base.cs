@@ -12,6 +12,8 @@ public class Base : NeutralBase {
 	public string enemyTag = "";
 
 	protected int _numSpawns = 0;
+	
+	protected bool _captured = false;
 
 
 	// Use this for initialization
@@ -68,6 +70,19 @@ public class Base : NeutralBase {
 
 	protected virtual IEnumerator _baseCaptured()
 	{
+		if (this._captured) {
+			return false;	
+		}
+		
+		this._captured = true;
+		GameObject Fire = Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity) as GameObject;
+
+		//Quaternion TempQuat = Quaternion.identity;
+		//TempQuat.x = 0
+		//Fire.transform.rotation = TempQuat;
+		
+		yield return new WaitForSeconds(3);
+		
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj != null) {
 			LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();

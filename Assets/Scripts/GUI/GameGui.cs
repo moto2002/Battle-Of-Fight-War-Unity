@@ -289,7 +289,7 @@ public class GameGui : MonoBehaviour
 
 		//LabelStyle.fontSize = this._statusTextFontSize;
 
-		GUILayout.BeginArea (new Rect ((Screen.width * 0.5f) - (this._gameEventWidth * 0.5f), (Screen.height * 0.5f) - (this._gameEventWidth * 0.5f), this._gameEventWidth, this._gameEventHeight));
+		GUILayout.BeginArea (new Rect ((Screen.width * 0.5f) - (this._gameEventWidth * 0.5f), (Screen.height * 0.5f) + (this._gameEventHeight * 0.25f), this._gameEventWidth, this._gameEventHeight));
 		GUILayout.BeginVertical ("", GUI.skin.box);
 		GUILayout.FlexibleSpace ();
 
