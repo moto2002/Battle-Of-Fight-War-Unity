@@ -596,6 +596,18 @@ public class Unit : MonoBehaviour
 
 	void OnDestroy ()
 	{
+		//In case player has this guy selected
+		GameObject PlayerObject = GameObject.Find("Player");
+		if (PlayerObject != null) {
+			Player Player = PlayerObject.GetComponent<Player>();
+			if (Player.SelectedUnit != null) {
+				if (Player.SelectedUnit.GetInstanceID() == this.gameObject.GetInstanceID()) {
+					Player.hideSelectSprite();
+					Player.SelectedUnit = null;	
+				}
+			}
+		}
+		
 		if (this.gameObject == null) {
 			return;
 		}
@@ -611,18 +623,6 @@ public class Unit : MonoBehaviour
 
 		if (this._CombatEffectsInstance != null) {
 			GameObject.Destroy (this._CombatEffectsInstance);
-		}
-		
-		//In case player has this guy selected
-		GameObject PlayerObject = GameObject.Find("Player");
-		if (PlayerObject != null) {
-			Player Player = PlayerObject.GetComponent<Player>();
-			if (Player.SelectedUnit != null) {
-				if (Player.SelectedUnit.GetInstanceID() == this.gameObject.GetInstanceID()) {
-					Player.removeSelectionBox();
-					Player.SelectedUnit = null;	
-				}
-			}
 		}
 		
 	}

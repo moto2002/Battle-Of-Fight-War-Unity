@@ -62,9 +62,14 @@ public class EnemyBase : Base
 			return false;
 		}
 		
-		Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity);
+		GameObject Fire = Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity) as GameObject;
+
+		//Quaternion TempQuat = Quaternion.identity;
+		//TempQuat.x = 0
+		//Fire.transform.rotation = TempQuat;
+		
 		yield return new WaitForSeconds(3);
-		//Fire.transform.rotation = new Quaternion(-90.0f, 0.0f, 0.0f, 0.0f);
+		
 		//Debug.Log (Fire.transform.rotation);
 		
 		LevelInfo LevelInfo = LevelInfoObj.GetComponent<LevelInfo>();

@@ -115,17 +115,6 @@ public class Player : MonoBehaviour
 		this.SelectedUnit = null;
 		this.hideSelectSprite();
 	}
-	
-	
-	public void removeSelectionBox()
-	{
-		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager> ();
-
-		SpriteManagerScript.RemoveSprite (this._SelectSprite);
-		SpriteManagerScript.RemoveSprite (this._HealthSprite);
-		this._SelectSprite = null;
-		this._HealthSprite = null;
-	}
 
 
 
