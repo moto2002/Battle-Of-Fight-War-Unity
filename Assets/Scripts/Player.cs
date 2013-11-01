@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
 		
 		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING) {
 			
-			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x, 0.60f, TargetUnit.GoalPosition.z);
+			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.35f, 0.60f, TargetUnit.GoalPosition.z);
 			this._UnitDestinationSprite.Transform();
 			this._UnitDestinationSprite.hidden = false;
 
@@ -101,6 +101,7 @@ public class Player : MonoBehaviour
 	{
 		this._SelectSprite.hidden = true;
 		this._HealthSprite.hidden = true;
+		this._UnitDestinationSprite.hidden = true;
 	}
 	
 	
