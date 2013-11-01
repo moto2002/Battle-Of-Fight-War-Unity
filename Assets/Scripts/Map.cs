@@ -113,7 +113,14 @@ public class Map : MonoBehaviour {
 			//Last variable is the length of the ray
 			//Physics.Raycast returns true if it collides with sommat; hitInfo will contain collision info in this case
 			if (Physics.Raycast (RayFromCameraToMouseClickPoint, out HitInfo, 100.0f)) {
-				Debug.Log ("Right-clicked on Point " + HitInfo.point);
+				if (
+					HitInfo.point.x < -10.0f || HitInfo.point.x > +10.0f || 
+					HitInfo.point.z < -10.0f || HitInfo.point.z > +10.0f
+					) {
+					//Don't bother if it's out of map
+					return;					
+				}
+				Debug.Log ("Ordered Unit to go to point " + HitInfo.point);
 
 				Node PathNode = AstarPath.active.GetNearest (HitInfo.point).node;
 				if (!PathNode.walkable) {

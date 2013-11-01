@@ -159,27 +159,6 @@ public class Unit : MonoBehaviour
 	// Update is called once per frame
 	public virtual void Update () 
 	{
-		//Should probably move this to FixedUpdate		
-		if (this.shouldSeekPath && this.PathToFollow == null) {
-
-			if (
-				Mathf.Abs (this.GoalPosition.x - this.transform.position.x) <= 0.5f && 
-				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.5f
-			    ) {
-				//Goal is too close; don't look for a path, so do nothing
-				this.currentAction = CURRENT_ACTION_HOLDING;
-			} else {
-				//Debug.Log ("looking for new path");
-				Seeker AISeeker = this.GetComponent<Seeker> ();
-				AISeeker.StartPath (this.transform.position, this.GoalPosition, pathSeekComplete);
-				this.currentAction = CURRENT_ACTION_MOVING;
-			}
-
-			//Need to stop seeking path immediately. Apparently the pathfinding algorithm doesn't do everything in one frame
-			//(which is pretty awesome), so we shouldn't keep restarting it
-			this.shouldSeekPath = false; 
-		}
-		
 		this._UnitSprite.Transform();
 		//Multiply the z by 100 so we get a more accurate drawLayer reading
 		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);
@@ -293,6 +272,27 @@ public class Unit : MonoBehaviour
 	{
 		if (this.health <= 0.0f) {
 			this.die ();
+			return;
+		}
+		
+		if (this.shouldSeekPath && this.PathToFollow == null) {
+
+			if (
+				Mathf.Abs (this.GoalPosition.x - this.transform.position.x) <= 0.5f && 
+				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.5f
+			    ) {
+				//Goal is too close; don't look for a path, so do nothing
+				this.currentAction = CURRENT_ACTION_HOLDING;
+			} else {
+				//Debug.Log ("looking for new path");
+				Seeker AISeeker = this.GetComponent<Seeker> ();
+				AISeeker.StartPath (this.transform.position, this.GoalPosition, pathSeekComplete);
+				this.currentAction = CURRENT_ACTION_MOVING;
+			}
+
+			//Need to stop seeking path immediately. Apparently the pathfinding algorithm doesn't do everything in one frame
+			//(which is pretty awesome), so we shouldn't keep restarting it
+			this.shouldSeekPath = false;
 			return;
 		}
 
