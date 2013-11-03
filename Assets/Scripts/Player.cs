@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 	
 	private Sprite _UnitDestinationSprite = null;
 	private GameObject _DestFlagObj = null;
+	
+	private string _ownershipTag = "GoodGuy"; 
 
 
 	// Use this for initialization
@@ -62,13 +64,13 @@ public class Player : MonoBehaviour
 		//Determine color of health sprite based on current health
 		this._HealthSprite.Transform ();
 		
-		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING) {
+		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING && this._ownershipTag == this.SelectedUnit.tag) {
 			
 			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.35f, 0.60f, TargetUnit.GoalPosition.z);
 			this._UnitDestinationSprite.Transform();
 			this._UnitDestinationSprite.hidden = false;
 
-		} else { //Selected Unit has no movement goal
+		} else { //do not display movement goal
 
 			this._UnitDestinationSprite.hidden = true;
 			
