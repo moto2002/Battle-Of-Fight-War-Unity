@@ -55,6 +55,11 @@ public class Player : MonoBehaviour
 		}
 		
 		Unit TargetUnit = this.SelectedUnit.GetComponent<Unit>();
+		if (TargetUnit.visibleToEnemy == 0 && this._ownershipTag != this.SelectedUnit.tag) {
+			this.hideSelectSprite();
+			this.SelectedUnit = null;
+			return;
+		}
 		
 		//this._SelectSprite.clientTransform = this.SelectedUnit.transform;
 		//this._HealthSprite.clientTransform = this.SelectedUnit.transform;
