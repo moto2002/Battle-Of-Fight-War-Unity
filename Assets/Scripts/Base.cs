@@ -75,7 +75,7 @@ public class Base : NeutralBase {
 		}
 		
 		this._captured = true;
-		GameObject Fire = Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity) as GameObject;
+		Instantiate (Resources.Load("Prefabs/Fire"), this.transform.position, Quaternion.identity);
 
 		//Quaternion TempQuat = Quaternion.identity;
 		//TempQuat.x = 0
