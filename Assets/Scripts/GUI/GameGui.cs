@@ -12,6 +12,15 @@ public class GameGui : MonoBehaviour
 
 	private float _squadBoxWidth = Screen.width * .30f;
 	private float _squadBoxHeight = Screen.height * .50f;
+	
+	private float _generalStatsMinWidth = 256.0f;
+	private float _generalStatsMinHeight = 128.0f;
+	
+	private float _squadBoxMinWidth = 316.0f;
+	private float _squadBoxMinHeight = 300.0f;
+	
+	private float _gameEventMinWidth = 450.0f;
+	private float _gameEventMinHeight = 100.0f;
 
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because that's what time people work and shit or something
@@ -44,6 +53,17 @@ public class GameGui : MonoBehaviour
 		this.Camera = CameraObj.GetComponent<CameraMovement> ();
 		
 		this._Player = GameObject.Find("Player").GetComponent<Player>();
+		
+		this._generalStatsWidth = CommonMenuUtilities.getMinParamIfNeeded(this._generalStatsWidth, this._generalStatsMinWidth);
+		this._generalStatsHeight = CommonMenuUtilities.getMinParamIfNeeded(this._generalStatsHeight, this._generalStatsMinHeight);
+		
+		this._squadBoxWidth = CommonMenuUtilities.getMinParamIfNeeded(this._squadBoxWidth, this._squadBoxMinWidth);
+		this._squadBoxHeight = CommonMenuUtilities.getMinParamIfNeeded(this._squadBoxWidth, this._squadBoxMinHeight);
+		
+		this._gameEventWidth = CommonMenuUtilities.getMinParamIfNeeded(this._gameEventWidth, this._gameEventMinWidth);
+		this._gameEventHeight = CommonMenuUtilities.getMinParamIfNeeded(this._gameEventHeight, this._gameEventMinHeight);
+		
+		CommonMenuUtilities.forceMinimumDimensions();
 	}
 	
 	// Update is called once per frame
@@ -166,7 +186,7 @@ public class GameGui : MonoBehaviour
 		GUILayout.FlexibleSpace ();
 
 		GUILayout.BeginHorizontal ();
-		GUILayout.Space (10);
+		GUILayout.Space (25);
 
 		int currentTime = (int)(this.LevelInformation.battleTime);
 		GUILayout.Label ("Day " + ((currentTime / 1440) + 1));
@@ -289,7 +309,13 @@ public class GameGui : MonoBehaviour
 
 		//LabelStyle.fontSize = this._statusTextFontSize;
 
-		GUILayout.BeginArea (new Rect ((Screen.width * 0.5f) - (this._gameEventWidth * 0.5f), (Screen.height * 0.5f) + (this._gameEventHeight * 0.25f), this._gameEventWidth, this._gameEventHeight));
+		GUILayout.BeginArea (
+			new Rect (
+				(Screen.width * 0.5f) - (this._gameEventWidth * 0.5f), 
+				(Screen.height * 0.5f) + (this._gameEventHeight * 0.25f), 
+				this._gameEventWidth, 
+				this._gameEventHeight)
+			);
 		GUILayout.BeginVertical ("", GUI.skin.box);
 		GUILayout.FlexibleSpace ();
 

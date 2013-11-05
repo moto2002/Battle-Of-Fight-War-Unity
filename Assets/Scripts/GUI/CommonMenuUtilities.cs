@@ -8,11 +8,20 @@ public class CommonMenuUtilities
 	
 	private static float _mainMenuWidth = Screen.width * 0.35f;
 	private static float _mainMenuHeight = Screen.height * 0.50f;
+	
+	private static float _mainMenuMinWidth = 310.0f;
+	private static float _mainMenuMinHeight = 250.0f;
 
 
 	public delegate void buttonResponse();
 
-
+	
+	public static void forceMinimumDimensions()
+	{
+		_mainMenuMinWidth = getMinParamIfNeeded(_mainMenuWidth, _mainMenuMinWidth);
+		_mainMenuMinHeight = getMinParamIfNeeded(_mainMenuHeight, _mainMenuMinHeight);
+	}
+	
 
 	public static void displayOptions()
 	{
@@ -41,6 +50,9 @@ public class CommonMenuUtilities
 	
 	public static void drawCenterBoxHeader(GUISkin CustomGuiSkin, string menuHeading, float width, float height)
 	{
+		Debug.Log ("width:" + _mainMenuWidth);
+		Debug.Log ("height: " + _mainMenuHeight);
+		
 		GUILayout.BeginArea (
 			new Rect (
 				(Screen.width * 0.50f) - (width * 0.50f), 
@@ -112,6 +124,15 @@ public class CommonMenuUtilities
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndHorizontal();
 	}
-
+	
+	
+	public static float getMinParamIfNeeded(float actualParam, float minParam)
+	{
+		if (actualParam < minParam) {
+			return minParam;
+		}
+		
+		return actualParam;
+	}
 
 }
