@@ -50,8 +50,8 @@ public class CommonMenuUtilities
 	
 	public static void drawCenterBoxHeader(GUISkin CustomGuiSkin, string menuHeading, float width, float height)
 	{
-		Debug.Log ("width:" + _mainMenuWidth);
-		Debug.Log ("height: " + _mainMenuHeight);
+		//Debug.Log ("width:" + _mainMenuWidth);
+		//Debug.Log ("height: " + _mainMenuHeight);
 		
 		GUILayout.BeginArea (
 			new Rect (
