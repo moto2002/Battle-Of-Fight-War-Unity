@@ -71,7 +71,9 @@ public class Player : MonoBehaviour
 		
 		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING && this._ownershipTag == this.SelectedUnit.tag) {
 			
-			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.35f, 0.60f, TargetUnit.GoalPosition.z);
+			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.25f, 0.60f, TargetUnit.GoalPosition.z);
+			this._UnitDestinationSprite.drawLayer = (int)(TargetUnit.GoalPosition.z * -100);
+			
 			this._UnitDestinationSprite.Transform();
 			this._UnitDestinationSprite.hidden = false;
 

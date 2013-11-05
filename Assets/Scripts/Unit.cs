@@ -26,7 +26,7 @@ public class Unit : MonoBehaviour
 	public int numMembers;
 
 	//Default unit stats for prefab (Should set these through Unity)
-	public float speed = 0.25f;
+	public float speed = 1.0f;
 	public float health = 100.0f;
 	public int visibleToEnemy = 0;
 
@@ -73,12 +73,12 @@ public class Unit : MonoBehaviour
 	public static string CURRENT_ACTION_COMBAT = "In Combat";
 
 	//-----------------------------------------------------------------------------
-
-
+	
 
 	// Use this for initialization
 	public virtual void Start () 
 	{
+	
 		this.SquadMembers = new ArrayList ();
 
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
@@ -278,8 +278,8 @@ public class Unit : MonoBehaviour
 		if (this.shouldSeekPath && this.PathToFollow == null) {
 
 			if (
-				Mathf.Abs (this.GoalPosition.x - this.transform.position.x) <= 0.5f && 
-				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.5f
+				Mathf.Abs (this.GoalPosition.x - this.transform.position.x) <= 0.25f && 
+				Mathf.Abs (this.GoalPosition.z - this.transform.position.z) <= 0.25f
 			    ) {
 				//Goal is too close; don't look for a path, so do nothing
 				this.currentAction = CURRENT_ACTION_HOLDING;
@@ -335,14 +335,14 @@ public class Unit : MonoBehaviour
 		Vector3 Direction = (this.PathToFollow.vectorPath[currentWaypoint]-transform.position).normalized;
 
 		//Determine if we should modify speed based on the node terrain type
-		float speedModifier = 1.0f;
+		float speedModifier = 0.5f;
 		switch (AstarPath.active.GetNearest (this.transform.position).node.tags) {
 
 			case Map.FOREST:
-				speedModifier = 0.5f;
+				speedModifier *= 0.5f;
 					break;
 			case Map.MOUNTAIN:
-				speedModifier = 0.3f;
+				speedModifier *= 0.3f;
 				break;
 			default:
 				break;
@@ -366,9 +366,15 @@ public class Unit : MonoBehaviour
 		 * TODO: add a special condition for the last waypoint (i.e. the goal) because we need the unit to reach
 		 * the exact goal coordinates
 		 */ 
-		if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.65f) {
+		//if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.10f) {
+		Vector3 CurrentWaypoint = this.PathToFollow.vectorPath[this.currentWaypoint];
+		if (
+			Mathf.Abs(CurrentWaypoint.x - this.transform.position.x) <= 0.10f && 
+			Mathf.Abs(CurrentWaypoint.z - this.transform.position.z) <= 0.10f
+		) {
 			//Debug.Log (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]));
-			this.currentWaypoint++;
+			this.currentWaypoint++;	
+			
 			return;
 		}
 
