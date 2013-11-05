@@ -113,6 +113,13 @@ public class Map : MonoBehaviour {
 			//Last variable is the length of the ray
 			//Physics.Raycast returns true if it collides with sommat; hitInfo will contain collision info in this case
 			if (Physics.Raycast (RayFromCameraToMouseClickPoint, out HitInfo, 100.0f)) {
+				
+				//Debug.Log(HitInfo.collider.tag);
+				//Don't do anything if we click on the unit itself
+				if (HitInfo.collider.gameObject.GetInstanceID() == PlayerScript.SelectedUnit.GetInstanceID()) {
+					return;	
+				}
+				
 				if (
 					HitInfo.point.x < -10.0f || HitInfo.point.x > +10.0f || 
 					HitInfo.point.z < -10.0f || HitInfo.point.z > +10.0f
