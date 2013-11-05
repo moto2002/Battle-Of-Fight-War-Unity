@@ -1,6 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GUI/GameGui.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Player.cs" Line="83" Column="4" />
+      <File FileName="Assets/Scripts/GUI/MainMenuGui.cs" Line="15" Column="11" />
+      <File FileName="Assets/Scripts/GUI/CommonMenuUtilities.cs" Line="92" Column="24" />
+      <File FileName="Assets/Scripts/GUI/GameGui.cs" Line="325" Column="16" />
+      <File FileName="Assets/Scripts/Unit.cs" Line="164" Column="83" />
+      <File FileName="Assets/Scripts/Map.cs" Line="117" Column="39" />
+      <File FileName="Assets/Scripts/EnemyBase.cs" Line="57" Column="93" />
+      <File FileName="Assets/Scripts/Base.cs" Line="67" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
