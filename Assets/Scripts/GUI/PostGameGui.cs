@@ -9,11 +9,17 @@ public class PostGameGui : MonoBehaviour
 	float _boxWidth = Screen.width * 0.5f;
 	float _boxHeight = Screen.height * 0.7f;
 	
+	private float _maxWidth = 610.0f;
+	private float _maxHeight = 440.0f;
+	
 	private LevelInfo _LevelInformations;
 	
 	// Use this for initialization
 	void Start () 
 	{
+		this._boxWidth = CommonMenuUtilities.forceDimensions(this._boxWidth, this._maxWidth, this._maxWidth);	
+		this._boxHeight = CommonMenuUtilities.forceDimensions(this._boxHeight, this._maxHeight, this._maxHeight);
+		
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj != null) {
 			this._LevelInformations = LevelInfoObj.GetComponent<LevelInfo>();
@@ -23,7 +29,10 @@ public class PostGameGui : MonoBehaviour
 		}
 		
 		//Technically this is all paused
-		Time.timeScale = 0;		
+		Time.timeScale = 0;	
+		
+		Debug.Log("PostGame width: " + this._boxWidth);
+		Debug.Log("PostGame height: " + this._boxHeight);
 	}
 	
 	// Update is called once per frame

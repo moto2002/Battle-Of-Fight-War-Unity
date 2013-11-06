@@ -10,7 +10,7 @@ public class MainMenuGui : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		CommonMenuUtilities.forceMinimumDimensions();
+		CommonMenuUtilities.forceMainMenuDimensions();
 		//Debug.Log (Screen.width + "," + Screen.height);
 		//Debug.Log (this._mainMenuWidth + "," + this._mainMenuHeight);
 	}

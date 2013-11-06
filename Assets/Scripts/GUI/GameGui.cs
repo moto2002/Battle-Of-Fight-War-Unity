@@ -16,11 +16,20 @@ public class GameGui : MonoBehaviour
 	private float _generalStatsMinWidth = 256.0f;
 	private float _generalStatsMinHeight = 128.0f;
 	
-	private float _squadBoxMinWidth = 316.0f;
+	private float _generalStatsMaxWidth = 256.0f;
+	private float _generalStatsMaxHeight = 128.0f;
+	
+	private float _squadBoxMinWidth = 330.0f;
 	private float _squadBoxMinHeight = 300.0f;
+	
+	private float _squadBoxMaxWidth = 365.0f;
+	private float _squadBoxMaxHeight = 365.0f;
 	
 	private float _gameEventMinWidth = 450.0f;
 	private float _gameEventMinHeight = 100.0f;
+	
+	private float _gameEventMaxWidth = 450.0f;
+	private float _gameEventMaxHeight = 210.0f;
 
 	//We'll treat each second as an in-game minute
 	//Start the game at 8 AM just because that's what time people work and shit or something
@@ -54,16 +63,25 @@ public class GameGui : MonoBehaviour
 		
 		this._Player = GameObject.Find("Player").GetComponent<Player>();
 		
-		this._generalStatsWidth = CommonMenuUtilities.getMinParamIfNeeded(this._generalStatsWidth, this._generalStatsMinWidth);
-		this._generalStatsHeight = CommonMenuUtilities.getMinParamIfNeeded(this._generalStatsHeight, this._generalStatsMinHeight);
+		this._generalStatsWidth = CommonMenuUtilities.forceDimensions(this._generalStatsWidth, this._generalStatsMinWidth, this._generalStatsMaxWidth);
+		this._generalStatsHeight = CommonMenuUtilities.forceDimensions(this._generalStatsHeight, this._generalStatsMinHeight, this._generalStatsMaxHeight);
 		
-		this._squadBoxWidth = CommonMenuUtilities.getMinParamIfNeeded(this._squadBoxWidth, this._squadBoxMinWidth);
-		this._squadBoxHeight = CommonMenuUtilities.getMinParamIfNeeded(this._squadBoxWidth, this._squadBoxMinHeight);
+		this._squadBoxWidth = CommonMenuUtilities.forceDimensions(this._squadBoxWidth, this._squadBoxMinWidth, this._squadBoxMaxWidth);
+		this._squadBoxHeight = CommonMenuUtilities.forceDimensions(this._squadBoxWidth, this._squadBoxMinHeight, this._squadBoxMaxHeight);
 		
-		this._gameEventWidth = CommonMenuUtilities.getMinParamIfNeeded(this._gameEventWidth, this._gameEventMinWidth);
-		this._gameEventHeight = CommonMenuUtilities.getMinParamIfNeeded(this._gameEventHeight, this._gameEventMinHeight);
+		this._gameEventWidth = CommonMenuUtilities.forceDimensions(this._gameEventWidth, this._gameEventMinWidth, this._gameEventMaxWidth);
+		this._gameEventHeight = CommonMenuUtilities.forceDimensions(this._gameEventHeight, this._gameEventMinHeight, this._gameEventMaxHeight);
 		
-		CommonMenuUtilities.forceMinimumDimensions();
+		Debug.Log("General stats width: " + this._generalStatsWidth);
+		Debug.Log("General stats height: " + this._generalStatsHeight);
+		
+		Debug.Log("Squad box width: " + this._squadBoxWidth);
+		Debug.Log("Squad box height: " + this._squadBoxHeight);
+
+		Debug.Log("Game events width: " + this._gameEventWidth);
+		Debug.Log("Game events height: " + this._gameEventHeight);
+		
+		CommonMenuUtilities.forceMainMenuDimensions();
 	}
 	
 	// Update is called once per frame
@@ -209,12 +227,14 @@ public class GameGui : MonoBehaviour
 		}
 		
 		GUILayout.Label (this.TimeOfDay);
+		GUILayout.Space(8.0f);
 		GUILayout.Label (hour + ":" + minute.ToString("D2"));
 
 		GUILayout.FlexibleSpace ();
 		//GUI.Label (new Rect (startX + (int)(infoSize * 1.5), startY, infoSize, infoSize), this.numObjectivesCaptured + "/" + this.numObjectives);
 
 		GUILayout.Label (this.Flag);
+		GUILayout.Space(8.0f);
 		GUILayout.Label (LevelInformation.numObjectivesCaptured + "/" + LevelInformation.getTotalNumObjectives());
 
 		GUILayout.FlexibleSpace ();

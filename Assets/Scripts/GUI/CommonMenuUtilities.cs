@@ -11,15 +11,21 @@ public class CommonMenuUtilities
 	
 	private static float _mainMenuMinWidth = 310.0f;
 	private static float _mainMenuMinHeight = 250.0f;
+	
+	private static float _mainMenuMaxWidth = 426.0f;
+	private static float _mainMenuMaxHeight = 316.0f;
 
 
 	public delegate void buttonResponse();
 
 	
-	public static void forceMinimumDimensions()
+	public static void forceMainMenuDimensions()
 	{
-		_mainMenuMinWidth = getMinParamIfNeeded(_mainMenuWidth, _mainMenuMinWidth);
-		_mainMenuMinHeight = getMinParamIfNeeded(_mainMenuHeight, _mainMenuMinHeight);
+		_mainMenuMinWidth = forceDimensions(_mainMenuWidth, _mainMenuMinWidth, _mainMenuMaxWidth);
+		_mainMenuMinHeight = forceDimensions(_mainMenuHeight, _mainMenuMinHeight, _mainMenuMaxHeight);
+		
+		//Debug.Log ("Main Menu width:" + _mainMenuWidth);
+		//Debug.Log ("Main Menu height:" + _mainMenuHeight);
 	}
 	
 
@@ -126,10 +132,24 @@ public class CommonMenuUtilities
 	}
 	
 	
-	public static float getMinParamIfNeeded(float actualParam, float minParam)
+	public static void drawSingleWrappingLabelLine(string labelText)
+	{
+		GUILayout.BeginHorizontal();
+		GUILayout.FlexibleSpace ();
+		GUILayout.Label(labelText, GUI.skin.GetStyle("WordWrapLabel"));
+		GUILayout.FlexibleSpace ();
+		GUILayout.EndHorizontal();
+	}
+	
+	
+	public static float forceDimensions(float actualParam, float minParam, float maxParam)
 	{
 		if (actualParam < minParam) {
 			return minParam;
+		}
+		
+		if (actualParam > maxParam) {
+			return maxParam;	
 		}
 		
 		return actualParam;
