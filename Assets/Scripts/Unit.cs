@@ -78,7 +78,13 @@ public class Unit : MonoBehaviour
 	// Use this for initialization
 	public virtual void Start () 
 	{
-	
+		//this is for pre-placed units, due to how they're displayed in the editor
+		//Don't match 180 degrees exactly because it's not exact
+		this.renderer.enabled = false;
+		if (this.transform.rotation.y > 0.0f) {
+			this.transform.Rotate(Vector3.up, -180.0f);			
+		}
+		
 		this.SquadMembers = new ArrayList ();
 
 		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
