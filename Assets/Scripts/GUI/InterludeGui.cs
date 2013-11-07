@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LeveiIntroGui : MonoBehaviour 
+public class InterludeGui : MonoBehaviour 
 {
 	
 	public GUISkin CustomGUISkin = null;
