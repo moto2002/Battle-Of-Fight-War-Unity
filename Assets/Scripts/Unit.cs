@@ -359,13 +359,9 @@ public class Unit : MonoBehaviour
 
 		//Check if we are close enough to the next waypoint
 		//If we are, proceed to follow the next waypoint
-		/**
-		 * I suspect there may be a problem here with the "distance until waypoint considered reached" variable
-		 * If it's too low then the object will never get to said waypoint due to the direction calculation fucking up
-		 * in-between waypoints
-		 * TODO: add a special condition for the last waypoint (i.e. the goal) because we need the unit to reach
-		 * the exact goal coordinates
-		 */ 
+		//Remember that the unit's y-coordinate never changes, so if it doesn't match the goal's y-coordinate they'll
+		//never reach the goal
+		
 		//if (Vector3.Distance (this.transform.position, this.PathToFollow.vectorPath[this.currentWaypoint]) < 0.10f) {
 		Vector3 CurrentWaypoint = this.PathToFollow.vectorPath[this.currentWaypoint];
 		if (
