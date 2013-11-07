@@ -12,15 +12,9 @@ public class EnemyBase : Base
 	{
 		base.Start ();
 
-		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
-		if (LevelInfoObj == null) {
-			return;
-		}
-
-		LevelInfo Info = LevelInfoObj.GetComponent<LevelInfo>();
-		int minSpawns = Info.minSpawnsFromEnemySpawner;
-		int maxSpawns = Info.maxSpawnsFromEnemySpawner;
-		this._timeBetweenSpawns = Info.timeBetweenSpawns;
+		int minSpawns = 5;
+		int maxSpawns = 8;
+		this._timeBetweenSpawns = 10;
 
 		this._numSpawns = Random.Range (minSpawns, maxSpawns);
 

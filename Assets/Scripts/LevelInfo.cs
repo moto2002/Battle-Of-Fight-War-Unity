@@ -6,10 +6,6 @@ using System.Text.RegularExpressions;
 public class LevelInfo : MonoBehaviour 
 {
 
-	public int minSpawnsFromEnemySpawner;
-	public int maxSpawnsFromEnemySpawner;
-	public int timeBetweenSpawns;
-
 	public int totalNumObjectives = 0;
 	public int gameEvent = GAME_EVENT_NONE;
 	
