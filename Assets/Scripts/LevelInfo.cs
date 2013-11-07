@@ -19,15 +19,14 @@ public class LevelInfo : MonoBehaviour
 	
 	public int battleTime = 0;
 	
-	
-	
 	//To record battle time (in seconds)
 	private int _startTime = 0;
 
 	public Vector3 StatusUpdateLocation;
 
 	public TextAsset Names;
-	private string[] _possibleNames;
+	private string[] _possibleNames;	
+	
 
 	public const int GAME_EVENT_NONE = 0;
 	public const int GAME_EVENT_PAUSED = 1;
@@ -49,8 +48,8 @@ public class LevelInfo : MonoBehaviour
 	}
 	
 	
-	//Using this because we don't want to reset records of shit after everything's all initialized
-	//Thus we reset records before any Start() stuff is called
+	//Using this because we don't want to reset records of shit after everything's all initialized on the map
+	//Thus we reset records before any other objects' Start() stuff is called
 	void Awake()
 	{
 		//Reset all non-zero "record" statistics to start just to be sure.
@@ -229,6 +228,5 @@ public class LevelInfo : MonoBehaviour
 	{
 		return this.battleTime;	
 	}
-	
 
 }

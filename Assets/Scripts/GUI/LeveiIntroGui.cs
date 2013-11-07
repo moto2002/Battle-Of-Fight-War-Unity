@@ -47,6 +47,12 @@ public class LeveiIntroGui : MonoBehaviour
 
 		GUILayout.FlexibleSpace();
 		
+		if (GUILayout.Button("Continue")) {
+			this._loadNextScene();
+		}
+		
+		GUILayout.FlexibleSpace();
+		
 		CommonMenuUtilities.endCenterBox();
 	}
 	
@@ -66,5 +72,11 @@ public class LeveiIntroGui : MonoBehaviour
 			"vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan " +
 			"et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. "
 		);
+	}
+	
+	
+	private void _loadNextScene()
+	{
+		
 	}
 }

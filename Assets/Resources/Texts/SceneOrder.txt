@@ -1,0 +1,3 @@
+Interlude	Intro
+Map		Border
+Interlude	End
