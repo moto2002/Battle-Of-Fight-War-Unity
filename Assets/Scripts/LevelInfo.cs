@@ -61,6 +61,7 @@ public class LevelInfo : MonoBehaviour
 		
 		if (Application.loadedLevelName != "PostGameStats") { //If this is post-game-stats, don't do shit
 			DontDestroyOnLoad(this.gameObject);
+			Debug.Log("WILL NOT DeSTROY LEVEL INFO");
 		}
 		
 	}

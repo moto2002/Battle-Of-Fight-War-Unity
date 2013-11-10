@@ -17,7 +17,7 @@ public class NeutralBase : MonoBehaviour
 	}
 
 
-	public virtual void OnTriggerEnter (Collider OtherObject)
+	public virtual void OnTriggerStay (Collider OtherObject)
 	{
 		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
 		if (UnitInBase != null) { //We actually have a unit

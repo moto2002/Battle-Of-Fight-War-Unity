@@ -33,22 +33,9 @@ public class Base : NeutralBase {
 	}
 	
 	
-	public override void OnTriggerEnter(Collider OtherObject)
+	public override void OnTriggerStay(Collider OtherObject)
 	{
-		//Do nothing for enemies entering
-		if (OtherObject.gameObject.tag == this.enemyTag) {
-			return;	
-		}
-		
-		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
-		if (UnitInBase != null) { //We actually have a unit
-			UnitInBase.inBase = true;
-		}
-	}
-	
-	
-	public void OnTriggerStay(Collider OtherObject)
-	{
+		//Check capture for enemies
 		if (OtherObject.gameObject.tag == this.enemyTag) {
 			
 			Vector3 spherePosition = new Vector3(
@@ -64,7 +51,14 @@ public class Base : NeutralBase {
 				}
 			}
 			
-		}	
+			return;
+		}
+		
+		//Otherwise set friendly unit as being in-base
+		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
+		if (UnitInBase != null) { //We actually have a unit
+			UnitInBase.inBase = true;
+		}
 	}
 
 
