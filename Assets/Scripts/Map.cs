@@ -12,20 +12,23 @@ public class Map : MonoBehaviour {
 	public const int WATER = 2;
 	public const int MOUNTAIN = 3;
 	public const int FOREST = 4;
+	public const int ROAD = 5;
 
 	public Texture2D GrassTexture;
 	public Texture2D WaterTexture;
 	public Texture2D MountainTexture;
 	public Texture2D ForestTexture;
+	public Texture2D RoadTexture;
 
 	private Texture2D _OriginalTexture;
 
 	//GameObjects
 	public GameObject PlayerObject;
 
-	private uint _PENALTY_GRASS = 0;
-	private uint _PENALTY_FOREST = 100;
+	private uint _PENALTY_GRASS = 100;
+	private uint _PENALTY_FOREST = 200;
 	private uint _PENALTY_MOUNTAIN = 500;
+	private uint _PENALTY_ROAD = 0;
 
 	// Use this for initialization
 	void Start () 
@@ -83,6 +86,12 @@ public class Map : MonoBehaviour {
 
 					PathNode.penalty = this._PENALTY_FOREST;
 					PathNode.tags = FOREST;
+				} else if (PixelColor.r == (127.0f/255.0f) && PixelColor.g == (127.0f/255.0f) && PixelColor.b == (127.0f/255.0f)) {
+					mapTiles [i, j] = ROAD;
+					NewMainTexPixels[pixelPosition] = this.RoadTexture.GetPixel (smallTextureX, smallTextureY);
+
+					PathNode.penalty = this._PENALTY_ROAD;
+					PathNode.tags = ROAD;
 				}
 
 				//Updating the actual node with its changes in the active grid graph?
