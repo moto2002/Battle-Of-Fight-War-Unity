@@ -15,6 +15,8 @@ public class SquadMemberCreator
 			
 			case "Slasher":
 				return new Slasher(name);
+			case "Raider":
+				return new Raider(name);
 			default: //Rifleman	
 				return new Rifleman(name);
 		
