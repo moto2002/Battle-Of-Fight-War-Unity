@@ -1,3 +1,4 @@
 Interlude	Intro
 BattleMap	Border
 Interlude	Intercept
+BattleMap	Intercept

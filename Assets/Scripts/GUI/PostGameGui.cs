@@ -70,6 +70,10 @@ public class PostGameGui : MonoBehaviour
 	
 	private void _loadNextScene()
 	{
+		//Make sure to destroy the LevelInfo that we carried over from the map
+		GameObject LevelInfo = GameObject.Find("LevelInfo");
+		Destroy(LevelInfo);
+		
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
 		Persistence.loadNextScene();
 	}

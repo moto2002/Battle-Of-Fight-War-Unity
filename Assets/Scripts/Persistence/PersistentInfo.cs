@@ -48,6 +48,9 @@ public class PersistentInfo : MonoBehaviour
 	
 	public void loadNextScene()
 	{
+		//This part is pretty important
+		Time.timeScale = 1;
+		
 		int nextSceneNumber = this.getSceneIndex() + 1;
 		Debug.Log("Next scene number: " + nextSceneNumber);
 		this.loadSceneAtIndex(nextSceneNumber);
