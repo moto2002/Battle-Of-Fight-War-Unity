@@ -32,6 +32,7 @@ public class PersistentInfo : MonoBehaviour
 		
 		string[] sceneInfo = this._getSceneInfoAtIndex(index);
 		
+		Debug.Log("Scene type: " + sceneInfo[0]);
 		if (sceneInfo[0] == "Interlude") {
 			
 			this.InterludeText = Resources.Load("Texts/Interludes/" + sceneInfo[1]) as TextAsset;
@@ -40,6 +41,7 @@ public class PersistentInfo : MonoBehaviour
 			
 		} else { //Map... load the right scene
 			
+			Debug.Log(sceneInfo[1]);
 			Application.LoadLevel(sceneInfo[1]);
 		}
 	}
@@ -55,8 +57,8 @@ public class PersistentInfo : MonoBehaviour
 		for (int i = 0; i <= index; i++) {
 			sceneInfo = Reader.ReadLine();
 		}
-		
-		//Debug.Log (sceneInfo);
+			
+		Debug.Log ("Scene Info :" + sceneInfo);
 		
 		return sceneInfo.Split(null);
 	}

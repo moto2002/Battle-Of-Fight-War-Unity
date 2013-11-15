@@ -45,6 +45,7 @@ public class MainMenuGui : MonoBehaviour
 	{
 		//Here we create our first and LevelInfo object.
 		GameObject PersistentInfoObj = Instantiate(Resources.Load("Prefabs/PersistentInfo")) as GameObject;
+		PersistentInfoObj.name = "PersistentInfo";
 		
 		PersistentInfo PersistentInformation = PersistentInfoObj.GetComponent<PersistentInfo>();
 		
