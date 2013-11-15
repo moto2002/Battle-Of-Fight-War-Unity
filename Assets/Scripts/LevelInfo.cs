@@ -45,10 +45,13 @@ public class LevelInfo : MonoBehaviour
 		if (Application.loadedLevelName != "PostGameStats") { //If this is post-game-stats, don't do shit
 			DontDestroyOnLoad(this.gameObject);
 		}
+		
+		//We can immediately unset the parent since I only needed that relationship for easy map-prefab-making
+		this.transform.parent = null;
 	}
 	
 	
-	//Using this because we don't want to reset records of shit after everything's all initialized on the map
+	//Using this because we don't want to zero-reset records of shit after everything's all initialized on the map
 	//Thus we reset records before any other objects' Start() stuff is called
 	void Awake()
 	{
