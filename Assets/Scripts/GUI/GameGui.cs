@@ -100,7 +100,7 @@ public class GameGui : MonoBehaviour
 			//User hit esc during pause
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				
-				this._playerHitsEscapeDuringEventDisplay();
+				this._escapeOutOfEventDisplay();
 				
 			}
 			
@@ -346,6 +346,12 @@ public class GameGui : MonoBehaviour
 
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndHorizontal ();
+		
+		GUILayout.FlexibleSpace();
+		if (GUILayout.Button("Continue")) {
+			this._escapeOutOfEventDisplay();
+		}
+		GUILayout.FlexibleSpace();
 
 		GUILayout.FlexibleSpace ();
 		GUILayout.EndVertical ();
@@ -430,7 +436,7 @@ public class GameGui : MonoBehaviour
 	}
 	
 	
-	private void _playerHitsEscapeDuringEventDisplay()
+	private void _escapeOutOfEventDisplay()
 	{
 		//Game-ending event? Then let's go to the post-game stats page
 		if (this.LevelInformation.gameEventEndsGame ()) {
