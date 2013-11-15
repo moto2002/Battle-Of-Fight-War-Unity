@@ -46,6 +46,14 @@ public class PersistentInfo : MonoBehaviour
 	}
 	
 	
+	public void loadNextScene()
+	{
+		int nextSceneNumber = this.getSceneIndex() + 1;
+		Debug.Log("Next scene number: " + nextSceneNumber);
+		this.loadSceneAtIndex(nextSceneNumber);
+	}
+	
+	
 	private string[] _getSceneInfoAtIndex(int index)
 	{
 		//Generate list of names

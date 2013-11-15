@@ -77,9 +77,6 @@ public class InterludeGui : MonoBehaviour
 	private void _loadNextScene()
 	{
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
-		
-		int nextSceneNumber = Persistence.getSceneIndex() + 1;
-		Debug.Log("Next scene number: " + nextSceneNumber);
-		Persistence.loadSceneAtIndex(nextSceneNumber);
+		Persistence.loadNextScene();
 	}
 }

@@ -59,6 +59,18 @@ public class PostGameGui : MonoBehaviour
 		CommonMenuUtilities.drawSingleLabelLine("Enemies Killed\t\t" + this._LevelInformations.getNumEnemiesKilled());
 		GUILayout.FlexibleSpace();
 		
+		if (GUILayout.Button("Continue")) {
+			this._loadNextScene();	
+		}		
+		GUILayout.FlexibleSpace();
+		
 		CommonMenuUtilities.endCenterBox();
+	}
+	
+	
+	private void _loadNextScene()
+	{
+		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
+		Persistence.loadNextScene();
 	}
 }
