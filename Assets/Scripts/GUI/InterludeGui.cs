@@ -12,6 +12,8 @@ public class InterludeGui : MonoBehaviour
 	float _maxWidth = 650.0f;
 	float _maxHeight = 500.0f;
 	
+	public TextAsset InterludeText;
+	
 
 	// Use this for initialization
 	void Start () 
@@ -21,6 +23,9 @@ public class InterludeGui : MonoBehaviour
 		
 		Debug.Log("Briefing width: " + this._boxWidth);
 		Debug.Log("Briefing height: " + this._boxHeight);
+		
+		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
+		this.InterludeText = Resources.Load("Texts/Interludes/" + Persistence.sceneName) as TextAsset;
 	}
 	
 	// Update is called once per frame
@@ -65,13 +70,7 @@ public class InterludeGui : MonoBehaviour
 	
 	private void _drawText()
 	{
-		CommonMenuUtilities.drawSingleWrappingLabelLine(
-			"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut " +
-			"laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper " +
-			"suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in " +
-			"vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan " +
-			"et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. "
-		);
+		CommonMenuUtilities.drawSingleWrappingLabelLine(this.InterludeText.text);
 	}
 	
 	

@@ -9,8 +9,7 @@ public class PersistentInfo : MonoBehaviour
 	public TextAsset SceneOrder;
 	
 	public int sceneIndex = 0;
-	
-	public TextAsset InterludeText;
+	public string sceneName = "";
 	
 	
 	// Use this for initialization
@@ -31,15 +30,15 @@ public class PersistentInfo : MonoBehaviour
 		this.setSceneIndex(index);
 		
 		string[] sceneInfo = this._getSceneInfoAtIndex(index);
+		this.sceneName = sceneInfo[1];
 		
 		Debug.Log("Scene type: " + sceneInfo[0]);
 		if (sceneInfo[0] == "Interlude") {
 			
-			this.InterludeText = Resources.Load("Texts/Interludes/" + sceneInfo[1]) as TextAsset;
 			Debug.Log ("Texts/Interludes/" + sceneInfo[1]);
 			Application.LoadLevel("Interlude");
 			
-		} else { //Map... load the right scene
+		} else { //BattleMap... load the right scene
 			
 			Debug.Log(sceneInfo[1]);
 			Application.LoadLevel(sceneInfo[1]);
