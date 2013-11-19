@@ -344,9 +344,12 @@ public class Unit : MonoBehaviour
 		float speedModifier = 0.5f;
 		switch (AstarPath.active.GetNearest (this.transform.position).node.tags) {
 
+			case Map.GRASS:
+				speedModifier *= 0.8f;
+				break;
 			case Map.FOREST:
 				speedModifier *= 0.5f;
-					break;
+				break;
 			case Map.MOUNTAIN:
 				speedModifier *= 0.3f;
 				break;
