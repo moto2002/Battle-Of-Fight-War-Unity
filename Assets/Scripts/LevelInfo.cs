@@ -21,6 +21,7 @@ public class LevelInfo : MonoBehaviour
 	
 	//To record battle time (in seconds)
 	private int _startTime = 0;
+	private int _timeSinceSceneLoaded = 0;
 
 	public Vector3 StatusUpdateLocation;
 
@@ -38,6 +39,8 @@ public class LevelInfo : MonoBehaviour
 	public const int TIME_DAY_THRESHOLD = 390;
 	public const int TIME_NIGHT_THRESHOLD = 1170;
 	
+
+	private const int TIME_MODIFIER = 3;
 
 	// Use this for initialization
 	void Start () 
@@ -58,6 +61,7 @@ public class LevelInfo : MonoBehaviour
 		//Reset all non-zero "record" statistics to start just to be sure.
 		
 		this._startTime = 300; //Battles start at early just because that's what time people wake up and do shit
+		this._timeSinceSceneLoaded = (int)(Time.fixedTime) * TIME_MODIFIER;
 		
 		GameObject[] EnemySpawns = GameObject.FindGameObjectsWithTag ("EnemySpawn");
 		this.totalNumObjectives = EnemySpawns.Length;
@@ -79,7 +83,7 @@ public class LevelInfo : MonoBehaviour
 	
 	void FixedUpdate()
 	{
-		this.battleTime = (int)(Time.fixedTime * 3) + this._startTime;	
+		this.battleTime = (int)(Time.fixedTime * TIME_MODIFIER) + this._startTime - this._timeSinceSceneLoaded;	
 	}
 	
 	
