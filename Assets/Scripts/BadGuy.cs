@@ -30,9 +30,9 @@ public class BadGuy : Unit
 					Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
 					PlayerScript.hideSelectSprite();
 				}
-				
-				this.removeStatusSprite();
+
 			}
+			this.removeStatusSprite();
 		} else {
 			if (this._UnitSprite.color.a <= 0.0f) {
 				Color Visibo = new Color(1.0f, 1.0f, 1.0f, 1.0f);

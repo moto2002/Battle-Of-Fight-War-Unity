@@ -3,6 +3,10 @@ using System.Collections;
 
 public class UnitLOS : MonoBehaviour {
 
+
+	private ArrayList _EnemiesInView = new ArrayList();
+
+
 	// Use this for initialization
 	void Start () {
 	
@@ -28,6 +32,7 @@ public class UnitLOS : MonoBehaviour {
 		}
 				
 		OtherUnit.visibleToEnemy++;
+		this._EnemiesInView.Add(OtherUnit);
 		
 		//Debug.Log("FOUND ENEMY");
 	}
@@ -47,8 +52,17 @@ public class UnitLOS : MonoBehaviour {
 		}
 				
 		OtherUnit.visibleToEnemy--;
+		this._EnemiesInView.Remove(OtherUnit);
 		//Debug.Log("LOST ENEMY");
-	}	
+	}
+
+
+	public void OnDestroy()
+	{
+		foreach (Unit VisibleEnemy in this._EnemiesInView) {
+			VisibleEnemy.visibleToEnemy--;
+		}
+	}
 	
 	
 			
