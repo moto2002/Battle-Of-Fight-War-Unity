@@ -4,9 +4,9 @@ using System.Collections;
 public class EnemyBase : Base 
 {
 
-	public int minSpawns = 4;
-	public int maxSpawns = 7;
-	public int timeBetweenSpawns = 10;
+	public int minSpawns = 1;
+	public int maxSpawns = 3;
+	public int timeBetweenSpawns = 30;
 
 	private int _timeOfLastSpawn = 0;
 
@@ -16,8 +16,6 @@ public class EnemyBase : Base
 	public override void Start () 
 	{
 		base.Start ();
-
-		this.timeBetweenSpawns = 10;
 
 		this._numSpawns = Random.Range (minSpawns, maxSpawns);
 
