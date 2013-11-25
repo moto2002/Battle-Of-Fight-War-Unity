@@ -61,6 +61,7 @@ public class EnemyBase : Base
 		
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");
 		if (LevelInfoObj == null) {
+			Debug.Log("ENEMY BASE TRIED TO USE LEVEL INFO BUT NOT FOUND. ERRORRRRR!!!");
 			return false;
 		}
 		

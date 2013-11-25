@@ -26,14 +26,27 @@ public class Base : NeutralBase {
 	}
 
 
-	// Update is called once per frame
-	public override void Update () 
+	public override void OnTriggerEnter (Collider OtherObject)
 	{
-	
+		if (OtherObject.tag == this.friendlyTag) {
+			this._UnitEnteredBase(OtherObject);
+		}
 	}
 	
 	
-	public override void OnTriggerStay(Collider OtherObject)
+	public override void OnTriggerExit (Collider OtherObject)
+	{
+		if (OtherObject.tag == this.friendlyTag) {
+			this._UnitExitedBase(OtherObject);
+		}
+	}
+
+
+	/**
+	 * Need to do this for enemies of the base because we don't want a base to count as captured until
+	 * enemies reach its center
+	 */
+	public void OnTriggerStay(Collider OtherObject)
 	{
 		//Check capture for enemies
 		if (OtherObject.gameObject.tag == this.enemyTag) {
@@ -53,11 +66,13 @@ public class Base : NeutralBase {
 			
 			return;
 		}
-		
-		//Otherwise set friendly unit as being in-base
-		Unit UnitInBase = OtherObject.gameObject.GetComponent<Unit> ();
-		if (UnitInBase != null) { //We actually have a unit
-			UnitInBase.inBase = true;
+	}
+
+
+	public void OnDestroy()
+	{
+		foreach (Unit UnitInBase in this._UnitsInBase) {
+			UnitInBase.inBase = false;
 		}
 	}
 
@@ -86,5 +101,6 @@ public class Base : NeutralBase {
 		
 		yield return new WaitForSeconds(1);
 	}
+
 
 }
