@@ -6,7 +6,7 @@ public class Base : NeutralBase {
 
 	public GameObject UnitPrefab;
 
-	public ArrayList Units;
+	public ArrayList Units  = new ArrayList ();;
 
 	public string friendlyTag = "";
 	public string enemyTag = "";
@@ -19,8 +19,6 @@ public class Base : NeutralBase {
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		this.Units = new ArrayList ();
-
 		this.friendlyTag = "GoodGuy";
 		this.enemyTag = "Monster";
 	}
