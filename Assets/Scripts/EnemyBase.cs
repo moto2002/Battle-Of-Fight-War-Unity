@@ -6,7 +6,7 @@ public class EnemyBase : Base
 
 	public int minSpawns = 4;
 	public int maxSpawns = 7;
-	public int timeBetweenSpawns = 0;
+	public int timeBetweenSpawns = 10;
 
 	private int _timeOfLastSpawn = 0;
 
@@ -28,18 +28,29 @@ public class EnemyBase : Base
 	// Update is called once per frame
 	public void FixedUpdate () 
 	{
-		if (this.Units.Count < this._numSpawns && (int)Time.fixedTime > this._timeOfLastSpawn + this.timeBetweenSpawns) {
+		if ((int)Time.fixedTime > (this._timeOfLastSpawn + this.timeBetweenSpawns) && this.Units.Count < this._numSpawns) {
 
 			this._timeOfLastSpawn = (int)Time.fixedTime;
 			Debug.Log ("SPAWN TIME " + this._timeOfLastSpawn);
 			Vector3 SpawnPosition = new Vector3 (this.gameObject.transform.position.x, 0.45f, this.gameObject.transform.position.z);
-			GameObject NewUnitObj = Instantiate(this.UnitPrefab, SpawnPosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
-			this.Units.Add(NewUnitObj);
+
+			GameObject NewUnitObj = Instantiate(this.SpawnedUnit, SpawnPosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
+			Unit NewUnit = NewUnitObj.GetComponent<Unit>();
+
+			this.Units.Add(NewUnit);
+			NewUnit.setHomeBase(this.gameObject);
 
 			GameObject PlayerBaseObj =  GameObject.Find("PlayerBase");
-			Unit NewUnit = NewUnitObj.GetComponent<Unit>();
 			NewUnit.setGoalPosition (PlayerBaseObj.gameObject.transform.position);
+
 		}
+	}
+
+
+	public virtual void removeUnitFromList(Unit UnitToRemove)
+	{
+		this.Units.Remove(UnitToRemove);
+		this._timeOfLastSpawn = (int)Time.fixedTime; //Reset the "last spawn" time
 	}
 
 

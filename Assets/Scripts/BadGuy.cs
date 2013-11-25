@@ -43,4 +43,16 @@ public class BadGuy : Unit
 		base.Update();	
 	}
 
+
+	protected override void _removeFromHomeBaseList()
+	{
+		GameObject HomeBaseObj = this.HomeBase;
+		if (HomeBaseObj == null) {
+			return;
+		}
+		EnemyBase Base = HomeBaseObj.GetComponent<EnemyBase>();
+
+		Base.removeUnitFromList(this);
+	}
+
 }

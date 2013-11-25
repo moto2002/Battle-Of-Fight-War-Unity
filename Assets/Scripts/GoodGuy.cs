@@ -17,4 +17,10 @@ public class GoodGuy : Unit
 		this._UnitSprite.SetColor (Color.green);
 	}
 
+
+	protected override void _removeFromHomeBaseList()
+	{
+
+	}
+
 }

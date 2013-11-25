@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour
 	public GameObject CombatEffects = null;
 	
 	public int numMembers;
+	public GameObject HomeBase = null;
 
 	//Default unit stats for prefab (Should set these through Unity)
 	public float speed = 1.0f;
@@ -618,6 +619,8 @@ public class Unit : MonoBehaviour
 				}
 			}
 		}
+
+		this._removeFromHomeBaseList();
 		
 		if (this.gameObject == null) {
 			return;
@@ -669,9 +672,15 @@ public class Unit : MonoBehaviour
 			this.removeStatusSprite();
 		}
 	}
+
+
+	public void setHomeBase(GameObject NewHomeBase)
+	{
+		this.HomeBase = NewHomeBase;
+	}
 	
 	
-	private ArrayList _getCloseUnits()
+	protected ArrayList _getCloseUnits()
 	{
 		GameObject[] GoodGuys = GameObject.FindGameObjectsWithTag("GoodGuy");
 		GameObject[] BadGuys = GameObject.FindGameObjectsWithTag("Monster");
@@ -698,6 +707,10 @@ public class Unit : MonoBehaviour
 		return CloseUnits;
 	}
 
+
+	protected virtual void _removeFromHomeBaseList()
+	{
+	}
 
 
 }

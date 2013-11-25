@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Base : NeutralBase {
 
-	public GameObject UnitPrefab;
+	public GameObject SpawnedUnit;
 
 	public ArrayList Units  = new ArrayList ();
 
@@ -72,6 +72,12 @@ public class Base : NeutralBase {
 		foreach (Unit UnitInBase in this._UnitsInBase) {
 			UnitInBase.inBase = false;
 		}
+	}
+
+
+	public virtual void removeUnitFromList(Unit UnitToRemove)
+	{
+		this.Units.Remove(UnitToRemove);
 	}
 
 
