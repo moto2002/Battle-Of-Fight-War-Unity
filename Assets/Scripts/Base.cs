@@ -6,7 +6,7 @@ public class Base : NeutralBase {
 
 	public GameObject UnitPrefab;
 
-	public ArrayList Units  = new ArrayList ();;
+	public ArrayList Units  = new ArrayList ();
 
 	public string friendlyTag = "";
 	public string enemyTag = "";
