@@ -4,17 +4,20 @@ using System.Collections;
 public class EnemyBase : Base 
 {
 
+	public int minSpawns = 4;
+	public int maxSpawns = 7;
+	public int timeBetweenSpawns = 0;
+
 	private int _timeOfLastSpawn = 0;
-	private int _timeBetweenSpawns = 0;
+
+
 
 	// Use this for initialization
 	public override void Start () 
 	{
 		base.Start ();
 
-		int minSpawns = 5;
-		int maxSpawns = 8;
-		this._timeBetweenSpawns = 10;
+		this.timeBetweenSpawns = 10;
 
 		this._numSpawns = Random.Range (minSpawns, maxSpawns);
 
@@ -25,7 +28,7 @@ public class EnemyBase : Base
 	// Update is called once per frame
 	public void FixedUpdate () 
 	{
-		if (this.Units.Count < this._numSpawns && (int)Time.fixedTime > this._timeOfLastSpawn + this._timeBetweenSpawns) {
+		if (this.Units.Count < this._numSpawns && (int)Time.fixedTime > this._timeOfLastSpawn + this.timeBetweenSpawns) {
 
 			this._timeOfLastSpawn = (int)Time.fixedTime;
 			Debug.Log ("SPAWN TIME " + this._timeOfLastSpawn);
