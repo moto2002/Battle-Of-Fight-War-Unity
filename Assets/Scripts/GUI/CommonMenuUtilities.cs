@@ -21,8 +21,8 @@ public class CommonMenuUtilities
 	
 	public static void forceMainMenuDimensions()
 	{
-		_mainMenuMinWidth = forceDimensions(_mainMenuWidth, _mainMenuMinWidth, _mainMenuMaxWidth);
-		_mainMenuMinHeight = forceDimensions(_mainMenuHeight, _mainMenuMinHeight, _mainMenuMaxHeight);
+		_mainMenuWidth = forceDimensions(_mainMenuWidth, _mainMenuMinWidth, _mainMenuMaxWidth);
+		_mainMenuHeight = forceDimensions(_mainMenuHeight, _mainMenuMinHeight, _mainMenuMaxHeight);
 		
 		//Debug.Log ("Main Menu width:" + _mainMenuWidth);
 		//Debug.Log ("Main Menu height:" + _mainMenuHeight);

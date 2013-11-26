@@ -11,6 +11,10 @@ public class InterludeGui : MonoBehaviour
 	
 	float _maxWidth = 650.0f;
 	float _maxHeight = 500.0f;
+
+	float _minWidth = 550.0f;
+	float _minHeight = 500.0f;
+
 	
 	public TextAsset InterludeText;
 	
@@ -18,8 +22,8 @@ public class InterludeGui : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		this._boxWidth = CommonMenuUtilities.forceDimensions(this._boxWidth, this._maxWidth, this._maxWidth);
-		this._boxHeight = CommonMenuUtilities.forceDimensions(this._boxHeight, this._maxHeight, this._maxHeight);
+		this._boxWidth = CommonMenuUtilities.forceDimensions(this._boxWidth, this._minWidth, this._maxWidth);
+		this._boxHeight = CommonMenuUtilities.forceDimensions(this._boxHeight, this._minHeight, this._maxHeight);
 		
 		Debug.Log("Briefing width: " + this._boxWidth);
 		Debug.Log("Briefing height: " + this._boxHeight);
