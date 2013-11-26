@@ -67,13 +67,18 @@ public class CommonMenuUtilities
 				height)
 			);
 		GUILayout.BeginVertical ("", GUI.skin.box);
-		
+
+		if (menuHeading == "") {
+			return;
+		}
+
 		GUIStyle LabelStyle = CustomGuiSkin.GetStyle ("Label");
 		int originalFontSize = LabelStyle.fontSize;
 
 		LabelStyle.fontSize = 12;
 
 		GUILayout.Space (20);
+		
 		GUILayout.Label (menuHeading);
 
 		LabelStyle.fontSize = originalFontSize;

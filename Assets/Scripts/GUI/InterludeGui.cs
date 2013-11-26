@@ -6,14 +6,16 @@ public class InterludeGui : MonoBehaviour
 	
 	public GUISkin CustomGUISkin = null;
 
+	public Texture InterludeImage = null;
+
 	float _boxWidth = Screen.width * 0.75f;
-	float _boxHeight = Screen.height * 0.80f;
+	float _boxHeight = Screen.height * 0.90f;
 	
 	float _maxWidth = 650.0f;
-	float _maxHeight = 500.0f;
+	float _maxHeight = 800.0f;
 
 	float _minWidth = 550.0f;
-	float _minHeight = 500.0f;
+	float _minHeight = 550.0f;
 
 	
 	public TextAsset InterludeText;
@@ -44,7 +46,7 @@ public class InterludeGui : MonoBehaviour
 		GUI.skin = this.CustomGUISkin;
 		
 		//Replace "briefing" with the name of the map or something (should be in the intro text file)
-		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "Briefing", this._boxWidth, this._boxHeight);
+		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "", this._boxWidth, this._boxHeight);
 
 		GUILayout.FlexibleSpace();
 		
@@ -68,7 +70,13 @@ public class InterludeGui : MonoBehaviour
 	
 	private void _drawPicture()
 	{
-		CommonMenuUtilities.drawSingleWrappingLabelLine("PICTURE GOES HERE");
+		GUILayout.BeginHorizontal();
+		GUILayout.FlexibleSpace();
+
+		GUILayout.Label(this.InterludeImage);
+
+		GUILayout.FlexibleSpace();
+		GUILayout.EndHorizontal();
 	}
 	
 	
