@@ -4,3 +4,4 @@ Interlude	Intercept
 BattleMap	Intercept
 Interlude	Retaliation
 BattleMap	Retaliation
+Interlude	Ending
