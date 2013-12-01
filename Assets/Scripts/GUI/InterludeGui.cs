@@ -12,7 +12,7 @@ public class InterludeGui : MonoBehaviour
 	float _boxHeight = Screen.height * 0.90f;
 	
 	float _maxWidth = 650.0f;
-	float _maxHeight = 800.0f;
+	float _maxHeight = 550.0f;
 
 	float _minWidth = 550.0f;
 	float _minHeight = 550.0f;
