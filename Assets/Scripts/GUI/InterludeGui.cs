@@ -19,6 +19,7 @@ public class InterludeGui : MonoBehaviour
 
 	
 	public TextAsset InterludeText;
+	public Texture2D BriefingTexture;
 	
 
 	// Use this for initialization
@@ -32,6 +33,9 @@ public class InterludeGui : MonoBehaviour
 		
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
 		this.InterludeText = Resources.Load("Texts/Interludes/" + Persistence.sceneName) as TextAsset;
+
+		Debug.Log ("Briefings/" + Persistence.sceneName);
+		this.BriefingTexture = Resources.Load("Briefings/" + Persistence.sceneName) as Texture2D;
 	}
 	
 	// Update is called once per frame
@@ -73,7 +77,7 @@ public class InterludeGui : MonoBehaviour
 		GUILayout.BeginHorizontal();
 		GUILayout.FlexibleSpace();
 
-		GUILayout.Label(this.InterludeImage);
+		GUILayout.Label(this.BriefingTexture);
 
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
