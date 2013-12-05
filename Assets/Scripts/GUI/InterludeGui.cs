@@ -20,7 +20,11 @@ public class InterludeGui : MonoBehaviour
 	
 	public TextAsset InterludeText;
 	public Texture2D BriefingTexture;
-	
+
+	public delegate void ContinueButtonResponse();
+
+	private ContinueButtonResponse _ContinueResponseFunction;
+
 
 	// Use this for initialization
 	void Start () 
@@ -28,14 +32,20 @@ public class InterludeGui : MonoBehaviour
 		this._boxWidth = CommonMenuUtilities.forceDimensions(this._boxWidth, this._minWidth, this._maxWidth);
 		this._boxHeight = CommonMenuUtilities.forceDimensions(this._boxHeight, this._minHeight, this._maxHeight);
 		
-		Debug.Log("Briefing width: " + this._boxWidth);
-		Debug.Log("Briefing height: " + this._boxHeight);
+		//Debug.Log("Briefing width: " + this._boxWidth);
+		//Debug.Log("Briefing height: " + this._boxHeight);
 		
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
 		this.InterludeText = Resources.Load("Texts/Interludes/" + Persistence.sceneName) as TextAsset;
 
-		Debug.Log ("Briefings/" + Persistence.sceneName);
+		//Debug.Log ("Briefings/" + Persistence.sceneName);
 		this.BriefingTexture = Resources.Load("Briefings/" + Persistence.sceneName) as Texture2D;
+
+		this._ContinueResponseFunction = _loadNextScene;
+		//Special exception for the ending, go to credits / back to main menu
+		if (Persistence.sceneName == "Ending") {
+			this._ContinueResponseFunction = _loadMainMenu;
+		}
 	}
 	
 	// Update is called once per frame
@@ -63,7 +73,7 @@ public class InterludeGui : MonoBehaviour
 		GUILayout.FlexibleSpace();
 		
 		if (GUILayout.Button("Continue")) {
-			this._loadNextScene();
+			this._ContinueResponseFunction();
 		}
 		
 		GUILayout.FlexibleSpace();
@@ -95,4 +105,11 @@ public class InterludeGui : MonoBehaviour
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
 		Persistence.loadNextScene();
 	}
+
+
+	private void _loadMainMenu()
+	{
+		Application.LoadLevel("MainMenu");
+	}
+
 }
