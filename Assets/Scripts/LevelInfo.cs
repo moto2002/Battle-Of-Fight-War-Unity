@@ -103,12 +103,20 @@ public class LevelInfo : MonoBehaviour
 
 	public void setPlayerWon()
 	{
+		//In case the game's already over
+		if (this.gameEvent == GAME_EVENT_PLAYER_LOST) {
+			return;
+		}
 		this.gameEvent = GAME_EVENT_PLAYER_WON;
 	}
 
 
 	public void setPlayerLost()
 	{
+		//In case the game's already over
+		if (this.gameEvent == GAME_EVENT_PLAYER_WON) {
+			return;
+		}
 		this.gameEvent = GAME_EVENT_PLAYER_LOST;
 	}
 

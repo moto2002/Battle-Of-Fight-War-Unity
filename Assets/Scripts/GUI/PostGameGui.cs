@@ -11,8 +11,14 @@ public class PostGameGui : MonoBehaviour
 	
 	private float _maxWidth = 610.0f;
 	private float _maxHeight = 440.0f;
-	
+
+	private string _title = "";
+
 	private LevelInfo _LevelInformations;
+
+	public delegate void ContinueButtonResponse();
+	
+	private ContinueButtonResponse _ContinueResponseFunction;
 	
 	// Use this for initialization
 	void Start () 
@@ -31,8 +37,16 @@ public class PostGameGui : MonoBehaviour
 		//Technically this is all paused
 		Time.timeScale = 0;	
 		
-		Debug.Log("PostGame width: " + this._boxWidth);
-		Debug.Log("PostGame height: " + this._boxHeight);
+		//Debug.Log("PostGame width: " + this._boxWidth);
+		//Debug.Log("PostGame height: " + this._boxHeight);
+
+		if (this._LevelInformations.gameEvent == LevelInfo.GAME_EVENT_PLAYER_WON) {
+			this._title = "VICTORY";
+			this._ContinueResponseFunction = _loadNextScene;
+		} else {
+			this._title = "DEFEAT";
+			this._ContinueResponseFunction = _loadDefeatScene;
+		}
 	}
 	
 	// Update is called once per frame
@@ -48,6 +62,10 @@ public class PostGameGui : MonoBehaviour
 
 		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "BATTLE REPORT", this._boxWidth, this._boxHeight);
 		
+		CommonMenuUtilities.drawSingleLabelLine(this._title);
+
+		GUILayout.FlexibleSpace();
+
 		CommonMenuUtilities.drawSingleLabelLine("Days Fought\t\t" + (this._LevelInformations.getBattleTime() / 1440) + 1);
 		GUILayout.FlexibleSpace();
 		
@@ -60,8 +78,8 @@ public class PostGameGui : MonoBehaviour
 		GUILayout.FlexibleSpace();
 		
 		if (GUILayout.Button("Continue")) {
-			this._loadNextScene();	
-		}		
+			this._ContinueResponseFunction();
+		}
 		GUILayout.FlexibleSpace();
 		
 		CommonMenuUtilities.endCenterBox();
@@ -77,4 +95,10 @@ public class PostGameGui : MonoBehaviour
 		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
 		Persistence.loadNextScene();
 	}
+
+	private void _loadDefeatScene()
+	{
+
+	}
+
 }
