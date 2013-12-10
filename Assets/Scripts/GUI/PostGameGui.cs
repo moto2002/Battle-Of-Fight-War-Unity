@@ -41,10 +41,10 @@ public class PostGameGui : MonoBehaviour
 		//Debug.Log("PostGame height: " + this._boxHeight);
 
 		if (this._LevelInformations.gameEvent == LevelInfo.GAME_EVENT_PLAYER_WON) {
-			this._title = "VICTORY";
+			this._title = "YOU ARE VICTORIOUS";
 			this._ContinueResponseFunction = _loadNextScene;
 		} else {
-			this._title = "DEFEAT";
+			this._title = "YOU HAVE BEEN DEFEATED";
 			this._ContinueResponseFunction = _loadDefeatScene;
 		}
 	}
@@ -60,9 +60,9 @@ public class PostGameGui : MonoBehaviour
 	{
 		GUI.skin = this.CustomGUISkin;
 
-		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, "BATTLE REPORT", this._boxWidth, this._boxHeight);
+		CommonMenuUtilities.drawCenterBoxHeader(this.CustomGUISkin, this._title, this._boxWidth, this._boxHeight);
 		
-		CommonMenuUtilities.drawSingleLabelLine(this._title);
+		CommonMenuUtilities.drawSingleLabelLine("BATTLE REPORT");
 
 		GUILayout.FlexibleSpace();
 
@@ -98,7 +98,11 @@ public class PostGameGui : MonoBehaviour
 
 	private void _loadDefeatScene()
 	{
-
+		GameObject LevelInfo = GameObject.Find("LevelInfo");
+		Destroy(LevelInfo);
+		
+		PersistentInfo Persistence = GameObject.Find("PersistentInfo").GetComponent<PersistentInfo>();
+		Persistence.loadDefeatScene();
 	}
 
 }

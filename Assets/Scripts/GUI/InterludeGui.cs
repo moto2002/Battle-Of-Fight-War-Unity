@@ -42,9 +42,16 @@ public class InterludeGui : MonoBehaviour
 		this.BriefingTexture = Resources.Load("Briefings/" + Persistence.sceneName) as Texture2D;
 
 		this._ContinueResponseFunction = _loadNextScene;
-		//Special exception for the ending, go to credits / back to main menu
+
+		//Special exception scenes
 		if (Persistence.sceneName == "Ending") {
+
 			this._ContinueResponseFunction = _loadMainMenu;
+		
+		} else if (Persistence.sceneName == "Defeat") {
+
+			this._ContinueResponseFunction = _loadMainMenu;
+
 		}
 	}
 	

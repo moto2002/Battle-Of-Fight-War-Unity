@@ -55,6 +55,17 @@ public class PersistentInfo : MonoBehaviour
 		Debug.Log("Next scene number: " + nextSceneNumber);
 		this.loadSceneAtIndex(nextSceneNumber);
 	}
+
+
+	public void loadDefeatScene()
+	{
+		Time.timeScale = 1;
+
+		//Don't mess with the scene number; we'll keep it for now
+		this.sceneName = "Defeat";
+
+		Application.LoadLevel("Interlude");
+	}
 	
 	
 	private string[] _getSceneInfoAtIndex(int index)
