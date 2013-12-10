@@ -1,2 +1,4 @@
 Battle sounds - Sound Dogs
 Font - codeman38
+A* - Aaron Granberg
+Sprites - SpriteManager
