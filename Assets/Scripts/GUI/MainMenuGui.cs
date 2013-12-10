@@ -13,6 +13,14 @@ public class MainMenuGui : MonoBehaviour
 		CommonMenuUtilities.forceMainMenuDimensions();
 		//Debug.Log (Screen.width + "," + Screen.height);
 		//Debug.Log (this._mainMenuWidth + "," + this._mainMenuHeight);
+
+		//Check if there's existing persistent info, just in case. So we don't have two
+		//This would happen when restarting the game
+		PersistentInfo ExistingPersistentInfo = GameObject.Find("PersistentInfo");
+		if (ExistingPersistentInfo != null) {
+			Destroy (ExistingPersistentInfo);
+		}
+
 	}
 	
 	// Update is called once per frame
