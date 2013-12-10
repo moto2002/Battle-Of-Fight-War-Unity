@@ -16,7 +16,7 @@ public class MainMenuGui : MonoBehaviour
 
 		//Check if there's existing persistent info, just in case. So we don't have two
 		//This would happen when restarting the game
-		PersistentInfo ExistingPersistentInfo = GameObject.Find("PersistentInfo");
+		GameObject ExistingPersistentInfo = GameObject.Find("PersistentInfo");
 		if (ExistingPersistentInfo != null) {
 			Destroy (ExistingPersistentInfo);
 		}
