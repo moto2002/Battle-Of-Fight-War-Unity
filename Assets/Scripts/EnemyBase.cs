@@ -24,8 +24,9 @@ public class EnemyBase : Base
 	}
 	
 	// Update is called once per frame
-	public void FixedUpdate () 
+	public override void FixedUpdate () 
 	{
+		base.FixedUpdate();
 		if ((int)Time.fixedTime > (this._timeOfLastSpawn + this.timeBetweenSpawns) && this.Units.Count < this._numSpawns) {
 
 			this._timeOfLastSpawn = (int)Time.fixedTime;
@@ -45,7 +46,7 @@ public class EnemyBase : Base
 	}
 
 
-	public virtual void removeUnitFromList(Unit UnitToRemove)
+	public override void removeUnitFromList(Unit UnitToRemove)
 	{
 		this.Units.Remove(UnitToRemove);
 		this._timeOfLastSpawn = (int)Time.fixedTime; //Reset the "last spawn" time
