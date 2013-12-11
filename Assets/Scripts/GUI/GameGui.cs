@@ -53,7 +53,7 @@ public class GameGui : CommonGui
 	// Use this for initialization
 	void Start () 
 	{
-		this._loadAllAudioClips();
+		this._initCommonGui();
 
 		this.TimeOfDay = this.Sun;
 

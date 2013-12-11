@@ -23,7 +23,7 @@ public class PostGameGui : CommonGui
 	// Use this for initialization
 	void Start () 
 	{
-		this._loadAllAudioClips();
+		this._initCommonGui();
 
 		this._boxWidth = CommonMenuUtilities.forceDimensions(this._boxWidth, this._maxWidth, this._maxWidth);	
 		this._boxHeight = CommonMenuUtilities.forceDimensions(this._boxHeight, this._maxHeight, this._maxHeight);
