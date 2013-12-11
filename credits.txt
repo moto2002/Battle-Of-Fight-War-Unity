@@ -1,4 +1,5 @@
 Battle sounds - Sound Dogs
+Fire sounds - soundbible.com
 Font - codeman38
 A* - Aaron Granberg
 Sprites - SpriteManager
