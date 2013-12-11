@@ -53,6 +53,8 @@ public class MainMenuGui : CommonGui
 
 	public void startGame()
 	{
+		this._AudioSource.PlayOneShot(this.Click1);
+
 		//Here we create our first and LevelInfo object.
 		GameObject PersistentInfoObj = Instantiate(Resources.Load("Prefabs/PersistentInfo")) as GameObject;
 		PersistentInfoObj.name = "PersistentInfo";

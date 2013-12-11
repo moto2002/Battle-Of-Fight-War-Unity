@@ -8,6 +8,8 @@ public class CommonGui : MonoBehaviour
 	public AudioClip Click1;
 	public AudioClip Click2;
 
+	protected AudioSource _AudioSource; 
+
 
 	// Use this for initialization
 	void Start () 
@@ -22,10 +24,12 @@ public class CommonGui : MonoBehaviour
 	}
 
 
-	protected void _loadAllAudioClips()
+	protected void _initCommonGui()
 	{
 		this.Click1 = this._loadAudioClip("GUI/click1");
 		this.Click2 = this._loadAudioClip("GUI/click2");
+
+		this._AudioSource = this.gameObject.AddComponent<AudioSource>();
 	}
 
 

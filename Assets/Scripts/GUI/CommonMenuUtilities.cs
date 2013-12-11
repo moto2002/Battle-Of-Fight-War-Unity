@@ -120,6 +120,9 @@ public class CommonMenuUtilities
 		GUILayout.BeginHorizontal ();
 		GUILayout.FlexibleSpace ();
 		if (GUILayout.Button (buttonText)) {
+
+			//Fucking ghetto but whatever, I wish I knew playing sounds would be such a pain in the ass without game objects
+
 			buttonResponseFunction ();
 		};
 		GUILayout.FlexibleSpace ();
