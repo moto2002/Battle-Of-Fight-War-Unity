@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class MainMenuGui : MonoBehaviour 
+public class MainMenuGui : CommonGui 
 {
 
 	public GUISkin CustomGUISkin = null;

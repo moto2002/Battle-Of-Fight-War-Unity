@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PostGameGui : MonoBehaviour 
+public class PostGameGui : CommonGui 
 {
 	
 	public GUISkin CustomGUISkin = null;

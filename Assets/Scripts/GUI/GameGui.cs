@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GameGui : MonoBehaviour 
+public class GameGui : CommonGui 
 {
 
 	private float _generalStatsWidth = Screen.width * .19f;

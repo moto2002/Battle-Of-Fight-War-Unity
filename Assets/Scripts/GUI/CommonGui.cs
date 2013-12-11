@@ -20,4 +20,17 @@ public class CommonGui : MonoBehaviour
 	{
 	
 	}
+
+
+	protected void _loadAllAudioClips()
+	{
+		this.Click1 = this._loadAudioClip("GUI/click1");
+		this.Click2 = this._loadAudioClip("GUI/click2");
+	}
+
+
+	protected AudioClip _loadAudioClip(string clipPath)
+	{
+		return Resources.Load("Sounds/" + clipPath) as AudioClip;
+	}
 }

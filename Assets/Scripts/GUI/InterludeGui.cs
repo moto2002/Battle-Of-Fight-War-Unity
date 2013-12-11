@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InterludeGui : MonoBehaviour 
+public class InterludeGui : CommonGui 
 {
 	
 	public GUISkin CustomGUISkin = null;
