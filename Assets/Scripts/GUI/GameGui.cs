@@ -53,6 +53,8 @@ public class GameGui : CommonGui
 	// Use this for initialization
 	void Start () 
 	{
+		this._loadAllAudioClips();
+
 		this.TimeOfDay = this.Sun;
 
 		GameObject LevelInfoObj = GameObject.Find ("LevelInfo");

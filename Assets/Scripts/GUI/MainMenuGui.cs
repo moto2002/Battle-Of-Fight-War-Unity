@@ -10,6 +10,8 @@ public class MainMenuGui : CommonGui
 	// Use this for initialization
 	void Start () 
 	{
+		this._loadAllAudioClips();
+
 		CommonMenuUtilities.forceMainMenuDimensions();
 		//Debug.Log (Screen.width + "," + Screen.height);
 		//Debug.Log (this._mainMenuWidth + "," + this._mainMenuHeight);
