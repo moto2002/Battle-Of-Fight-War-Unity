@@ -80,6 +80,7 @@ public class PostGameGui : CommonGui
 		GUILayout.FlexibleSpace();
 		
 		if (GUILayout.Button("Continue")) {
+			this.GuiAudioSource.PlayOneShot(this.Click1);
 			this._ContinueResponseFunction();
 		}
 		GUILayout.FlexibleSpace();

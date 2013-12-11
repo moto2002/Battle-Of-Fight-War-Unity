@@ -351,6 +351,7 @@ public class GameGui : CommonGui
 		
 		GUILayout.FlexibleSpace();
 		if (GUILayout.Button("Continue")) {
+			this.GuiAudioSource.PlayOneShot(this.Click1);
 			this._escapeOutOfEventDisplay();
 		}
 		GUILayout.FlexibleSpace();
@@ -397,7 +398,8 @@ public class GameGui : CommonGui
 			GUILayout.Label(FirstSquaddie.SquadViewTexture);
 			GUILayout.Space(10.0f);
 			if (GUILayout.Button(FirstSquaddie.name)) { //Player selected one of these guys
-				
+
+				this.GuiAudioSource.PlayOneShot(this.Click1);
 				Time.timeScale = 1;
 				this._Player.PotentialSelectedUnits.RemoveRange(0, this._Player.PotentialSelectedUnits.Count);
 				this._Player.SelectedUnit = SelectableUnit;

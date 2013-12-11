@@ -78,14 +78,13 @@ public class InterludeGui : CommonGui
 		GUILayout.FlexibleSpace();
 		
 		this._drawText();
-
-		GUILayout.FlexibleSpace();
 		
-		if (GUILayout.Button("Continue")) {
+		GUILayout.FlexibleSpace ();
+		if (GUILayout.Button ("Continue")) {
+			this.GuiAudioSource.PlayOneShot(this.Click1);
 			this._ContinueResponseFunction();
-		}
-		
-		GUILayout.FlexibleSpace();
+		};
+		GUILayout.FlexibleSpace ();
 		
 		CommonMenuUtilities.endCenterBox();
 	}

@@ -18,6 +18,9 @@ public class CommonMenuUtilities
 
 	public delegate void buttonResponse();
 
+	//This is fucking terrible but it's just a duct-tape measure for now (ha-ha I'm an idiot, fuck this shit)
+	public static CommonGui CurrentGui = null;
+
 	
 	public static void forceMainMenuDimensions()
 	{
@@ -122,7 +125,7 @@ public class CommonMenuUtilities
 		if (GUILayout.Button (buttonText)) {
 
 			//Fucking ghetto but whatever, I wish I knew playing sounds would be such a pain in the ass without game objects
-
+			CurrentGui.GuiAudioSource.PlayOneShot(CurrentGui.Click1);
 			buttonResponseFunction ();
 		};
 		GUILayout.FlexibleSpace ();
