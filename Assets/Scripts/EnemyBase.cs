@@ -21,6 +21,8 @@ public class EnemyBase : Base
 
 		this.friendlyTag = "Monster";
 		this.enemyTag = "GoodGuy";
+
+		this._timeOfLastSpawn = (int)Time.fixedTime;
 	}
 	
 	// Update is called once per frame
