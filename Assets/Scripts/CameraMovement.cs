@@ -16,7 +16,7 @@ public class CameraMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-	
+		this.transform.position = new Vector3(this.transform.position.x, 6.0f, -18.0f);
 	}
 
 
@@ -93,9 +93,28 @@ public class CameraMovement : MonoBehaviour {
 			//translationZ = Mathf.Cos (rotationZInRad) * translationZ;
 			//Debug.Log(rotationXInRad);
 
-			this.transform.position += this.transform.forward * this._zoomSpeed * mouseScrollTranslation;
-			this.transform.position += this.transform.right * this._camSpeed * translationX;
-			this.transform.position += trueForward * this._camSpeed * translationZ;
+			Vector3 OldTransformPosition = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+
+			this.transform.position += (this.transform.right * this._camSpeed * translationX);
+			this.transform.position += (trueForward * this._camSpeed * translationZ);
+
+			Vector3 ZoomPosition = (this.transform.forward * this._zoomSpeed * mouseScrollTranslation) + this.transform.position;
+			this.transform.position = new Vector3(this.transform.position.x, ZoomPosition.y, this.transform.position.z);
+
+			Debug.Log(this.transform.position);
+
+			if (Mathf.Abs(this.transform.position.x) >= 10.0f) {
+				this.transform.position = new Vector3(OldTransformPosition.x, this.transform.position.y, this.transform.position.z);
+			}
+
+			if (this.transform.position.z <= -18.0f || this.transform.position.z >= -1.5f) {
+				this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, OldTransformPosition.z);
+			}
+
+			if (this.transform.position.y <= 3.0f || this.transform.position.y >= 6.0f) {
+				this.transform.position = new Vector3(this.transform.position.x, OldTransformPosition.y, this.transform.position.z);
+			}
+
 		}
 
 
