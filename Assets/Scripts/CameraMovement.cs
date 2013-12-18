@@ -9,6 +9,15 @@ public class CameraMovement : MonoBehaviour {
 	public bool forcedMove = false;
 	public bool cameraFocusedOnEvent = false;
 
+
+	public const float X_MIN = -10.0f;
+	public const float X_MAX = +10.0f;
+	public const float Y_MIN = 6.0f;
+	public const float Y_MAX = 8.5f;
+	public const float Z_MIN = -20.0f;
+	public const float Z_MAX = -5.0f;
+
+
 	//This is the target we want to focus on, not where the camera should be
 	//So always subtract z from this value to get where want the camera to be
 	public Vector3 TargetPosition;
@@ -16,7 +25,10 @@ public class CameraMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		this.transform.position = new Vector3(this.transform.position.x, 6.0f, -18.0f);
+		Vector3 PlayerBasePos = GameObject.Find("PlayerBase").transform.position;
+		//this.transform.position = new Vector3(PlayerBasePos.x, PlayerBasePos.y + 7.0f, PlayerBasePos.z - 5.0f);
+
+		this.transform.position = new Vector3(0.0f, Y_MAX, Z_MIN);
 	}
 
 
@@ -27,6 +39,8 @@ public class CameraMovement : MonoBehaviour {
 
 		float translationX = 0.0f;
 		float translationZ = 0.0f;
+
+		Vector3 OldTransformPosition = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 
 		if (this.forcedMove) {
 
@@ -92,28 +106,11 @@ public class CameraMovement : MonoBehaviour {
 			//translationZ = Mathf.Cos (rotationZInRad) * translationZ;
 			//Debug.Log(rotationXInRad);
 
-			Vector3 OldTransformPosition = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
-
 			this.transform.position += (this.transform.right * this._camSpeed * translationX);
 			this.transform.position += (trueForward * this._camSpeed * translationZ);
 
 			Vector3 ZoomPosition = (this.transform.forward * this._zoomSpeed * mouseScrollTranslation) + this.transform.position;
 			this.transform.position = new Vector3(this.transform.position.x, ZoomPosition.y, this.transform.position.z);
-
-			//Debug.Log(this.transform.position);
-
-			//Restricting camera position
-			if (Mathf.Abs(this.transform.position.x) >= 10.0f) {
-				this.transform.position = new Vector3(OldTransformPosition.x, this.transform.position.y, this.transform.position.z);
-			}
-			
-			if (this.transform.position.z <= -18.0f || this.transform.position.z >= -1.5f) {
-				this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, OldTransformPosition.z);
-			}
-			
-			if (this.transform.position.y <= 3.0f || this.transform.position.y >= 6.0f) {
-				this.transform.position = new Vector3(this.transform.position.x, OldTransformPosition.y, this.transform.position.z);
-			}
 
 		}
 
@@ -125,7 +122,8 @@ public class CameraMovement : MonoBehaviour {
 		}
 		*/
 
-		//this.transform.Translate(translationX, this.transform.position.y, translationZ);
+		Debug.Log(this.transform.position);
+		this._keepCameraWithinBounds(OldTransformPosition);
 	}
 	
 	
@@ -170,5 +168,22 @@ public class CameraMovement : MonoBehaviour {
 	public void setFocusPosition(Vector3 FocusPosition)
 	{
 		this.TargetPosition = FocusPosition;
+	}
+
+
+	private void _keepCameraWithinBounds(Vector3 OldTransformPosition)
+	{
+		//Restricting camera position
+		if (Mathf.Abs(this.transform.position.x) >= X_MAX) {
+			this.transform.position = new Vector3(OldTransformPosition.x, this.transform.position.y, this.transform.position.z);
+		}
+		
+		if (this.transform.position.z <= Z_MIN || this.transform.position.z >= Z_MAX) {
+			this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, OldTransformPosition.z);
+		}
+		
+		if (this.transform.position.y <= Y_MIN || this.transform.position.y >= Y_MAX) {
+			this.transform.position = new Vector3(this.transform.position.x, OldTransformPosition.y, this.transform.position.z);
+		}
 	}
 }
