@@ -68,10 +68,10 @@ public class Map : MonoBehaviour {
 					PathNode.penalty = this._PENALTY_GRASS;
 					PathNode.tags = GRASS;
 				} else if (PixelColor == Color.blue) {
+
 					mapTiles [i, j] = WATER;
 					NewMainTexPixels[pixelPosition] = this.WaterTexture.GetPixel (smallTextureX, smallTextureY);
 
-					//Walkability edit
 					PathNode.walkable = false;
 					PathNode.tags = WATER;
 				} else if (PixelColor.r == (128.0f/255.0f) && PixelColor.g == (64.0f/255.0f)) { //Mountain brown
@@ -136,19 +136,46 @@ public class Map : MonoBehaviour {
 					//Don't bother if it's out of map
 					return;					
 				}
-				Debug.Log ("Ordered Unit to go to point " + HitInfo.point);
 
-				Node PathNode = AstarPath.active.GetNearest (HitInfo.point).node;
+				//Debug.Log ("Ordered Unit to go to point " + HitInfo.point);
+
+				NNConstraint NodeConstraints = new NNConstraint();
+				NodeConstraints.constrainWalkability = true;
+				NodeConstraints.walkable = true;
+
+				Node PathNode = AstarPath.active.GetNearest(HitInfo.point, NodeConstraints).node;
+
+				/**
+				Debug.Log(PathNode.tags);
+				if (PathNode.tags == WATER) {
+					Debug.Log("FOUND WATER");
+					if (PathNode.walkable) {
+						Debug.Log("FOUND WALKABLE WATER WTFFFFFF!!!");
+					}
+				}
+				*/
+
+				/** No longer need this check since we're constraining GetNearest to walkable nodes only
 				if (!PathNode.walkable) {
 					//node is not walkable, so do noffin, jon snuh
 					Debug.Log ("Clicked on unwalkable node");
 					return;
 				}
+				*/
 
 
 				//Debug.DrawLine (RayFromCameraToMouseClickPoint.origin, HitInfo.point);
 				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
-				UnitScript.setGoalPosition (HitInfo.point);
+
+				//Debug.Log ("Hit Point: " + HitInfo.point);
+				//Debug.Log ("Node Point: " + PathNode.position);
+
+				Vector3 GoalPoint = new Vector3(
+					PathNode.position.x * 0.001f,
+					PathNode.position.y * 0.001f,
+					PathNode.position.z * 0.001f
+				);
+				UnitScript.setGoalPosition (GoalPoint);
 			}
 		} 
 	}
@@ -157,6 +184,21 @@ public class Map : MonoBehaviour {
 	void OnDestroy()
 	{
 		this.renderer.material.mainTexture = this._OriginalTexture;
+	}
+
+
+	private bool _nodeIsAlreadySetToWalkable(Node PathNode)
+	{
+		if (
+			PathNode.tags == GRASS 		||
+			PathNode.tags == ROAD 		||
+			PathNode.tags == FOREST 	||
+			PathNode.tags == MOUNTAIN
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 
