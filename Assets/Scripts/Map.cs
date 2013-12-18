@@ -115,6 +115,11 @@ public class Map : MonoBehaviour {
 				return;
 			}
 
+			//We don't want to order units from opposing sides!
+			if (PlayerScript.SelectedUnit.tag != PlayerScript.ownershipTag) {
+				return;
+			}
+
 			//Gives you a ray going from camera to the designated point on the screen (x,y?)
 			Ray RayFromCameraToMouseClickPoint = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit HitInfo;
