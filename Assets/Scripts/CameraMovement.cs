@@ -21,7 +21,7 @@ public class CameraMovement : MonoBehaviour {
 
 
 	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
 		Vector3 trueForward = new Vector3 (0.0f, 0.0f, +1.0f);
 
@@ -61,7 +61,6 @@ public class CameraMovement : MonoBehaviour {
 			this.transform.position += this.transform.right * this._camSpeed * translationX;
 			this.transform.position += trueForward * this._camSpeed * translationZ;
 
-			//We reached the target goal, now notify user what happen
 			//Debug.Log (Vector3.Distance (this.transform.position, this.TargetPosition));
 			float yzRatio = Mathf.Abs(this.transform.position.y / (this.TargetPosition.z - this.transform.position.z ));
 
@@ -101,22 +100,22 @@ public class CameraMovement : MonoBehaviour {
 			Vector3 ZoomPosition = (this.transform.forward * this._zoomSpeed * mouseScrollTranslation) + this.transform.position;
 			this.transform.position = new Vector3(this.transform.position.x, ZoomPosition.y, this.transform.position.z);
 
-			Debug.Log(this.transform.position);
+			//Debug.Log(this.transform.position);
 
+			//Restricting camera position
 			if (Mathf.Abs(this.transform.position.x) >= 10.0f) {
 				this.transform.position = new Vector3(OldTransformPosition.x, this.transform.position.y, this.transform.position.z);
 			}
-
+			
 			if (this.transform.position.z <= -18.0f || this.transform.position.z >= -1.5f) {
 				this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, OldTransformPosition.z);
 			}
-
+			
 			if (this.transform.position.y <= 3.0f || this.transform.position.y >= 6.0f) {
 				this.transform.position = new Vector3(this.transform.position.x, OldTransformPosition.y, this.transform.position.z);
 			}
 
 		}
-
 
 		/**
 		if (Input.GetKeyDown(KeyCode.Q)) {
