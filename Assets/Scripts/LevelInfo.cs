@@ -54,7 +54,7 @@ public class LevelInfo : MonoBehaviour
 
 		//Putting this time shit deliberately in Start() so it's "closer" to the actual start of the game
 		//(As opposed to, say, Awake(), which is called before Start()
-		this._startTime = 300; //Battles start at early just because that's what time people wake up and do shit
+		this._startTime = 720; //Battles start at noon for no reason
 		this._timeSinceSceneLoaded = (int)(Time.fixedTime) * TIME_MODIFIER;
 	}
 	

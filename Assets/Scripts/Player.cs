@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
 		//Determine color of health sprite based on current health
 		this._HealthSprite.Transform ();
 		
-		if (TargetUnit.currentAction == Unit.CURRENT_ACTION_MOVING && this.ownershipTag == this.SelectedUnit.tag) {
+		if (TargetUnit.PathToFollow != null && this.ownershipTag == this.SelectedUnit.tag) {
 			
 			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.22f, 0.60f, TargetUnit.GoalPosition.z);
 			this._UnitDestinationSprite.drawLayer = (int)(TargetUnit.GoalPosition.z * -100);
