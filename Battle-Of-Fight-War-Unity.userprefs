@@ -1,5 +1,5 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Unit.cs">
     <Files>
       <File FileName="Assets\Scripts\GUI\GameGui.cs" Line="1" Column="1" />
@@ -7,13 +7,13 @@
       <File FileName="Assets\Scripts\GUI\MainMenuGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GUI\CommonGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Sunlight.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\BadGuy.cs" Line="34" Column="40" />
-      <File FileName="Assets\Scripts\Unit.cs" Line="466" Column="66" />
+      <File FileName="Assets\Scripts\CameraMovement.cs" Line="125" Column="5" />
+      <File FileName="Assets\Scripts\BadGuy.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Unit.cs" Line="152" Column="3" />
       <File FileName="Assets\Scripts\Map.cs" Line="92" Column="6" />
-      <File FileName="Assets\Scripts\GoodGuy.cs" Line="11" Column="3" />
-      <File FileName="Assets\Scripts\EnemyBase.cs" Line="36" Column="83" />
-      <File FileName="Assets\Scripts\Player.cs" Line="18" Column="2" />
+      <File FileName="Assets\Scripts\GoodGuy.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\EnemyBase.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="83" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
