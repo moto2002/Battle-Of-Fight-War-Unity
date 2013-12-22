@@ -13,7 +13,7 @@ public class BadGuy : Unit
 	
 	void OnMouseEnter()
 	{
-		this._UnitSprite.SetColor (Color.red);
+		this._SpriteRenderer.color = Color.red;
 	}
 	
 	
@@ -22,22 +22,16 @@ public class BadGuy : Unit
 		//Sprite graphics stuff
 		
 		if (this.visibleToEnemy <= 0) {
-			if (this._UnitSprite.color.a > 0.0f) {
-				Color Invisibo = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-				this._UnitSprite.SetColor(Invisibo);
 				
-				if (this.selected) {
-					Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
-					PlayerScript.hideSelectSprite();
-				}
-
+			this._SpriteRenderer.enabled = false;
+			if (this.selected) {
+				Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
+				PlayerScript.hideSelectSprite();
 			}
+
 			this.removeStatusSprite();
 		} else {
-			if (this._UnitSprite.color.a <= 0.0f) {
-				Color Visibo = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-				this._UnitSprite.SetColor(Visibo);
-			}
+			this._SpriteRenderer.enabled = true;
 		}
 		
 		base.Update();	

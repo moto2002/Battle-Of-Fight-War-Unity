@@ -5,12 +5,9 @@ using Pathfinding;
 
 public class Unit : MonoBehaviour 
 {
-
-
-	protected Sprite _UnitSprite;
-	protected Sprite _StatusSprite;
-	
-	protected GameObject _MainSpriteManager;
+	protected SpriteRenderer _HealthStatusSprite;
+	protected SpriteRenderer _BattleStatusSprite;
+	protected SpriteRenderer _SpriteRenderer;
 
 	//Public variables
 	public string unitClass;
@@ -87,18 +84,9 @@ public class Unit : MonoBehaviour
 		}
 		
 		this.SquadMembers = new ArrayList ();
-
-		this._MainSpriteManager = GameObject.Find("MainSpriteManager");
-
+		
 		this._Controller = this.GetComponent<CharacterController> ();
 
-		SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-
-		Vector2 SpriteStart = new Vector2 ((this.spriteBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (this.spriteBottomLeftY / SpriteInfo.spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteWidth / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteHeight / SpriteInfo.spriteSheetHeight));
-
-		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
-		//SpriteManagerScript.AddSprite(this.gameObject, 1, 1, 0, 48, 48, 48, false);
 		//this._UnitSprite.SetDrawLayer(-(int)this.gameObject.transform.position.z);
 
 		/**
@@ -161,24 +149,26 @@ public class Unit : MonoBehaviour
 		);
 		GameObject NewUnitLOS = Instantiate(Resources.Load("Prefabs/UnitLOS"), LOSPosition, Quaternion.identity) as GameObject;
 		NewUnitLOS.transform.parent = this.gameObject.transform;
+
+		this._SpriteRenderer = this.GetComponent<SpriteRenderer>();
+		this._SpriteRenderer.enabled = true;
+
+		this._HealthStatusSprite = this.transform.FindChild("HealthStatusSprite").GetComponent<SpriteRenderer>();
+		this._HealthStatusSprite.enabled = false;
+
+		this._BattleStatusSprite = this.transform.FindChild("BattleStatusSprite").GetComponent<SpriteRenderer>();
+		this._BattleStatusSprite.enabled = false;
 	}
 	
 	// Update is called once per frame
 	public virtual void Update () 
 	{
-		this._UnitSprite.Transform();
-		//Multiply the z by 100 so we get a more accurate drawLayer reading
-		this._UnitSprite.drawLayer = (int)(this.gameObject.transform.position.z * -100);
-		
-		if (this._StatusSprite != null) {
-			this._StatusSprite.Transform();	
-		}
 	}
 
 
 	void OnMouseExit()
 	{
-		this._UnitSprite.SetColor (Color.white);
+		this._SpriteRenderer.color = Color.white;
 	}
 
 
@@ -217,50 +207,6 @@ public class Unit : MonoBehaviour
 		}
 		
 	}
-
-
-	/**
-	void OnMouseEnter()
-	{
-		//Below is commented-out bullshit code that didn't work but might be 
-		//My original goal was to customize the individual pixels within the sprite
-		/**
-		GameObject UnitSpriteManager = GameObject.Find("UnitSpriteManager");
-
-		Texture2D OriginalSprite = (Texture2D)UnitSpriteManager.renderer.material.mainTexture;
-		Texture2D NewTexture = new Texture2D(64, 64, TextureFormat.ARGB32, true);
-
-		Color[] NewMainTexPixels = new Color[64 * 64];
-		Color DarkYellow = new Color (200.0f/255.0f, 175.0f / 255.0f, 35.0f / 255.0f);
-		for (int i = 0; i < 64; i++) {
-			for (int j = 0; j < 64; j++) {
-				Color PixelColor = OriginalSprite.GetPixel(i, j);
-
-				int pixelPosition = 64 * j + i;
-				if (PixelColor.b > (200.0f / 255.0f) && PixelColor.a > 0.0f) {
-					NewMainTexPixels [pixelPosition] = Color.yellow;
-				} else if (PixelColor.b > (100.0f / 255.0f)) { //Darker color
-					NewMainTexPixels [pixelPosition] = DarkYellow;
-				} else if (PixelColor.a == 0.0f) {
-					NewMainTexPixels [pixelPosition] = new Color (1.0f, 1.0f, 1.0f, 0.0f);
-				} else {
-					NewMainTexPixels [pixelPosition] = PixelColor;
-				}
-			}
-		}
-
-		NewTexture.SetPixels (NewMainTexPixels);
-		NewTexture.Apply();
-
-		UnitSpriteManager.renderer.material.mainTexture = NewTexture;
-		SpriteManager SpriteManagerScript = UnitSpriteManager.GetComponent<SpriteManager> ();
-
-		Vector2 SpriteStart = new Vector2 ((bodyBottomLeftX / spriteSheetWidth), 1.0f - (bodyBottomLeftY / spriteSheetHeight));
-		Vector2 SpriteDimensions = new Vector2 ((bodyWidth / spriteSheetWidth), (bodyHeight / spriteSheetHeight));
-
-		this._UnitSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SpriteStart, SpriteDimensions, false);
-
-	} */
 
 
 	public void pathSeekComplete(Path CompletedPath)
@@ -319,9 +265,8 @@ public class Unit : MonoBehaviour
 		}
 		
 		//Not healing and not in combat and not holding position
-		if (this._StatusSprite != null) {
-			this.removeStatusSprite();	
-		}
+		this._HealthStatusSprite.enabled = false;
+		this._BattleStatusSprite.enabled = false;
 		
 		//Then we must be moving
 		this.currentAction = CURRENT_ACTION_MOVING;
@@ -401,14 +346,9 @@ public class Unit : MonoBehaviour
 	}
 	
 	public void removeStatusSprite()
-	{
-		if (this._StatusSprite == null) {
-			return;	
-		}
-		
-		SpriteManager Manager = this._MainSpriteManager.GetComponent<SpriteManager>();
-		Manager.RemoveSprite(this._StatusSprite);
-		this._StatusSprite = null;
+	{		
+		this._HealthStatusSprite.enabled = false;
+		this._BattleStatusSprite.enabled = false;
 	}	
 
 
@@ -456,21 +396,10 @@ public class Unit : MonoBehaviour
 				}
 				
 				this.inCombat = true;
-				//Remove any existing status sprites, replace with the combat one
-				this.removeStatusSprite();
-				SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-		
-				Vector2 SpriteStart = new Vector2 ((SpriteInfo.combatIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.combatIconBottomLeftY / SpriteInfo.spriteSheetHeight));
-				Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-				
-				//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-				this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
-				this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
-				//this._StatusSprite.drawLayer = 1001;
-				this._StatusSprite.offset.x = -0.40f;
-				this._StatusSprite.offset.y = +0.10f;
-				//Offset doesn't take effect until we call setSizeXY
-				this._StatusSprite.SetSizeXY(0.35f, 0.35f);
+
+				this._BattleStatusSprite.enabled = true;
+				//this._StatusSpriteRenderer.sprite = Sprite.Create();
+
 
 				/**
 				if (!this.inCombat && this.CombatEffects != null) { //Only create combat effects unless already in combat
@@ -567,23 +496,7 @@ public class Unit : MonoBehaviour
 			return;
 		}
 		
-		if (this._StatusSprite == null) {
-				
-			SpriteManager SpriteManagerScript = this._MainSpriteManager.GetComponent<SpriteManager> ();
-			
-			Vector2 SpriteStart = new Vector2 ((SpriteInfo.healingIconBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healingIconBottomLeftY / SpriteInfo.spriteSheetHeight));
-			Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-			
-			//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-			this._StatusSprite = SpriteManagerScript.AddSprite(this.gameObject,  0.35f, 0.35f, SpriteStart, SpriteDimensions, false);
-			this._StatusSprite.drawLayer = this._UnitSprite.drawLayer + 1;
-			//this._StatusSprite.drawLayer = 1001;
-			this._StatusSprite.offset.x = -0.40f;
-			this._StatusSprite.offset.y = +0.10f;
-			//Offset doesn't take effect until we call setSizeXY
-			this._StatusSprite.SetSizeXY(0.35f, 0.35f);
-				
-		}
+		this._HealthStatusSprite.enabled = true;
 
 		this._timeOfLastHeal = (int)Time.time;
 
@@ -599,9 +512,7 @@ public class Unit : MonoBehaviour
 		this.health = (totalHealth/maxHealth) * 100.0f;
 		
 		if (this.health >= 100.0f) {
-			if (this._StatusSprite != null) {
-				this.removeStatusSprite();
-			}	
+			this._HealthStatusSprite.enabled = false;	
 		}
 	}
 
@@ -624,15 +535,6 @@ public class Unit : MonoBehaviour
 		
 		if (this.gameObject == null) {
 			return;
-		}
-
-		if (this._MainSpriteManager != null) {
-			SpriteManager SpriteManager = this._MainSpriteManager.GetComponent<SpriteManager> ();
-
-			SpriteManager.RemoveSprite (this._UnitSprite);
-			if (this._StatusSprite != null) {
-				SpriteManager.RemoveSprite(this._StatusSprite);	
-			}
 		}
 
 		if (this._CombatEffectsInstance != null) {

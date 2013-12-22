@@ -33,7 +33,7 @@ public class EnemyBase : Base
 
 			this._timeOfLastSpawn = (int)Time.fixedTime;
 			Debug.Log ("SPAWN TIME " + this._timeOfLastSpawn);
-			Vector3 SpawnPosition = new Vector3 (this.gameObject.transform.position.x, 0.45f, this.gameObject.transform.position.z);
+			Vector3 SpawnPosition = new Vector3 (this.gameObject.transform.position.x, 0.30f, this.gameObject.transform.position.z);
 
 			GameObject NewUnitObj = Instantiate(this.SpawnedUnit, SpawnPosition, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f)) as GameObject;
 			Unit NewUnit = NewUnitObj.GetComponent<Unit>();

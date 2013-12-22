@@ -122,7 +122,7 @@ public class CameraMovement : MonoBehaviour {
 		}
 		*/
 
-		Debug.Log(this.transform.position);
+		//Debug.Log(this.transform.position);
 		this._keepCameraWithinBounds(OldTransformPosition);
 	}
 	

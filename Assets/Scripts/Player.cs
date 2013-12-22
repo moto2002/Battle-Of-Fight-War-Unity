@@ -9,10 +9,10 @@ public class Player : MonoBehaviour
 	
 	public ArrayList PotentialSelectedUnits = new ArrayList();
 	
-	private Sprite _SelectSprite = null;
-	private Sprite _HealthSprite = null;
-	
-	private Sprite _UnitDestinationSprite = null;
+	protected SpriteRenderer _SelectSprite = null;
+	protected SpriteRenderer _HealthSprite = null;
+	protected SpriteRenderer _UnitDestinationSprite = null;
+
 	private GameObject _DestFlagObj = null;
 	
 	public string ownershipTag = "GoodGuy"; 
@@ -21,30 +21,13 @@ public class Player : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{	
-		SpriteManager SpriteManagerScript = GameObject.Find ("MainSpriteManager").GetComponent<SpriteManager>();
-		Vector2 SpriteDimensions = new Vector2 ((SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetWidth), (SpriteInfo.spriteStandardSize / SpriteInfo.spriteSheetHeight));
-		
-		this._DestFlagObj = Instantiate(Resources.Load("Prefabs/DestinationFlag"), this.transform.position, Quaternion.identity) as GameObject;
-		//Dimensions for unit select box
-		Vector2 FlagSpriteStart = new Vector2 ((SpriteInfo.destinationFlagBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.destinationFlagBottomLeftY / SpriteInfo.spriteSheetHeight));
-		
-		this._UnitDestinationSprite = SpriteManagerScript.AddSprite(this._DestFlagObj, 1.0f, 1.0f, FlagSpriteStart, SpriteDimensions, false);
-		this._UnitDestinationSprite.hidden = true;
-		this._UnitDestinationSprite.drawLayer = 998;
-			
-		//Dimensions for unit select box
-		Vector2 SelectSpriteStart = new Vector2 ((SpriteInfo.selectBoxBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.selectBoxBottomLeftY / SpriteInfo.spriteSheetHeight));
-		Vector2 HealthSpriteStart = new Vector2 ((SpriteInfo.healthBarBottomLeftX / SpriteInfo.spriteSheetWidth), 1.0f - (SpriteInfo.healthBarBottomLeftY / SpriteInfo.spriteSheetHeight));
+		this._SelectSprite = GameObject.Find("SelectSprite").GetComponent<SpriteRenderer>();
+		this._HealthSprite = GameObject.Find("HealthSprite").GetComponent<SpriteRenderer>();
+		this._UnitDestinationSprite = GameObject.Find("DestinationFlagSprite").GetComponent<SpriteRenderer>();
 
-		//pick a very large number for these UI sprites so they're drawn last; for some reason MoveToFront sucks
-		this._SelectSprite = SpriteManagerScript.AddSprite(this.gameObject, 1, 1, SelectSpriteStart, SpriteDimensions, false);
-		this._SelectSprite.drawLayer = 999;
-		this._SelectSprite.hidden = true;
-
-		this._HealthSprite = SpriteManagerScript.AddSprite(this.gameObject, 1.0f, 1.0f, HealthSpriteStart, SpriteDimensions, false);
-		this._HealthSprite.offset.y = 0.60f;
-		this._HealthSprite.drawLayer = 1000;
-		this._HealthSprite.hidden = true;
+		this._SelectSprite.enabled = false;
+		this._HealthSprite.enabled = false;
+		this._UnitDestinationSprite.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -63,54 +46,60 @@ public class Player : MonoBehaviour
 		
 		//this._SelectSprite.clientTransform = this.SelectedUnit.transform;
 		//this._HealthSprite.clientTransform = this.SelectedUnit.transform;
-		
-		this._SelectSprite.Transform ();
 
 		//Determine color of health sprite based on current health
-		this._HealthSprite.Transform ();
-		
+
+		this._SelectSprite.enabled = true;
+		this._HealthSprite.enabled = true;
+
+		this._SelectSprite.gameObject.transform.position = this.SelectedUnit.transform.position;
+		this._HealthSprite.gameObject.transform.position = new Vector3(
+			this.SelectedUnit.transform.position.x,
+			this.SelectedUnit.transform.position.y + 0.35f,
+			this.SelectedUnit.transform.position.z
+		);
+
 		if (TargetUnit.PathToFollow != null && this.ownershipTag == this.SelectedUnit.tag) {
 			
-			this._DestFlagObj.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.22f, 0.60f, TargetUnit.GoalPosition.z);
-			this._UnitDestinationSprite.drawLayer = (int)(TargetUnit.GoalPosition.z * -100);
-			
-			this._UnitDestinationSprite.Transform();
-			this._UnitDestinationSprite.hidden = false;
+			this._UnitDestinationSprite.transform.position = new Vector3(TargetUnit.GoalPosition.x + 0.22f, 0.50f, TargetUnit.GoalPosition.z);
+			this._UnitDestinationSprite.enabled = true;
 
 		} else { //do not display movement goal
 
-			this._UnitDestinationSprite.hidden = true;
+			this._UnitDestinationSprite.enabled = false;
 			
 		}
 		
 		if (TargetUnit.health > 70.0f) {
-			this._HealthSprite.SetColor (Color.green);
+			this._HealthSprite.color = Color.green;
 		} else if (TargetUnit.health > 30.0f) {
-			this._HealthSprite.SetColor (Color.yellow);
+			this._HealthSprite.color = Color.yellow;
 		} else {
-			this._HealthSprite.SetColor (Color.red);
+			this._HealthSprite.color = Color.red;
 		}
-		
-		float healthWidth = TargetUnit.health / 100.0f;
-		this._HealthSprite.SetSizeXY (healthWidth, 0.26f);
+
+		//Set health sprite scale
+		float healthWidth = (TargetUnit.health / 100.0f) * 2.0f; //Just because I know localScale.x is 2.0f max
+		//Debug.Log("Health width: " + healthWidth);
+		this._HealthSprite.transform.localScale = new Vector3(healthWidth, 0.50f, 2.0f); 
 	}
 	
 	
 	public void displaySelectSprite()
 	{	
-		this._SelectSprite.client = this.SelectedUnit;
-		this._HealthSprite.client = this.SelectedUnit;
-		
-		this._SelectSprite.hidden = false;
-		this._HealthSprite.hidden = false;
+		this._SelectSprite.gameObject.transform.position = this.SelectedUnit.transform.position;
+		this._HealthSprite.gameObject.transform.position = this.SelectedUnit.transform.position;
+
+		this._SelectSprite.enabled = false;
+		this._HealthSprite.enabled = false;
 	}
 	
 	
 	public void hideSelectSprite()
 	{
-		this._SelectSprite.hidden = true;
-		this._HealthSprite.hidden = true;
-		this._UnitDestinationSprite.hidden = true;
+		this._SelectSprite.enabled = false;
+		this._HealthSprite.enabled = false;
+		this._UnitDestinationSprite.enabled = false;
 	}
 	
 	
