@@ -7,13 +7,14 @@ public class BadGuy : Unit
 	// Use this for initialization
 	public override void Start () 
 	{
+		this.TeamColor = Color.red;
 		base.Start ();
 	}
 
 	
 	void OnMouseEnter()
 	{
-		this._SpriteRenderer.color = Color.red;
+		this._setSoldierSpriteColor(Color.red);
 	}
 	
 	
@@ -23,7 +24,7 @@ public class BadGuy : Unit
 		
 		if (this.visibleToEnemy <= 0) {
 				
-			this._SpriteRenderer.enabled = false;
+			this._setSoldierSpriteVisible(false);
 			if (this.selected) {
 				Player PlayerScript = GameObject.Find ("Player").GetComponent<Player>();
 				PlayerScript.hideSelectSprite();
@@ -31,7 +32,7 @@ public class BadGuy : Unit
 
 			this.removeStatusSprite();
 		} else {
-			this._SpriteRenderer.enabled = true;
+			this._setSoldierSpriteVisible(true);
 		}
 		
 		base.Update();	

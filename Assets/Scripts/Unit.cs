@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
 {
 	protected SpriteRenderer _HealthStatusSprite;
 	protected SpriteRenderer _BattleStatusSprite;
-	protected SpriteRenderer _SpriteRenderer;
+	protected GameObject _SoldierSprite;
 
 	//Public variables
 	public string unitClass;
@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
 	public bool inCombat = false;
 	public bool inBase = false;
 	public string currentAction;
+	public Color TeamColor = Color.blue;
 
 	//Setup variables
 	public bool generateNames = false;
@@ -75,14 +76,7 @@ public class Unit : MonoBehaviour
 
 	// Use this for initialization
 	public virtual void Start () 
-	{
-		//this is for pre-placed units, due to how they're displayed in the editor
-		//Don't match 180 degrees exactly because it's not exact
-		this.renderer.enabled = false;
-		if (this.transform.rotation.y > 0.0f) {
-			this.transform.Rotate(Vector3.up, -180.0f);			
-		}
-		
+	{		
 		this.SquadMembers = new ArrayList ();
 		
 		this._Controller = this.GetComponent<CharacterController> ();
@@ -150,8 +144,33 @@ public class Unit : MonoBehaviour
 		GameObject NewUnitLOS = Instantiate(Resources.Load("Prefabs/UnitLOS"), LOSPosition, Quaternion.identity) as GameObject;
 		NewUnitLOS.transform.parent = this.gameObject.transform;
 
-		this._SpriteRenderer = this.GetComponent<SpriteRenderer>();
-		this._SpriteRenderer.enabled = true;
+		this._SoldierSprite = this.transform.FindChild("SoldierSprite").gameObject;
+		if (this._SoldierSprite == null) {
+			Debug.Log("SoldierSprite is null");
+		}
+		//Animator SoldierSpriteAnimator = this._SoldierSprite.GetComponent<Animator>();
+
+		/**
+		foreach (SpriteRenderer SoldierSpritePart in this._getSoldierSprites()) {
+			Texture2D SpriteTexture = SoldierSpritePart.sprite.texture;
+			for (int x = 0; x < SpriteTexture.width; x++) {
+				for (int y = 0; y < SpriteTexture.height; y++) {
+
+					Color Gray = new Color(192.0f / 255.0f, 192.0f / 255.0f, 192.0f / 255.0f);
+					//For some reason adding debug messages in this area seems to fuck things up (i.e. crash Unity)
+					//Debug.Log ("Checking sprite textures");
+					if (SpriteTexture.GetPixel(x, y) == Gray) {
+						//Debug.Log ("Setting Sprite texture to team color");
+						//SoldierSpritePart.sprite.texture.SetPixel(x, y, Gray);
+					}
+				}
+
+			}
+
+			SoldierSpritePart.sprite.texture.Apply();                                                    
+		}
+		*/
+
 
 		this._HealthStatusSprite = this.transform.FindChild("HealthStatusSprite").GetComponent<SpriteRenderer>();
 		this._HealthStatusSprite.enabled = false;
@@ -168,7 +187,7 @@ public class Unit : MonoBehaviour
 
 	void OnMouseExit()
 	{
-		this._SpriteRenderer.color = Color.white;
+		this._setSoldierSpriteColor(Color.white);
 	}
 
 
@@ -241,6 +260,9 @@ public class Unit : MonoBehaviour
 				Seeker AISeeker = this.GetComponent<Seeker> ();
 				AISeeker.StartPath (this.transform.position, this.GoalPosition, pathSeekComplete);
 				this.currentAction = CURRENT_ACTION_MOVING;
+
+				Animator SoldierSpriteAnimator = this._SoldierSprite.GetComponent<Animator>();
+				SoldierSpriteAnimator.SetBool("moving", true);
 			}
 
 			//Need to stop seeking path immediately. Apparently the pathfinding algorithm doesn't do everything in one frame
@@ -280,6 +302,9 @@ public class Unit : MonoBehaviour
 			//this.shouldSeekPath = false;
 			//Debug.Log ("End Of Path Reached");
 			this.currentAction = CURRENT_ACTION_HOLDING;
+			Animator SoldierSpriteAnimator = this._SoldierSprite.GetComponent<Animator>();
+			SoldierSpriteAnimator.SetBool("moving", false);
+
 			return;
 		}
 
@@ -607,6 +632,29 @@ public class Unit : MonoBehaviour
 		}
 		
 		return CloseUnits;
+	}
+
+
+	protected void _setSoldierSpriteVisible(bool visibile)
+	{
+		foreach (SpriteRenderer SoldierSpritePart in this._getSoldierSprites()) {
+			//Debug.Log("In sprite renderer loop");
+			SoldierSpritePart.enabled = visibile;
+		}
+	}
+
+
+	protected void _setSoldierSpriteColor(Color NewColor)
+	{
+		foreach (SpriteRenderer SoldierSpritePart in this._getSoldierSprites()) {
+			SoldierSpritePart.color = NewColor;
+		}
+	}
+
+
+	protected SpriteRenderer[] _getSoldierSprites()
+	{
+		return this._SoldierSprite.GetComponentsInChildren<SpriteRenderer>();
 	}
 
 
