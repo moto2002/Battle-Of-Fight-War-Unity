@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 83a1fb3c29074da4999fb6a12a4ec4c7
+guid: d45e223032913eb43b4844c01fc7e26d
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -41,31 +41,13 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: SoldierSprites_0
+    - name: WeaponSprites_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 177
-        width: 13
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: SoldierSprites_1
-      rect:
-        serializedVersion: 2
-        x: 21
-        y: 178
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: SoldierSprites_2
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 177
-        width: 8
-        height: 11
+        x: 1
+        y: 179
+        width: 30
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
   spritePackingTag: 
