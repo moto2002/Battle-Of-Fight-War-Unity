@@ -7,7 +7,7 @@ public class BadGuy : Unit
 	// Use this for initialization
 	public override void Start () 
 	{
-		this.TeamColor = Color.red;
+		this.TeamColor = new Color(184.0f / 255.0f, 116.0f / 255.0f, 116.0f / 255.0f);
 		base.Start ();
 	}
 

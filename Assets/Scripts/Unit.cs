@@ -177,6 +177,13 @@ public class Unit : MonoBehaviour
 
 		this._BattleStatusSprite = this.transform.FindChild("BattleStatusSprite").GetComponent<SpriteRenderer>();
 		this._BattleStatusSprite.enabled = false;
+
+		SpriteRenderer[] SoldierSprites = this._getSoldierSprites();
+		foreach (SpriteRenderer SoldierSprite in SoldierSprites) {
+			if (SoldierSprite.name == "Body" || SoldierSprite.name == "Arm" || SoldierSprite.name == "Hat") {
+				SoldierSprite.color = this.TeamColor;
+			}
+		}
 	}
 	
 	// Update is called once per frame
@@ -187,7 +194,7 @@ public class Unit : MonoBehaviour
 
 	void OnMouseExit()
 	{
-		this._setSoldierSpriteColor(Color.white);
+		this._setSoldierSpriteColor(this.TeamColor);
 	}
 
 

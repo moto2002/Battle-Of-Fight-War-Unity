@@ -7,6 +7,7 @@ public class GoodGuy : Unit
 	// Use this for initialization
 	public override void Start () 
 	{
+		this.TeamColor = new Color(97.0f / 255.0f, 136.0f / 255.0f, 189.0f / 255.0f);
 		base.Start ();
 	}
 

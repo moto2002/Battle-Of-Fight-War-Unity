@@ -68,5 +68,14 @@ TextureImporter:
         height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
+    - name: SoldierSprites_3
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 180
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
   spritePackingTag: 
   userData: 
