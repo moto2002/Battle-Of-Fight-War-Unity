@@ -14,7 +14,7 @@ public class BadGuy : Unit
 	
 	void OnMouseEnter()
 	{
-		this._setSoldierSpriteColor(Color.red);
+		this._setAllSpriteColors(Color.red);
 	}
 	
 	

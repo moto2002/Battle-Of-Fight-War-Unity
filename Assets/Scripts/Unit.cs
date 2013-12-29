@@ -73,6 +73,10 @@ public class Unit : MonoBehaviour
 
 	//-----------------------------------------------------------------------------
 	
+	protected SpriteRenderer[] _Sprites;
+
+
+
 
 	// Use this for initialization
 	public virtual void Start () 
@@ -178,8 +182,8 @@ public class Unit : MonoBehaviour
 		this._BattleStatusSprite = this.transform.FindChild("BattleStatusSprite").GetComponent<SpriteRenderer>();
 		this._BattleStatusSprite.enabled = false;
 
-		SpriteRenderer[] SoldierSprites = this._getSoldierSprites();
-		foreach (SpriteRenderer SoldierSprite in SoldierSprites) {
+		this._Sprites = this._getSoldierSprites();
+		foreach (SpriteRenderer SoldierSprite in this._Sprites) {
 			if (SoldierSprite.name == "Body" || SoldierSprite.name == "Arm" || SoldierSprite.name == "Hat") {
 				SoldierSprite.color = this.TeamColor;
 			}
@@ -644,7 +648,7 @@ public class Unit : MonoBehaviour
 
 	protected void _setSoldierSpriteVisible(bool visibile)
 	{
-		foreach (SpriteRenderer SoldierSpritePart in this._getSoldierSprites()) {
+		foreach (SpriteRenderer SoldierSpritePart in this._Sprites) {
 			//Debug.Log("In sprite renderer loop");
 			SoldierSpritePart.enabled = visibile;
 		}
@@ -653,7 +657,19 @@ public class Unit : MonoBehaviour
 
 	protected void _setSoldierSpriteColor(Color NewColor)
 	{
-		foreach (SpriteRenderer SoldierSpritePart in this._getSoldierSprites()) {
+		foreach (SpriteRenderer SoldierSprite in this._Sprites) {
+			if (SoldierSprite.name == "Body" || SoldierSprite.name == "Arm" || SoldierSprite.name == "Hat") {
+				SoldierSprite.color = this.TeamColor;
+			} else {
+				SoldierSprite.color = Color.white;
+			}
+		}
+	}
+
+
+	protected void _setAllSpriteColors(Color NewColor)
+	{
+		foreach (SpriteRenderer SoldierSpritePart in this._Sprites) {
 			SoldierSpritePart.color = NewColor;
 		}
 	}

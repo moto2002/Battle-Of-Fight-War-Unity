@@ -15,7 +15,7 @@ public class GoodGuy : Unit
 	void OnMouseEnter()
 	{
 		//Color MouseOverColor = new Color (128.0f/255.0f, 255.0f / 255.0f, 128.0f / 255.0f);
-		this._setSoldierSpriteColor(Color.green);
+		this._setAllSpriteColors(Color.green);
 	}
 
 
