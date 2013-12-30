@@ -50,62 +50,7 @@ public class BattleMap : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		/**
-		if (Input.GetMouseButtonDown(1)) {
-			Player PlayerScript = this.PlayerObject.GetComponent<Player> ();
-			if (PlayerScript.SelectedUnit == null) {
-				return;
-			}
 
-			//We don't want to order units from opposing sides!
-			if (PlayerScript.SelectedUnit.tag != PlayerScript.ownershipTag) {
-				return;
-			}
-
-			//Gives you a ray going from camera to the designated point on the screen (x,y?)
-			Ray RayFromCameraToMouseClickPoint = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit HitInfo;
-
-			//Last variable is the length of the ray
-			//Physics.Raycast returns true if it collides with sommat; hitInfo will contain collision info in this case
-			if (Physics.Raycast (RayFromCameraToMouseClickPoint, out HitInfo, 100.0f)) {
-				
-				//Debug.Log(HitInfo.collider.tag);
-				//Don't do anything if we click on the unit itself
-				if (HitInfo.collider.gameObject.GetInstanceID() == PlayerScript.SelectedUnit.GetInstanceID()) {
-					return;	
-				}
-				
-				if (
-					HitInfo.point.x < -10.0f || HitInfo.point.x > +10.0f || 
-					HitInfo.point.z < -10.0f || HitInfo.point.z > +10.0f
-					) {
-					//Don't bother if it's out of map
-					return;					
-				}
-
-				//Debug.Log ("Ordered Unit to go to point " + HitInfo.point);
-
-				NNConstraint NodeConstraints = new NNConstraint();
-				NodeConstraints.constrainWalkability = true;
-				NodeConstraints.walkable = true;
-
-				Node PathNode = AstarPath.active.GetNearest(HitInfo.point, NodeConstraints).node;
-
-				//Debug.DrawLine (RayFromCameraToMouseClickPoint.origin, HitInfo.point);
-				Unit UnitScript = PlayerScript.SelectedUnit.GetComponent<Unit> ();
-
-				//Debug.Log ("Hit Point: " + HitInfo.point);
-				//Debug.Log ("Node Point: " + PathNode.position);
-
-				Vector3 GoalPoint = new Vector3(
-					PathNode.position.x * 0.001f,
-					PathNode.position.y * 0.001f,
-					PathNode.position.z * 0.001f
-				);
-				UnitScript.setGoalPosition (GoalPoint);
-			}
-		} */
 	}
 
 
