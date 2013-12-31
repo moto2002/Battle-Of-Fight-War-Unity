@@ -40,7 +40,7 @@ public class BattleMap : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		this._buildMesh();
+		this.buildMesh();
 		this._detailTexture();
 		//-------------------------------------------------------------------------------------------------------------
 		//Redoing texture to look nicer
@@ -123,7 +123,7 @@ public class BattleMap : MonoBehaviour {
 	}
 
 
-	private void _buildMesh()
+	public void buildMesh()
 	{
 		int numTiles = this.sizeX * this.sizeZ;
 		int numTriangles = numTiles * 2;
@@ -179,6 +179,9 @@ public class BattleMap : MonoBehaviour {
 		MeshFilter ObjMeshFilter =  this.GetComponent<MeshFilter>();
 		ObjMeshFilter.mesh = NewMesh;
 		Debug.Log("Done building mesh");
+
+		MeshCollider MapMeshCollider = this.GetComponent<MeshCollider>();
+		MapMeshCollider.sharedMesh = NewMesh;
 	}
 
 

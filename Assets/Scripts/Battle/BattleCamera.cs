@@ -5,10 +5,10 @@ public class BattleCamera : MonoBehaviour {
 
 	public const float X_MIN = -10.0f;
 	public const float X_MAX = +10.0f;
-	public const float Y_MIN = 6.0f;
-	public const float Y_MAX = 8.5f;
-	public const float Z_MIN = -20.0f;
-	public const float Z_MAX = -5.0f;
+	public const float Y_MIN = 0.0f;
+	public const float Y_MAX = 3.0f;
+	public const float Z_MIN = -6.5f;
+	public const float Z_MAX = 5.0f;
 
 	private float _camSpeed = 10.0f;
 	private float _zoomSpeed = 200.0f;
@@ -17,7 +17,7 @@ public class BattleCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		this.transform.position = new Vector3(0.0f, Y_MAX, Z_MIN);
+		this.transform.position = new Vector3(5.0f, Y_MAX, Z_MIN);
 	}
 	
 	// Update is called once per frame

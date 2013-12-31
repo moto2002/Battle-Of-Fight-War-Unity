@@ -1,14 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Unit.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Battle\BattleMap.cs">
     <Files>
       <File FileName="Assets\Scripts\GUI\GameGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GUI\PostGameGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GUI\MainMenuGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GUI\CommonGui.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Sunlight.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Unit.cs" Line="103" Column="61" />
+      <File FileName="Assets\Scripts\Unit.cs" Line="83" Column="5" />
+      <File FileName="Assets\Scripts\Battle\BattleMap.cs" Line="165" Column="5" />
+      <File FileName="Assets\Scripts\Battle\BattleCamera.cs" Line="44" Column="3" />
+      <File FileName="Assets\Editor\BattleMapInspector.cs" Line="23" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
