@@ -47,7 +47,7 @@ TextureImporter:
         x: 2
         y: 177
         width: 13
-        height: 14
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: SoldierSprites_1
@@ -63,9 +63,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 35
-        y: 177
+        y: 178
         width: 8
-        height: 11
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: SoldierSprites_3
@@ -73,6 +73,42 @@ TextureImporter:
         serializedVersion: 2
         x: 52
         y: 180
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: SoldierSprites_4
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 158
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: SoldierSprites_5
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 160
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: SoldierSprites_6
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 160
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+    - name: SoldierSprites_7
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 162
         width: 12
         height: 9
       alignment: 0
